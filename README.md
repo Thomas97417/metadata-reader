@@ -1,5 +1,10 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Info
+
+Repo contenant une base de départ pour générer un projet avec shadcn-ui, cn() dans utils.ts et la font Geist ainsi
+que du style de base dans layout.tsx
+
 ## Getting Started
 
 First, run the development server:
