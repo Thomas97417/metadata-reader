@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Base Repo",
-  description: "Base repo for Geist",
+  title: "Metadata Reader",
+  description: "Upload an image to read its metadata.",
 };
 
 export default function RootLayout({
