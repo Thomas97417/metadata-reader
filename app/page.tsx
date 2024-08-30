@@ -9,27 +9,25 @@ export default function Home() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   return (
-    <>
-      <h1 className="font-bold text-3xl m-4">Metadata Reader</h1>
-      <div className="w-full flex gap-4">
-        <div className="w-1/2">
-          <div className="mx-4">
-            <p className="text-lg">Upload an image to read its metadata.</p>
-            <ImageUploader
-              setMetadata={setMetadata}
-              setImageUrl={setImageUrl}
-              setFileName={setFileName}
-            />
-          </div>
-        </div>
-        <div className="w-1/2">
-          <ImageDetails
-            metadata={metadata}
-            imageUrl={imageUrl}
-            fileName={fileName}
-          />
-        </div>
+    <div className="max-w-7xl mx-auto">
+      <div className="m-4">
+        <h1 className="font-bold text-3xl">Metadata Reader</h1>
+        <p className="text-lg">Upload an image to read its metadata.</p>
       </div>
-    </>
+      <div className="w-full px-4">
+        <ImageUploader
+          setMetadata={setMetadata}
+          setImageUrl={setImageUrl}
+          setFileName={setFileName}
+        />
+      </div>
+      <div className="mt-4 px-4 flex">
+        <ImageDetails
+          metadata={metadata}
+          imageUrl={imageUrl}
+          fileName={fileName}
+        />
+      </div>
+    </div>
   );
 }

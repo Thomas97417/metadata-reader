@@ -9,27 +9,28 @@ export default function ImageDetails({
   imageUrl,
   fileName,
 }: ImageDetailsProps) {
+  console.log(metadata);
   return (
-    <div className="flex flex-col w-full mx-auto">
+    <div className="flex w-full">
       {imageUrl && (
-        <div>
+        <div className="flex-1 flex-col">
           <img
             src={imageUrl}
             alt="uploaded"
-            className="w-80 h-80 object-cover mx-auto rounded-md"
+            className="w-80 h-80 object-cover rounded-md"
           />
-          <div className="mx-auto">
-            <h2 className="text-sm font-light ">Filename: {fileName}</h2>
-          </div>
+          <p className="text-sm font-light ">
+            <span className="text-md font-semibold">Filename:</span> {fileName}
+          </p>
         </div>
       )}
-      {metadata && (
-        <div className="mt-4">
-          <h3 className="font-bold">Metadata:</h3>
+      {metadata !== null && (
+        <div className="flex-1">
+          <p className="font-bold text-lg">Metadata:</p>
           <pre className="max-w-full overflow-x-auto ">
-            {metadata !== (null || undefined)
+            {metadata !== undefined
               ? JSON.stringify(metadata, null, 2)
-              : "No metadata on this file"}
+              : "This image has no metadata."}
           </pre>
         </div>
       )}
