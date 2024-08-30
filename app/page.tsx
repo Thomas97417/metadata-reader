@@ -14,14 +14,14 @@ export default function Home() {
         <h1 className="font-bold text-3xl">Metadata Reader</h1>
         <p className="text-lg">Upload an image to read its metadata.</p>
       </div>
-      <div className="w-full px-4">
+      <div className="w-full px-4 mt-8">
         <ImageUploader
           setMetadata={setMetadata}
           setImageUrl={setImageUrl}
           setFileName={setFileName}
         />
       </div>
-      <div className="mt-4 px-4 flex">
+      <div className="mt-12 px-4 flex">
         <ImageDetails
           metadata={metadata}
           imageUrl={imageUrl}
