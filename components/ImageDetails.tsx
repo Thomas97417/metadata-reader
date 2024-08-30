@@ -10,6 +10,9 @@ export default function ImageDetails({
   fileName,
 }: ImageDetailsProps) {
   console.log(metadata);
+
+  const parametersSections = metadata?.paramaters?.split("\n") || [];
+
   return (
     <div className="flex w-full">
       {imageUrl && (
@@ -17,7 +20,7 @@ export default function ImageDetails({
           <img
             src={imageUrl}
             alt="uploaded"
-            className="w-80 h-80 object-cover rounded-md"
+            className="w-96 h-96 object-cover rounded-md"
           />
           <p className="text-sm font-light ">
             <span className="text-md font-semibold">Filename:</span> {fileName}
@@ -32,6 +35,16 @@ export default function ImageDetails({
               ? JSON.stringify(metadata, null, 2)
               : "This image has no metadata."}
           </pre>
+          {parametersSections.length > 0 && (
+            <div className="mt-4">
+              <p className="font-bold text-lg">Parameters:</p>
+              {parametersSections.map((section: any, index: any) => (
+                <p key={index} className="whitespace-pre-wrap">
+                  {section}
+                </p>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>
