@@ -52,28 +52,28 @@ export default function ImageDetails({
   }, [metadata]);
 
   return (
-    <div className="flex flex-col md:flex-row w-full">
+    <div className="flex flex-col md:flex-row w-full gap-4">
       {imageUrl && (
-        <div className="w-1/2 flex flex-col">
-          <div className="w-96 h-96 md:w-[450px] md:h-[450px] xl:w-[600px] xl:h-[600px] relative">
-            <img
-              src={imageUrl}
-              alt="uploaded"
-              className="w-full h-full object-contain rounded-md"
-            />
-          </div>
-          <p className="text-sm font-light ">
+        <div className="w-full md:w-1/2 flex flex-col">
+          <img
+            src={imageUrl}
+            alt="uploaded"
+            className="w-full object-contain rounded-md"
+          />
+          <p className="text-sm font-light">
             <span className="text-md font-semibold">Filename:</span>{" "}
             {shortFileName}
           </p>
         </div>
       )}
       {metadata !== null && (
-        <ParametersDetails
-          metadata={metadata}
-          parametersSections={parametersSections}
-          kindOfPrompt={kindOfPrompt}
-        />
+        <div className="w-full md:w-1/2">
+          <ParametersDetails
+            metadata={metadata}
+            parametersSections={parametersSections}
+            kindOfPrompt={kindOfPrompt}
+          />
+        </div>
       )}
     </div>
   );

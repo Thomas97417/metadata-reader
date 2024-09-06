@@ -42,7 +42,7 @@ export default function ParametersDetails({
   }
 
   return (
-    <div className="w-1/2 ">
+    <>
       <MetadataDisplay metadata={metadata} />
       {parametersSections !== "" && (
         <div className="flex flex-col gap-3">
@@ -90,6 +90,6 @@ export default function ParametersDetails({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

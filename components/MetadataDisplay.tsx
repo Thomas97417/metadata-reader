@@ -17,7 +17,6 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
       : "This image has no metadata.";
 
   const lineCount = metadataString.split("\n").length;
-  console.log(lineCount);
 
   return (
     <>
