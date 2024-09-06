@@ -1,6 +1,6 @@
 "use client";
 import * as exifr from "exifr";
-import React, { ChangeEvent, useRef } from "react";
+import { ChangeEvent, useEffect, useRef } from "react";
 
 type ImageUploaderProps = {
   setMetadata: (metadata: any) => void;
@@ -44,9 +44,9 @@ const ImageUploader = ({
     }
   };
 
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = (event: DragEvent) => {
     event.preventDefault();
-    if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+    if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
       handleImageChange(event.dataTransfer.files[0]);
       event.dataTransfer.clearData();
     }
@@ -58,14 +58,22 @@ const ImageUploader = ({
     }
   };
 
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+  const handleDragOver = (event: DragEvent) => {
     event.preventDefault();
   };
 
+  useEffect(() => {
+    window.addEventListener("dragover", handleDragOver);
+    window.addEventListener("drop", handleDrop);
+
+    return () => {
+      window.removeEventListener("dragover", handleDragOver);
+      window.removeEventListener("drop", handleDrop);
+    };
+  }, []);
+
   return (
     <div
-      onDrop={handleDrop}
-      onDragOver={handleDragOver}
       onClick={handleClick}
       className="flex items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
     >
