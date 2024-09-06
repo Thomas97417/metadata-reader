@@ -24,10 +24,10 @@ const CopyToClipboard = ({
       navigator.clipboard
         .writeText(parametersSections)
         .then(() => {
-          console.log("Texte copié dans le presse-papiers");
+          console.log("Text copied to clipboard");
         })
         .catch((err) => {
-          console.error("Erreur lors de la copie dans le presse-papiers", err);
+          console.error("Error when copying to clipboard", err);
         });
 
       setCopied(true);
@@ -58,7 +58,7 @@ const CopyToClipboard = ({
           )}
         </TooltipTrigger>
         <TooltipContent>
-          <p>Copier dans le presse-papiers</p>
+          <p>Copy to clipboard</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
