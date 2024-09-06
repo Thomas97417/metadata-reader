@@ -20,7 +20,7 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
 
   return (
     <>
-      <p className="font-bold text-lg">Metadata:</p>
+      <p className="font-bold text-lg">Metadata :</p>
       <pre
         className={`max-w-full overflow-x-hidden whitespace-pre-wrap ${
           !isExpanded && lineCount > MAX_METADATA_LINES ? "max-h-60" : ""
