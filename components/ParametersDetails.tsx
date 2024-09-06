@@ -46,8 +46,8 @@ export default function ParametersDetails({
       <MetadataDisplay metadata={metadata} />
       {parametersSections !== "" && (
         <div className="flex flex-col gap-3">
-          <div className="mt-2 flex justify-between">
-            <p className="font-bold text-lg">Parameters {} :</p>
+          <div className="mt-2 flex justify-between items-center">
+            <p className="font-bold text-lg">Parameters :</p>
             <CopyToClipboard
               parametersSections={parametersSections}
               copied={copiedAll}

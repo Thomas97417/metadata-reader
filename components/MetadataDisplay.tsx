@@ -23,10 +23,8 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
     <>
       <p className="font-bold text-lg">Metadata:</p>
       <pre
-        className={`max-w-full overflow-x-auto whitespace-pre-wrap ${
-          !isExpanded && lineCount > MAX_METADATA_LINES
-            ? "max-h-60 overflow-y-hidden"
-            : ""
+        className={`max-w-full overflow-x-hidden whitespace-pre-wrap ${
+          !isExpanded && lineCount > MAX_METADATA_LINES ? "max-h-60" : ""
         }`}
         style={{
           maxHeight:
