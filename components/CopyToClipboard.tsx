@@ -1,4 +1,5 @@
 import { Clipboard, ClipboardCheck } from "lucide-react";
+import { Button } from "./ui/button";
 import {
   Tooltip,
   TooltipContent,
@@ -10,11 +11,13 @@ type CopyToClipboardProps = {
   parametersSections: string;
   copied: boolean;
   setCopied: (copied: boolean) => void;
+  text: string;
 };
 const CopyToClipboard = ({
   parametersSections,
   copied,
   setCopied,
+  text,
 }: CopyToClipboardProps) => {
   const copyToClipboard = () => {
     if (parametersSections !== "") {
@@ -34,15 +37,24 @@ const CopyToClipboard = ({
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger>
+        <TooltipTrigger asChild>
           {copied ? (
-            <ClipboardCheck size={22} className="text-green-500" />
+            <Button className="flex justify-between gap-4" variant="ghost">
+              <p>{text}</p>
+              <ClipboardCheck size={20} className="text-green-500" />
+            </Button>
           ) : (
-            <Clipboard
-              size={22}
+            <Button
+              className="flex justify-between gap-4"
               onClick={copyToClipboard}
-              className="hover:cursor-pointer hover:text-green-500"
-            />
+              variant="ghost"
+            >
+              <p>{text}</p>
+              <Clipboard
+                size={20}
+                className="hover:cursor-pointer hover:text-green-500"
+              />
+            </Button>
           )}
         </TooltipTrigger>
         <TooltipContent>

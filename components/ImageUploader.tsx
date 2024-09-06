@@ -28,7 +28,6 @@ const ImageUploader = ({
           // Utilisation de la bibliothèque exifr pour extraire les métadonnées
           const metadata = await exifr.parse(file);
           setMetadata(metadata);
-          console.log(metadata);
         } catch (error) {
           console.error("Error reading EXIF data:", error);
         }

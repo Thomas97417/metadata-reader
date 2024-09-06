@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
-import ModelToggle from "./AIModelToggle";
-import CopyToClipboard from "./CopyToClipboard";
+import { MAX_FILENAME_LENGTH } from "@/lib/constants";
+import { useEffect, useState } from "react";
+import ParametersDetails from "./ParametersDetails";
 type ImageDetailsProps = {
   metadata: any;
   imageUrl: string | null;
@@ -13,20 +13,43 @@ export default function ImageDetails({
   imageUrl,
   fileName,
 }: ImageDetailsProps) {
-  const [copied, setCopied] = useState(false);
-  const [isComfyUI, setIsComfyUI] = useState(false);
-  const parametersSections = metadata?.parameters || "";
-  console.log(parametersSections);
+  const [shortFileName, setShortFileName] = useState<string | null>(null);
+  const [kindOfPrompt, setKindOfPrompt] = useState<string | null>(null);
 
-  // Split parametersSections into three parts
-  const negativePromptIndex = parametersSections.indexOf("Negative prompt");
-  const stepsIndex = parametersSections.indexOf("Steps");
+  useEffect(() => {
+    if (fileName) {
+      const lastDotIndex = fileName.lastIndexOf(".");
+      let baseFileName = fileName;
+      let fileExtension = "";
 
-  const part1 = parametersSections.substring(0, negativePromptIndex).trim();
-  const part2 = parametersSections
-    .substring(negativePromptIndex, stepsIndex)
-    .trim();
-  const part3 = parametersSections.substring(stepsIndex).trim();
+      if (lastDotIndex !== -1) {
+        baseFileName = fileName.substring(0, lastDotIndex);
+        fileExtension = fileName.substring(lastDotIndex);
+      }
+
+      // Shorten the base file name if it's too long
+      if (baseFileName.length > MAX_FILENAME_LENGTH) {
+        baseFileName = baseFileName.substring(0, MAX_FILENAME_LENGTH) + "...";
+      }
+
+      setShortFileName(baseFileName + fileExtension);
+    } else {
+      setShortFileName(null);
+    }
+  }, [fileName]);
+
+  let parametersSections = metadata?.parameters || metadata?.prompt || "";
+  parametersSections = parametersSections.replace(/�/g, " ");
+
+  useEffect(() => {
+    if (metadata?.parameters) {
+      setKindOfPrompt("parameters");
+    } else if (metadata?.prompt) {
+      setKindOfPrompt("prompt");
+    } else {
+      setKindOfPrompt(null);
+    }
+  }, [metadata]);
 
   return (
     <div className="flex flex-col md:flex-row w-full">
@@ -40,49 +63,17 @@ export default function ImageDetails({
             />
           </div>
           <p className="text-sm font-light ">
-            <span className="text-md font-semibold">Filename:</span> {fileName}
+            <span className="text-md font-semibold">Filename:</span>{" "}
+            {shortFileName}
           </p>
         </div>
       )}
       {metadata !== null && (
-        <div className="w-1/2 ">
-          <ModelToggle isComfyUI={isComfyUI} setIsComfyUI={setIsComfyUI} />
-          <p className="font-bold text-lg">Metadata:</p>
-          <pre className="max-w-full overflow-x-auto whitespace-pre-wrap">
-            {metadata !== undefined
-              ? JSON.stringify(metadata, null, 2)
-              : "This image has no metadata."}
-          </pre>
-          {parametersSections !== "" && (
-            <div className="flex flex-col gap-3">
-              <div className="mt-2 flex justify-between">
-                <p className="font-bold text-lg">Parameters:</p>
-                <CopyToClipboard
-                  parametersSections={parametersSections}
-                  copied={copied}
-                  setCopied={setCopied}
-                />
-              </div>
-              {/* <p className="max-w-full overflow-x-auto">
-                {parametersSections !== undefined
-                  ? JSON.stringify(parametersSections, null, 2).replace(
-                      /\n/g,
-                      " "
-                    )
-                  : "This image has no parameters."}
-              </p> */}
-              <p className="max-w-full overflow-x-auto whitespace-pre-wrap">
-                {part1}
-              </p>
-              <p className="max-w-full overflow-x-auto whitespace-pre-wrap">
-                {part2}
-              </p>
-              <p className="max-w-full overflow-x-auto whitespace-pre-wrap">
-                {part3}
-              </p>
-            </div>
-          )}
-        </div>
+        <ParametersDetails
+          metadata={metadata}
+          parametersSections={parametersSections}
+          kindOfPrompt={kindOfPrompt}
+        />
       )}
     </div>
   );
