@@ -2,7 +2,7 @@ import TryLinkButton from "./TryLinkButton";
 
 const Hero = () => {
   return (
-    <div className="flex flex-col justify-center items-center py-24 lg:py-36 xl:py-48">
+    <div className="flex flex-col justify-center items-center py-36 lg:py-48 xl:py-60 2xl:py-72">
       <div className="flex flex-col justify-center space-y-4">
         <div className="space-y-2">
           <h1 className="font-bold tracking-tighter text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary/35">
