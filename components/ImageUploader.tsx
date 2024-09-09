@@ -1,6 +1,6 @@
 "use client";
 import * as exifr from "exifr";
-import { ChangeEvent, useEffect, useRef } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useImageContext } from "./ImageContext";
 
 type ImageUploaderProps = {
@@ -11,6 +11,7 @@ const ImageUploader = ({ setFileName }: ImageUploaderProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { setImageUrl, setMetadata } = useImageContext();
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleImageChange = async (file: File) => {
     if (file) {
@@ -43,6 +44,7 @@ const ImageUploader = ({ setFileName }: ImageUploaderProps) => {
 
   const handleDrop = (event: DragEvent) => {
     event.preventDefault();
+    setIsDragging(false);
     if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
       handleImageChange(event.dataTransfer.files[0]);
       event.dataTransfer.clearData();
@@ -55,8 +57,13 @@ const ImageUploader = ({ setFileName }: ImageUploaderProps) => {
     }
   };
 
-  const handleDragOver = (event: DragEvent) => {
-    event.preventDefault();
+  const handleDragOver = (e: DragEvent) => {
+    e.preventDefault();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setIsDragging(true);
+    } else if (e.type === "dragleave") {
+      setIsDragging(false);
+    }
   };
 
   useEffect(() => {
@@ -72,7 +79,9 @@ const ImageUploader = ({ setFileName }: ImageUploaderProps) => {
   return (
     <div
       onClick={handleClick}
-      className="flex items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-secondary/25"
+      className={`flex items-center justify-center cursor-pointer border-2 border-dashed rounded-lg p-8 h-64 text-center ${
+        isDragging ? "border-primary bg-primary/10" : "border-gray-300"
+      }`}
     >
       <p>Drag & drop an image here, or click to select one</p>
       <input
