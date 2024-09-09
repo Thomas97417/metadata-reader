@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 
 import Header from "@/components/Header";
+import { ImageProvider } from "@/components/ImageContext";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
@@ -33,10 +34,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="max-w-7xl mx-auto">
-            <Header />
-            {children}
-          </div>
+          <ImageProvider>
+            <div className="max-w-7xl mx-auto">
+              <Header />
+              {children}
+            </div>
+          </ImageProvider>
         </ThemeProvider>
         <Analytics />
       </body>

@@ -1,20 +1,17 @@
 "use client";
 import { MAX_FILENAME_LENGTH } from "@/lib/constants";
 import { useEffect, useState } from "react";
+import { useImageContext } from "./ImageContext";
 import ParametersDetails from "./ParametersDetails";
+
 type ImageDetailsProps = {
-  metadata: any;
-  imageUrl: string | null;
   fileName: string | null;
 };
 
-export default function ImageDetails({
-  metadata,
-  imageUrl,
-  fileName,
-}: ImageDetailsProps) {
+export default function ImageDetails({ fileName }: ImageDetailsProps) {
   const [shortFileName, setShortFileName] = useState<string | null>(null);
   const [kindOfPrompt, setKindOfPrompt] = useState<string | null>(null);
+  const { imageUrl, metadata } = useImageContext();
 
   useEffect(() => {
     if (fileName) {

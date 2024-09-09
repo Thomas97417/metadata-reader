@@ -1,19 +1,16 @@
 "use client";
 import * as exifr from "exifr";
 import { ChangeEvent, useEffect, useRef } from "react";
+import { useImageContext } from "./ImageContext";
 
 type ImageUploaderProps = {
-  setMetadata: (metadata: any) => void;
-  setImageUrl: (imageUrl: string | null) => void;
   setFileName: (fileName: string | null) => void;
 };
 
-const ImageUploader = ({
-  setMetadata,
-  setImageUrl,
-  setFileName,
-}: ImageUploaderProps) => {
+const ImageUploader = ({ setFileName }: ImageUploaderProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const { setImageUrl, setMetadata } = useImageContext();
 
   const handleImageChange = async (file: File) => {
     if (file) {
