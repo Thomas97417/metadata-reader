@@ -7,7 +7,7 @@ const features = [
     title: "Made for AI Enthusiasts",
     description: "Extracts prompts from your AI generated images.",
     content:
-      "Extracts prompts and generation data when your web ui is running or not launched. Works with A1111 and ComfyUI for now.",
+      "Extracts prompts and generation data when your web ui is running or not launched. Works with A1111 and ComfyUI images for now.",
   },
   {
     icon: Rocket,

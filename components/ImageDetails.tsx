@@ -52,29 +52,40 @@ export default function ImageDetails({
   }, [metadata]);
 
   return (
-    <div className="flex flex-col md:flex-row w-full gap-4">
-      {imageUrl && (
-        <div className="w-full md:w-1/2 flex flex-col">
-          <img
-            src={imageUrl}
-            alt="uploaded"
-            className="w-full object-contain rounded-md"
-          />
-          <p className="text-sm font-light">
-            <span className="text-md font-semibold">Filename:</span>{" "}
-            {shortFileName}
+    <>
+      {imageUrl !== null && (
+        <div className="flex flex-col md:flex-row w-full gap-4">
+          {imageUrl && (
+            <div className="w-full md:w-1/2 flex flex-col">
+              <img
+                src={imageUrl}
+                alt="uploaded"
+                className="w-full object-contain rounded-md"
+              />
+              <p className="text-sm font-light">
+                <span className="text-md font-semibold">Filename:</span>{" "}
+                {shortFileName}
+              </p>
+            </div>
+          )}
+          {metadata !== null && (
+            <div className="w-full md:w-1/2">
+              <ParametersDetails
+                metadata={metadata}
+                parametersSections={parametersSections}
+                kindOfPrompt={kindOfPrompt}
+              />
+            </div>
+          )}
+        </div>
+      )}
+      {metadata === null && imageUrl === null && (
+        <div className="flex justify-center w-full">
+          <p className="text-2xl font-medium mt-8">
+            Upload an image to read its metadata.
           </p>
         </div>
       )}
-      {metadata !== null && (
-        <div className="w-full md:w-1/2">
-          <ParametersDetails
-            metadata={metadata}
-            parametersSections={parametersSections}
-            kindOfPrompt={kindOfPrompt}
-          />
-        </div>
-      )}
-    </div>
+    </>
   );
 }
