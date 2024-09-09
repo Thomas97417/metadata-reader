@@ -11,7 +11,8 @@ export function MetadataLinkButton() {
 
   return (
     <Link href="/metadata">
-      <Button variant="outline" size="icon">
+      <Button variant="outline" size="default">
+        <span className="mr-2">Extract</span>
         <FileTerminal className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all" />
       </Button>
     </Link>

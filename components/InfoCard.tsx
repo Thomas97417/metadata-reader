@@ -23,7 +23,7 @@ export function InfoCard({
   return (
     <Card>
       <CardHeader>
-        <Icon className="w-8 h-8 mb-2" />
+        <Icon className="w-8 h-8 mb-2 " />
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>

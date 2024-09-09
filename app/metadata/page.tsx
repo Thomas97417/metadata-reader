@@ -11,6 +11,9 @@ export default function Home() {
   return (
     <>
       <div className="w-full px-4 my-16">
+        <p className="text-xl font-medium">
+          Upload an image to read its metadata.
+        </p>
         <ImageUploader
           setMetadata={setMetadata}
           setImageUrl={setImageUrl}
