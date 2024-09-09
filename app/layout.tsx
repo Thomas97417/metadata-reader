@@ -2,6 +2,8 @@ import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 
+import Header from "@/components/Header";
+import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
@@ -25,7 +27,17 @@ export default function RootLayout({
           "h-full bg-background font-sans text-foreground"
         )}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="max-w-7xl mx-auto">
+            <Header />
+            {children}
+          </div>
+        </ThemeProvider>
         <Analytics />
       </body>
     </html>

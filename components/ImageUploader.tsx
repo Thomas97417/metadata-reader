@@ -75,7 +75,7 @@ const ImageUploader = ({
   return (
     <div
       onClick={handleClick}
-      className="flex items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
+      className="flex items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-secondary/25"
     >
       <p>Drag & drop an image here, or click to select one</p>
       <input
