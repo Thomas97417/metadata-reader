@@ -11,6 +11,7 @@ const ImageUploader = ({ setFileName }: ImageUploaderProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { setImageUrl, setMetadata } = useImageContext();
+
   const [isDragging, setIsDragging] = useState(false);
 
   const handleImageChange = async (file: File) => {
