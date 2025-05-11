@@ -4,13 +4,18 @@ import { AnimatePresence, motion } from "framer-motion";
 import { FileText } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useImageContext } from "./ImageContext";
+import ImageUploader from "./ImageUploader";
 import ParametersDetails from "./ParametersDetails";
 
 type ImageDetailsProps = {
   fileName: string | null;
+  setFileName: (fileName: string | null) => void;
 };
 
-export default function ImageDetails({ fileName }: ImageDetailsProps) {
+export default function ImageDetails({
+  fileName,
+  setFileName,
+}: ImageDetailsProps) {
   const [shortFileName, setShortFileName] = useState<string | null>(null);
   const [kindOfPrompt, setKindOfPrompt] = useState<string | null>(null);
   const { imageUrl, metadata } = useImageContext();
@@ -51,72 +56,61 @@ export default function ImageDetails({ fileName }: ImageDetailsProps) {
 
   return (
     <AnimatePresence mode="wait">
-      {imageUrl !== null ? (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.5 }}
-          className="flex flex-col lg:flex-row w-full gap-8 bg-card rounded-xl p-6 border shadow-sm"
-        >
-          <div className="w-full lg:w-1/2 flex flex-col gap-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="relative aspect-square rounded-lg overflow-hidden border bg-background/50"
-            >
-              <img
-                src={imageUrl}
-                alt="uploaded"
-                className="w-full h-full object-contain"
-              />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg p-3"
-            >
-              <FileText className="size-4" />
-              <span className="font-medium">File:</span>
-              <span className="truncate">{shortFileName}</span>
-            </motion.div>
-          </div>
-
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.5 }}
+        className="flex flex-col lg:flex-row w-full gap-8 bg-card rounded-xl p-6 border shadow-sm"
+      >
+        <div className="w-full lg:w-1/2 flex flex-col gap-4">
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="w-full lg:w-1/2 flex flex-col gap-4"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="relative rounded-lg overflow-hidden border bg-background/50"
           >
-            {metadata !== null ? (
-              <ParametersDetails
-                metadata={metadata}
-                parametersSections={parametersSections}
-                kindOfPrompt={kindOfPrompt}
-              />
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <p className="text-muted-foreground">
-                  No metadata found in this image
-                </p>
-              </div>
-            )}
+            <ImageUploader setFileName={setFileName} />
           </motion.div>
-        </motion.div>
-      ) : (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg p-3"
+          >
+            <FileText className="size-4" />
+            <span className="font-medium">File:</span>
+            <span className="truncate">{shortFileName}</span>
+          </motion.div>
+        </div>
+
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className="flex justify-center w-full py-12"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="w-full lg:w-1/2 flex flex-col gap-4"
         >
-          <p className="text-xl text-muted-foreground">
-            Upload an image to view its metadata and generation parameters
-          </p>
+          {metadata !== null ? (
+            <ParametersDetails
+              metadata={metadata}
+              parametersSections={parametersSections}
+              kindOfPrompt={kindOfPrompt}
+            />
+          ) : imageUrl !== null ? (
+            <div className="flex flex-col items-center justify-center h-full">
+              <p className="text-muted-foreground">
+                No metadata found in this image
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full">
+              <p className="text-muted-foreground">
+                Upload an image to view its metadata and generation parameters
+              </p>
+            </div>
+          )}
         </motion.div>
-      )}
+      </motion.div>
     </AnimatePresence>
   );
 }

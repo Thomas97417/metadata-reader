@@ -52,7 +52,7 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 px-2 text-muted-foreground hover:text-foreground"
+            className="h-8 px-2 text-muted-foreground hover:text-foreground hover:cursor-pointer"
             onClick={handleCopy}
           >
             {isCopied ? (

@@ -1,7 +1,6 @@
 "use client";
 
 import ImageDetails from "@/components/ImageDetails";
-import ImageUploader from "@/components/ImageUploader";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
@@ -25,13 +24,13 @@ export default function MetadataPage() {
           className="px-4 space-y-8"
         >
           {/* Upload Section */}
-          <div className="bg-card/50 backdrop-blur-sm border rounded-xl p-6 shadow-sm">
+          {/* <div className="bg-card/50 backdrop-blur-sm border rounded-xl p-6 shadow-sm">
             <ImageUploader setFileName={setFileName} />
-          </div>
+          </div> */}
 
           {/* Details Section */}
           <div className="pb-16">
-            <ImageDetails fileName={fileName} />
+            <ImageDetails fileName={fileName} setFileName={setFileName} />
           </div>
         </motion.div>
       </div>

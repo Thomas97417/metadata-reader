@@ -76,7 +76,7 @@ export default function ImageUploader({ setFileName }: ImageUploaderProps) {
             backgroundColor: isDragging ? "hsl(var(--accent))" : "transparent",
           }}
           transition={{ duration: 0.2 }}
-          className="relative flex min-h-[300px] flex-col items-center justify-center overflow-hidden rounded-xl border-2 border-dashed p-4 transition-colors hover:cursor-pointer hover:bg-accent/20"
+          className="relative flex min-h-[300px] flex-col items-center justify-center overflow-hidden rounded-xl transition-colors hover:cursor-pointer hover:bg-accent/20"
         >
           <input
             {...getInputProps()}
@@ -96,7 +96,7 @@ export default function ImageUploader({ setFileName }: ImageUploaderProps) {
                 <img
                   src={previewUrl}
                   alt={files[0]?.file?.name || "Uploaded image"}
-                  className="h-full w-full object-contain"
+                  className="h-full w-full object-cover rounded-xl"
                 />
               </motion.div>
             ) : (
