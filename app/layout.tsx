@@ -2,8 +2,8 @@ import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 
-import Header from "@/components/Header";
 import { ImageProvider } from "@/components/ImageContext";
+import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
@@ -35,8 +35,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ImageProvider>
-            <div className="max-w-7xl mx-auto">
-              <Header />
+            <div className="max-w-5xl mx-auto">
+              <Navbar />
               {children}
             </div>
           </ImageProvider>

@@ -1,5 +1,7 @@
 "use client";
 import { MAX_FILENAME_LENGTH } from "@/lib/constants";
+import { AnimatePresence, motion } from "framer-motion";
+import { FileText } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useImageContext } from "./ImageContext";
 import ParametersDetails from "./ParametersDetails";
@@ -24,7 +26,6 @@ export default function ImageDetails({ fileName }: ImageDetailsProps) {
         fileExtension = fileName.substring(lastDotIndex);
       }
 
-      // Shorten the base file name if it's too long
       if (baseFileName.length > MAX_FILENAME_LENGTH) {
         baseFileName = baseFileName.substring(0, MAX_FILENAME_LENGTH) + "...";
       }
@@ -36,7 +37,7 @@ export default function ImageDetails({ fileName }: ImageDetailsProps) {
   }, [fileName]);
 
   let parametersSections = metadata?.parameters || metadata?.prompt || "";
-  parametersSections = parametersSections.replace(/�/g, " ");
+  parametersSections = parametersSections.replace(/[\uFFFD]/g, " ");
 
   useEffect(() => {
     if (metadata?.parameters) {
@@ -49,40 +50,73 @@ export default function ImageDetails({ fileName }: ImageDetailsProps) {
   }, [metadata]);
 
   return (
-    <>
-      {imageUrl !== null && (
-        <div className="flex flex-col md:flex-row w-full gap-4">
-          {imageUrl && (
-            <div className="w-full md:w-1/2 flex flex-col">
+    <AnimatePresence mode="wait">
+      {imageUrl !== null ? (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col lg:flex-row w-full gap-8 bg-card rounded-xl p-6 border shadow-sm"
+        >
+          <div className="w-full lg:w-1/2 flex flex-col gap-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="relative aspect-square rounded-lg overflow-hidden border bg-background/50"
+            >
               <img
                 src={imageUrl}
                 alt="uploaded"
-                className="w-full object-contain rounded-md"
+                className="w-full h-full object-contain"
               />
-              <p className="text-sm font-light">
-                <span className="text-md font-semibold">Filename:</span>{" "}
-                {shortFileName}
-              </p>
-            </div>
-          )}
-          {metadata !== null && (
-            <div className="w-full md:w-1/2">
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg p-3"
+            >
+              <FileText className="size-4" />
+              <span className="font-medium">File:</span>
+              <span className="truncate">{shortFileName}</span>
+            </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="w-full lg:w-1/2 flex flex-col gap-4"
+          >
+            {metadata !== null ? (
               <ParametersDetails
                 metadata={metadata}
                 parametersSections={parametersSections}
                 kindOfPrompt={kindOfPrompt}
               />
-            </div>
-          )}
-        </div>
-      )}
-      {metadata === null && imageUrl === null && (
-        <div className="flex justify-center w-full">
-          <p className="text-2xl font-medium mt-8">
-            Upload an image to read its metadata.
+            ) : (
+              <div className="flex items-center justify-center h-full">
+                <p className="text-muted-foreground">
+                  No metadata found in this image
+                </p>
+              </div>
+            )}
+          </motion.div>
+        </motion.div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          className="flex justify-center w-full py-12"
+        >
+          <p className="text-xl text-muted-foreground">
+            Upload an image to view its metadata and generation parameters
           </p>
-        </div>
+        </motion.div>
       )}
-    </>
+    </AnimatePresence>
   );
 }

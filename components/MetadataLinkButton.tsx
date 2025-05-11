@@ -1,20 +1,34 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import { FileTerminal } from "lucide-react";
 import { useTheme } from "next-themes";
-
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export function MetadataLinkButton() {
   const { setTheme } = useTheme();
 
   return (
-    <Link href="/metadata">
-      <Button variant="outline" size="default">
-        <span className="mr-2">Extract</span>
-        <FileTerminal className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all" />
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+    >
+      <Button
+        variant="default"
+        size="default"
+        className="bg-primary text-primary-foreground hover:bg-primary/90 relative overflow-hidden group hover:cursor-pointer"
+        asChild
+      >
+        <Link href="/metadata">
+          <span className="relative z-10 flex items-center gap-2">
+            Extract
+            <FileTerminal className="w-5 h-5 transition-transform group-hover:rotate-12" />
+          </span>
+          <div className="absolute inset-0 bg-gradient-to-r from-primary-foreground/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        </Link>
       </Button>
-    </Link>
+    </motion.div>
   );
 }

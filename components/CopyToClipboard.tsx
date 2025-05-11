@@ -1,4 +1,7 @@
-import { Clipboard, ClipboardCheck } from "lucide-react";
+"use client";
+
+import { AnimatePresence, motion } from "framer-motion";
+import { CheckIcon, CopyIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   Tooltip,
@@ -13,52 +16,72 @@ type CopyToClipboardProps = {
   setCopied: (copied: boolean) => void;
   text: string;
 };
+
+const iconVariants = {
+  initial: { scale: 0.5, opacity: 0 },
+  animate: { scale: 1, opacity: 1 },
+  exit: { scale: 0.5, opacity: 0 },
+};
+
 const CopyToClipboard = ({
   parametersSections,
   copied,
   setCopied,
   text,
 }: CopyToClipboardProps) => {
-  const copyToClipboard = () => {
+  const copyToClipboard = async () => {
     if (parametersSections !== "") {
-      navigator.clipboard
-        .writeText(parametersSections)
-        .then(() => {
-          console.log("Text copied to clipboard");
-        })
-        .catch((err) => {
-          console.error("Error when copying to clipboard", err);
-        });
-
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      try {
+        await navigator.clipboard.writeText(parametersSections);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+        console.error("Error when copying to clipboard", err);
+      }
     }
   };
+
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          {copied ? (
-            <Button className="flex justify-between gap-4" variant="ghost">
-              <p>{text}</p>
-              <ClipboardCheck size={20} className="text-green-500" />
-            </Button>
-          ) : (
-            <Button
-              className="flex justify-between gap-4"
-              onClick={copyToClipboard}
-              variant="ghost"
-            >
-              <p>{text}</p>
-              <Clipboard
-                size={20}
-                className="hover:cursor-pointer hover:text-green-500"
-              />
-            </Button>
-          )}
+          <Button
+            onClick={copyToClipboard}
+            variant="ghost"
+            size="sm"
+            className="h-8 px-2 text-muted-foreground hover:text-foreground transition-colors"
+            disabled={copied}
+          >
+            <span className="mr-2">{copied ? "Copied!" : text}</span>
+            <AnimatePresence mode="wait" initial={false}>
+              {copied ? (
+                <motion.span
+                  key="check"
+                  variants={iconVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  transition={{ duration: 0.2 }}
+                >
+                  <CheckIcon className="w-4 h-4 text-primary" />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="copy"
+                  variants={iconVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  transition={{ duration: 0.2 }}
+                >
+                  <CopyIcon className="w-4 h-4" />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </Button>
         </TooltipTrigger>
-        <TooltipContent>
-          <p>Copy to clipboard</p>
+        <TooltipContent side="bottom" className="text-xs">
+          <p>{copied ? "Copied to clipboard!" : "Copy to clipboard"}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
