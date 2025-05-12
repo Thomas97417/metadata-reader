@@ -112,7 +112,7 @@ export default function ImageDetails({
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex flex-col items-center justify-center h-full p-8 bg-muted/30 rounded-lg"
+              className="flex flex-col items-center justify-center h-full p-8"
             >
               <p className="text-muted-foreground text-center">
                 Upload an image to view its metadata and generation parameters

@@ -98,9 +98,20 @@ export default function ImageUploader({ setFileName }: ImageUploaderProps) {
                   alt={files[0]?.file?.name || "Uploaded image"}
                   className="h-full w-full object-cover transition-transform group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
-                  <p className="text-white text-sm font-medium">
-                    Click to change image
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-200 rounded-xl flex flex-col gap-2 items-center justify-center backdrop-blur-[2px]">
+                  <motion.div
+                    initial={{ scale: 0.8 }}
+                    animate={{ scale: 1 }}
+                    whileHover={{ scale: 1.1, rotate: 15 }}
+                    className="bg-white/10 p-3 rounded-full border border-white/20 backdrop-blur-sm"
+                  >
+                    <ImageUpIcon className="size-5 text-white" />
+                  </motion.div>
+                  <p className="text-white/90 text-sm font-medium tracking-wide">
+                    Change image
+                  </p>
+                  <p className="text-white/60 text-xs">
+                    Drop a new file or click to browse
                   </p>
                 </div>
               </motion.div>
