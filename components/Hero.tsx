@@ -6,13 +6,7 @@ import TryLinkButton from "./TryLinkButton";
 
 const Hero = () => {
   return (
-    <div className="relative flex flex-col justify-center items-center py-24 lg:py-32 xl:py-40 2xl:py-48 min-h-[80vh] bg-gradient-to-b from-background to-background/80 overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-primary/5 to-transparent rounded-full blur-3xl" />
-        <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-tl from-secondary/5 to-transparent rounded-full blur-3xl" />
-      </div>
-
+    <div className="relative flex flex-col justify-center items-center py-24 lg:py-32 xl:py-40 2xl:py-48 min-h-[80vh] overflow-hidden">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

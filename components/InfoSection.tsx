@@ -40,13 +40,7 @@ const container = {
 
 export default function InfoSection() {
   return (
-    <section className="w-full py-24 bg-gradient-to-b from-background/80 to-background relative overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/2 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-primary/5 to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-secondary/5 to-transparent rounded-full blur-3xl" />
-      </div>
-
+    <section className="w-full py-24 relative overflow-hidden">
       <div className="container px-4 md:px-6 mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -35,7 +35,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ImageProvider>
-            <div className="max-w-5xl mx-auto">
+            <div className="max-w-7xl mx-auto">
               <Navbar />
               {children}
             </div>

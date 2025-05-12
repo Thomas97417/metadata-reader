@@ -1,10 +1,10 @@
 "use client";
 
-import { MAX_METADATA_LINES } from "@/lib/constants";
+import { MAX_CHARACTERS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { CheckIcon, ChevronDown, CopyIcon, Database } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 
 type MetadataDisplayProps = {
@@ -14,16 +14,20 @@ type MetadataDisplayProps = {
 export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const [shouldShowButton, setShouldShowButton] = useState(false);
 
   const metadataString =
     metadata !== undefined
       ? JSON.stringify(metadata, null, 2).replace(/[\uFFFD]/g, " ")
       : "This image has no metadata.";
 
-  const lineCount = metadataString.split("\n").length;
-  console.log("lineCount", lineCount);
+  const characterCount = metadataString.length;
   const hasMetadata =
     metadata !== undefined && Object.keys(metadata).length > 0;
+
+  useEffect(() => {
+    setShouldShowButton(characterCount > MAX_CHARACTERS);
+  }, [characterCount]);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(metadataString);
@@ -74,21 +78,21 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
             className={cn(
               "text-sm font-mono bg-muted/50 rounded-lg p-3 whitespace-pre-wrap break-all hover:bg-muted/70 transition-colors",
               isExpanded ? "h-auto" : "max-h-[15em] overflow-y-auto",
-              !isExpanded && lineCount > MAX_METADATA_LINES && "mask-bottom"
+              !isExpanded && shouldShowButton && "mask-bottom"
             )}
           >
             {metadataString}
           </pre>
         </motion.div>
 
-        {lineCount > MAX_METADATA_LINES && (
+        {shouldShowButton && (
           <div className="flex justify-center -mt-1">
             <button
               onClick={() => setIsExpanded(!isExpanded)}
               className={cn(
                 "group flex items-center gap-1.5 px-3 py-1.5",
                 "text-xs font-medium text-muted-foreground/80",
-                "hover:text-muted-foreground transition-colors  hover:cursor-pointer",
+                "hover:text-muted-foreground transition-colors hover:cursor-pointer",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 rounded-md"
               )}
               aria-expanded={isExpanded}
