@@ -3,9 +3,9 @@
 import { MAX_CHARACTERS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { CheckIcon, ChevronDown, CopyIcon, Database } from "lucide-react";
+import { ChevronDown, Database } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Button } from "./ui/button";
+import CopyToClipboard from "./CopyToClipboard";
 
 type MetadataDisplayProps = {
   metadata: any;
@@ -29,12 +29,6 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
     setShouldShowButton(characterCount > MAX_CHARACTERS);
   }, [characterCount]);
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(metadataString);
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 2000);
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -48,20 +42,12 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
           <h2 className="font-semibold text-lg">Raw Metadata</h2>
         </div>
         {hasMetadata && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 px-2 text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
-            onClick={handleCopy}
-            aria-label={isCopied ? "Copied to clipboard" : "Copy metadata"}
-          >
-            {isCopied ? (
-              <CheckIcon className="w-4 h-4 mr-1" />
-            ) : (
-              <CopyIcon className="w-4 h-4 mr-1" />
-            )}
-            {isCopied ? "Copied!" : "Copy All"}
-          </Button>
+          <CopyToClipboard
+            parametersSections={metadataString}
+            copied={isCopied}
+            setCopied={setIsCopied}
+            text="Copy All"
+          />
         )}
       </div>
 
@@ -103,7 +89,7 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
                 animate={{ rotate: isExpanded ? 180 : 0 }}
                 transition={{ duration: 0.2, ease: "easeInOut" }}
               >
-                <ChevronDown className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity" />
+                <ChevronDown className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity group-hover:text-primary" />
               </motion.span>
               {isExpanded ? "Show less" : "Show more"}
             </button>

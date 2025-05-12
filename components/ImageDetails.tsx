@@ -78,8 +78,8 @@ export default function ImageDetails({
             transition={{ duration: 0.5, delay: 0.3 }}
             className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg p-3 hover:bg-muted/70 transition-colors"
           >
-            <FileText className="size-4" />
-            <span className="font-medium">File:</span>
+            <FileText className="size-4 text-primary" />
+            <span className="font-medium text-primary">File:</span>
             <span className="truncate">
               {shortFileName || "No file selected"}
             </span>

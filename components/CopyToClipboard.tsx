@@ -49,10 +49,9 @@ const CopyToClipboard = ({
             onClick={copyToClipboard}
             variant="ghost"
             size="sm"
-            className="h-8 px-2 text-muted-foreground hover:text-foreground transition-colors"
+            className="h-8 px-2 text-muted-foreground transition-colors hover:cursor-pointer"
             disabled={copied}
           >
-            <span className="mr-2">{copied ? "Copied!" : text}</span>
             <AnimatePresence mode="wait" initial={false}>
               {copied ? (
                 <motion.span
@@ -78,10 +77,11 @@ const CopyToClipboard = ({
                 </motion.span>
               )}
             </AnimatePresence>
+            <span>{copied && "Copied!"}</span>
           </Button>
         </TooltipTrigger>
         <TooltipContent side="bottom" className="text-xs">
-          <p>{copied ? "Copied to clipboard!" : "Copy to clipboard"}</p>
+          <p>{`${text} to clipboard`}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
