@@ -54,7 +54,6 @@ export default function ImageDetails({
       setKindOfPrompt(null);
     }
   }, [metadata]);
-  console.log("kindOfPrompt", kindOfPrompt);
 
   return (
     <AnimatePresence mode="wait">
