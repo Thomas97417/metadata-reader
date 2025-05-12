@@ -100,8 +100,6 @@ export default function ParametersDetails({
       transition={{ duration: 0.3 }}
       className="space-y-6 overflow-hidden"
     >
-      <MetadataDisplay metadata={metadata} />
-
       <AnimatePresence mode="wait">
         {parametersSections !== "" && (
           <motion.div

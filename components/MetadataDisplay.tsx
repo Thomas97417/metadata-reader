@@ -17,13 +17,15 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
   const [shouldShowButton, setShouldShowButton] = useState(false);
 
   const metadataString =
-    metadata !== undefined
+    metadata !== undefined && metadata !== null
       ? JSON.stringify(metadata, null, 2).replace(/[\uFFFD]/g, " ")
       : "This image has no metadata.";
 
   const characterCount = metadataString.length;
   const hasMetadata =
-    metadata !== undefined && Object.keys(metadata).length > 0;
+    metadata !== undefined &&
+    metadata !== null &&
+    Object.keys(metadata).length > 0;
 
   useEffect(() => {
     setShouldShowButton(characterCount > MAX_CHARACTERS);
