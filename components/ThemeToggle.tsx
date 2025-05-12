@@ -53,7 +53,7 @@ export default function ThemeToggle() {
         <Button
           variant="outline"
           size="icon"
-          className="relative overflow-hidden hover:cursor-pointer text-primary hover:text-primary/80 dark:hover:text-primary/80 hover:bg-primary/10 dark:hover:bg-primary/10 border-primary hover:border-primary/80 dark:hover:border-primary/80"
+          className="relative overflow-hidden hover:cursor-pointer text-primary hover:text-primary/80 dark:hover:text-primary/80 hover:bg-primary/10 dark:hover:bg-primary/10 border-primary hover:border-primary/80 dark:hover:border-primary/80 border-2"
         >
           <AnimatePresence mode="wait" initial={false}>
             {shouldShowSun ? (
