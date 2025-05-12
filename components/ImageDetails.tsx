@@ -68,7 +68,7 @@ export default function ImageDetails({
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="relative rounded-lg overflow-hidden border bg-background/50"
+            className="relative rounded-xl overflow-hidden border bg-background/50"
           >
             <ImageUploader setFileName={setFileName} />
           </motion.div>

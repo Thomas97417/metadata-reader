@@ -3,13 +3,7 @@
 import { MAX_METADATA_LINES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import {
-  CheckIcon,
-  ChevronDown,
-  ChevronUp,
-  CopyIcon,
-  Database,
-} from "lucide-react";
+import { CheckIcon, ChevronDown, CopyIcon, Database } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 
@@ -27,6 +21,7 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
       : "This image has no metadata.";
 
   const lineCount = metadataString.split("\n").length;
+  console.log("lineCount", lineCount);
   const hasMetadata =
     metadata !== undefined && Object.keys(metadata).length > 0;
 
@@ -66,52 +61,51 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
         )}
       </div>
 
-      <motion.div
-        initial={false}
-        animate={{
-          height: isExpanded
-            ? "auto"
-            : lineCount > MAX_METADATA_LINES
-            ? "15em"
-            : "auto",
-        }}
-        transition={{ duration: 0.3 }}
-        className="relative mt-2 overflow-hidden"
-      >
-        <pre
-          className={cn(
-            "text-sm font-mono bg-muted/50 rounded-lg p-3 overflow-x-auto whitespace-pre-wrap break-all hover:bg-muted/70 transition-colors max-h-[15em]",
-            !isExpanded && lineCount > MAX_METADATA_LINES && "mask-bottom"
-          )}
+      <div className="mt-2">
+        <motion.div
+          initial={false}
+          animate={{
+            height: isExpanded ? "auto" : "15em",
+          }}
+          transition={{ duration: 0.3 }}
+          className={cn("relative", !isExpanded && "overflow-hidden")}
         >
-          {metadataString}
-        </pre>
+          <pre
+            className={cn(
+              "text-sm font-mono bg-muted/50 rounded-lg p-3 whitespace-pre-wrap break-all hover:bg-muted/70 transition-colors",
+              isExpanded ? "h-auto" : "max-h-[15em] overflow-y-auto",
+              !isExpanded && lineCount > MAX_METADATA_LINES && "mask-bottom"
+            )}
+          >
+            {metadataString}
+          </pre>
+        </motion.div>
 
         {lineCount > MAX_METADATA_LINES && (
-          <div className="flex justify-center mt-2">
-            <Button
+          <div className="flex justify-center -mt-1">
+            <button
               onClick={() => setIsExpanded(!isExpanded)}
-              variant="ghost"
-              size="sm"
-              className="h-8 px-3 text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
+              className={cn(
+                "group flex items-center gap-1.5 px-3 py-1.5",
+                "text-xs font-medium text-muted-foreground/80",
+                "hover:text-muted-foreground transition-colors  hover:cursor-pointer",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 rounded-md"
+              )}
               aria-expanded={isExpanded}
               aria-controls="metadata-content"
             >
-              {isExpanded ? (
-                <>
-                  <ChevronUp className="w-4 h-4 mr-1" />
-                  Show Less
-                </>
-              ) : (
-                <>
-                  <ChevronDown className="w-4 h-4 mr-1" />
-                  Show More
-                </>
-              )}
-            </Button>
+              <motion.span
+                initial={false}
+                animate={{ rotate: isExpanded ? 180 : 0 }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
+              >
+                <ChevronDown className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity" />
+              </motion.span>
+              {isExpanded ? "Show less" : "Show more"}
+            </button>
           </div>
         )}
-      </motion.div>
+      </div>
     </motion.div>
   );
 }
