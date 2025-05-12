@@ -19,7 +19,7 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
   const metadataString =
     metadata !== undefined && metadata !== null
       ? JSON.stringify(metadata, null, 2).replace(/[\uFFFD]/g, " ")
-      : "This image has no metadata.";
+      : "";
 
   const characterCount = metadataString.length;
   const hasMetadata =
@@ -30,6 +30,8 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
   useEffect(() => {
     setShouldShowButton(characterCount > MAX_CHARACTERS);
   }, [characterCount]);
+
+  if (!hasMetadata) return null;
 
   return (
     <motion.div

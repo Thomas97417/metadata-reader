@@ -92,7 +92,9 @@ export default function ImageDetails({
             </motion.div>
           </div>
 
-          {metadata !== null ? (
+          {metadata &&
+          typeof metadata === "object" &&
+          Object.keys(metadata).length > 0 ? (
             <MetadataDisplay metadata={metadata} />
           ) : imageUrl !== null ? (
             <motion.div
@@ -116,9 +118,13 @@ export default function ImageDetails({
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex flex-col items-center justify-center h-full"
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="flex flex-col items-center justify-center gap-3 h-full p-8 transition-colors"
             >
-              <p className="text-muted-foreground text-center">
+              <p className="text-muted-foreground text-center font-medium">
+                No Image Selected
+              </p>
+              <p className="text-sm text-muted-foreground/70 text-center max-w-md">
                 Upload an image to view its metadata and generation parameters
               </p>
             </motion.div>

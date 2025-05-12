@@ -126,20 +126,17 @@ export default function ImageUploader({ setFileName }: ImageUploaderProps) {
               >
                 <motion.div
                   whileHover={{ scale: 1.1, rotate: 15 }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  className="bg-background mb-4 flex size-16 shrink-0 items-center justify-center rounded-full border shadow-sm"
+                  whileTap={{ scale: 0.9 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  className="bg-background/80 mb-2 flex size-20 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-muted-foreground/20 shadow-md hover:border-primary/30 transition-colors"
                 >
-                  <ImageUpIcon className="size-6 opacity-60" />
+                  <ImageUpIcon className="size-8 text-muted-foreground/60" />
                 </motion.div>
                 <h3 className="mb-2 text-lg font-semibold">
                   Drop your image here
                 </h3>
                 <p className="mb-2 text-sm text-muted-foreground">
                   or click to browse
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Supports: AI-generated images from Stable Diffusion, ComfyUI
                 </p>
               </motion.div>
             )}
