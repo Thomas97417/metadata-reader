@@ -98,7 +98,7 @@ export default function ParametersDetails({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className="space-y-6"
+      className="space-y-6 overflow-hidden"
     >
       <MetadataDisplay metadata={metadata} />
 
@@ -106,7 +106,7 @@ export default function ParametersDetails({
         {parametersSections !== "" && (
           <motion.div
             {...fadeInUp}
-            className="rounded-lg border bg-card p-4 shadow-sm space-y-4"
+            className="rounded-lg border bg-card p-4 shadow-sm hover:shadow-md transition-shadow space-y-4"
           >
             <div className="flex justify-between items-center pb-2 border-b">
               <div className="flex items-center gap-2">
@@ -131,10 +131,10 @@ export default function ParametersDetails({
                 <motion.div
                   key={section.title}
                   variants={itemVariants}
-                  className="space-y-2"
+                  className="space-y-2 group"
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-muted-foreground">
+                    <div className="flex items-center gap-2 text-muted-foreground group-hover:text-foreground transition-colors">
                       <section.icon className="w-4 h-4" />
                       <h3 className="font-medium">{section.title}</h3>
                     </div>
@@ -146,8 +146,12 @@ export default function ParametersDetails({
                     />
                   </div>
                   <div className="relative">
-                    <pre className="text-sm font-mono bg-muted/50 rounded-lg p-3 overflow-x-auto whitespace-pre-wrap break-words">
-                      {section.content || "None"}
+                    <pre className="text-sm font-mono bg-muted/50 rounded-lg p-3 overflow-x-auto whitespace-pre-wrap break-all group-hover:bg-muted/70 transition-colors">
+                      {section.content || (
+                        <span className="text-muted-foreground italic">
+                          None
+                        </span>
+                      )}
                     </pre>
                   </div>
                 </motion.div>

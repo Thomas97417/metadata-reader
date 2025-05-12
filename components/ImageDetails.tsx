@@ -61,7 +61,7 @@ export default function ImageDetails({
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col lg:flex-row w-full gap-8 bg-card rounded-xl p-6 border shadow-sm"
+        className="flex flex-col xlg:flex-row w-full gap-8 bg-card rounded-xl p-6 border shadow-sm hover:shadow-md transition-shadow"
       >
         <div className="w-full lg:w-1/2 flex flex-col gap-4">
           <motion.div
@@ -76,11 +76,13 @@ export default function ImageDetails({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg p-3"
+            className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg p-3 hover:bg-muted/70 transition-colors"
           >
             <FileText className="size-4" />
             <span className="font-medium">File:</span>
-            <span className="truncate">{shortFileName}</span>
+            <span className="truncate">
+              {shortFileName || "No file selected"}
+            </span>
           </motion.div>
         </div>
 
@@ -97,17 +99,25 @@ export default function ImageDetails({
               kindOfPrompt={kindOfPrompt}
             />
           ) : imageUrl !== null ? (
-            <div className="flex flex-col items-center justify-center h-full">
-              <p className="text-muted-foreground">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-col items-center justify-center h-full p-8 bg-muted/30 rounded-lg border border-dashed"
+            >
+              <p className="text-muted-foreground text-center">
                 No metadata found in this image
               </p>
-            </div>
+            </motion.div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-full">
-              <p className="text-muted-foreground">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-col items-center justify-center h-full p-8 bg-muted/30 rounded-lg border border-dashed"
+            >
+              <p className="text-muted-foreground text-center">
                 Upload an image to view its metadata and generation parameters
               </p>
-            </div>
+            </motion.div>
           )}
         </motion.div>
       </motion.div>

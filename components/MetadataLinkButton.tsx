@@ -21,7 +21,10 @@ export function MetadataLinkButton() {
         className="bg-primary text-primary-foreground hover:bg-primary/90 relative overflow-hidden group hover:cursor-pointer"
         asChild
       >
-        <Link href="/metadata">
+        <Link
+          href="/metadata"
+          className="w-full h-full flex items-center justify-center"
+        >
           <span className="relative z-10 flex items-center gap-2">
             Extract
             <FileTerminal className="w-5 h-5 transition-transform group-hover:rotate-12" />

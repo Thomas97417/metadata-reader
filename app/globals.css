@@ -171,4 +171,5 @@
 
 @theme {
   --breakpoint-xs: 600px;
+  --breakpoint-xlg: 840px;
 }

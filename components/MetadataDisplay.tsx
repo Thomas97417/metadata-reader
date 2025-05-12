@@ -41,7 +41,7 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="rounded-lg border bg-card p-4 shadow-sm"
+      className="rounded-lg border bg-card p-4 shadow-sm hover:shadow-md transition-shadow"
     >
       <div className="flex items-center justify-between pb-3 border-b">
         <div className="flex items-center gap-2">
@@ -52,8 +52,9 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 px-2 text-muted-foreground hover:text-foreground hover:cursor-pointer"
+            className="h-8 px-2 text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
             onClick={handleCopy}
+            aria-label={isCopied ? "Copied to clipboard" : "Copy metadata"}
           >
             {isCopied ? (
               <CheckIcon className="w-4 h-4 mr-1" />
@@ -75,11 +76,11 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
             : "auto",
         }}
         transition={{ duration: 0.3 }}
-        className="relative mt-2"
+        className="relative mt-2 overflow-hidden"
       >
         <pre
           className={cn(
-            "text-sm font-mono bg-muted/50 rounded-lg p-3 overflow-x-auto",
+            "text-sm font-mono bg-muted/50 rounded-lg p-3 overflow-x-auto whitespace-pre-wrap break-all hover:bg-muted/70 transition-colors max-h-[15em]",
             !isExpanded && lineCount > MAX_METADATA_LINES && "mask-bottom"
           )}
         >
@@ -92,7 +93,9 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
               onClick={() => setIsExpanded(!isExpanded)}
               variant="ghost"
               size="sm"
-              className="h-8 px-3 text-muted-foreground hover:text-foreground"
+              className="h-8 px-3 text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
+              aria-expanded={isExpanded}
+              aria-controls="metadata-content"
             >
               {isExpanded ? (
                 <>

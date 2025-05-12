@@ -76,7 +76,7 @@ export default function ImageUploader({ setFileName }: ImageUploaderProps) {
             backgroundColor: isDragging ? "hsl(var(--accent))" : "transparent",
           }}
           transition={{ duration: 0.2 }}
-          className="relative flex min-h-[300px] flex-col items-center justify-center overflow-hidden rounded-xl transition-colors hover:cursor-pointer hover:bg-accent/20"
+          className="relative flex min-h-[300px] flex-col items-center justify-center overflow-hidden rounded-xl transition-all hover:cursor-pointer hover:bg-accent/20 hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
         >
           <input
             {...getInputProps()}
@@ -91,13 +91,18 @@ export default function ImageUploader({ setFileName }: ImageUploaderProps) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
-                className="absolute inset-0"
+                className="absolute inset-0 group"
               >
                 <img
                   src={previewUrl}
                   alt={files[0]?.file?.name || "Uploaded image"}
-                  className="h-full w-full object-cover rounded-xl"
+                  className="h-full w-full object-cover rounded-xl transition-transform group-hover:scale-105"
                 />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
+                  <p className="text-white text-sm font-medium">
+                    Click to change image
+                  </p>
+                </div>
               </motion.div>
             ) : (
               <motion.div
@@ -110,6 +115,7 @@ export default function ImageUploader({ setFileName }: ImageUploaderProps) {
               >
                 <motion.div
                   whileHover={{ scale: 1.1, rotate: 15 }}
+                  whileTap={{ scale: 0.95 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
                   className="bg-background mb-4 flex size-16 shrink-0 items-center justify-center rounded-full border shadow-sm"
                 >
@@ -159,7 +165,7 @@ export default function ImageUploader({ setFileName }: ImageUploaderProps) {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="text-destructive flex items-center gap-1.5 text-sm bg-destructive/10 p-2 rounded-md"
+            className="text-destructive flex items-center gap-1.5 text-sm bg-destructive/10 p-3 rounded-lg border border-destructive/20"
             role="alert"
           >
             <AlertCircleIcon className="size-4 shrink-0" />
