@@ -28,7 +28,12 @@ const menuItemVariants = {
 
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const [systemTheme, setSystemTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: light)");
@@ -41,6 +46,18 @@ export default function ThemeToggle() {
 
     return () => mediaQuery.removeEventListener("change", updateSystemTheme);
   }, []);
+
+  if (!mounted) {
+    return (
+      <Button
+        variant="outline"
+        size="icon"
+        className="relative overflow-hidden hover:cursor-pointer text-primary hover:text-primary/80 dark:hover:text-primary/80 hover:bg-primary/10 dark:hover:bg-primary/10 border-primary hover:border-primary/80 dark:hover:border-primary/80 border-2"
+      >
+        <span className="opacity-0">Toggle theme</span>
+      </Button>
+    );
+  }
 
   const shouldShowSun =
     !theme ||

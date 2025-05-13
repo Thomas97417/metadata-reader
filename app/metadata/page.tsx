@@ -2,11 +2,8 @@
 
 import ImageDetails from "@/components/ImageDetails";
 import { motion } from "framer-motion";
-import { useState } from "react";
 
 export default function MetadataPage() {
-  const [fileName, setFileName] = useState<string | null>(null);
-
   return (
     <div className="bg-background relative pt-16">
       {/* Content */}
@@ -19,7 +16,7 @@ export default function MetadataPage() {
         >
           {/* Details Section */}
           <div className="pb-16">
-            <ImageDetails fileName={fileName} setFileName={setFileName} />
+            <ImageDetails />
           </div>
         </motion.div>
       </div>

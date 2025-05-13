@@ -2,7 +2,7 @@ import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 
-import { ImageProvider } from "@/components/ImageContext";
+import { ImageContextProvider } from "@/components/ImageContext";
 import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
@@ -34,12 +34,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ImageProvider>
+          <ImageContextProvider>
             <div className="max-w-7xl mx-auto">
               <Navbar />
               {children}
             </div>
-          </ImageProvider>
+          </ImageContextProvider>
         </ThemeProvider>
         <Analytics />
       </body>

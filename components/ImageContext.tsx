@@ -13,7 +13,7 @@ interface ImageContextType {
 
 const ImageContext = createContext<ImageContextType | undefined>(undefined);
 
-export const ImageProvider = ({ children }: { children: ReactNode }) => {
+export const ImageContextProvider = ({ children }: { children: ReactNode }) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [metadata, setMetadata] = useState<Metadata | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);

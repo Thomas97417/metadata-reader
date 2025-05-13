@@ -8,18 +8,10 @@ import ImageUploader from "./ImageUploader";
 import MetadataDisplay from "./MetadataDisplay";
 import ParametersDetails from "./ParametersDetails";
 
-type ImageDetailsProps = {
-  fileName: string | null;
-  setFileName: (fileName: string | null) => void;
-};
-
-export default function ImageDetails({
-  fileName,
-  setFileName,
-}: ImageDetailsProps) {
+export default function ImageDetails() {
   const [shortFileName, setShortFileName] = useState<string | null>(null);
   const [kindOfPrompt, setKindOfPrompt] = useState<string | null>(null);
-  const { imageUrl, metadata } = useImageContext();
+  const { imageUrl, metadata, fileName } = useImageContext();
 
   useEffect(() => {
     if (fileName) {
@@ -76,7 +68,7 @@ export default function ImageDetails({
               transition={{ duration: 0.5, delay: 0.2 }}
               className="relative rounded-xl overflow-hidden border bg-background/50"
             >
-              <ImageUploader setFileName={setFileName} />
+              <ImageUploader />
             </motion.div>
             <motion.div
               initial={{ opacity: 0 }}

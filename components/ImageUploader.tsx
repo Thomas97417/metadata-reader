@@ -6,12 +6,8 @@ import { AlertCircleIcon, ImageUpIcon, XIcon } from "lucide-react";
 import { useEffect } from "react";
 import { useImageContext } from "./ImageContext";
 
-interface ImageUploaderProps {
-  setFileName: (fileName: string | null) => void;
-}
-
-export default function ImageUploader({ setFileName }: ImageUploaderProps) {
-  const { setImageUrl, setMetadata } = useImageContext();
+export default function ImageUploader() {
+  const { setImageUrl, setMetadata, setFileName } = useImageContext();
 
   const [
     { files, isDragging, errors },
