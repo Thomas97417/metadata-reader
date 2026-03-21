@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 
 import { ImageContextProvider } from "@/components/ImageContext";
 import Navbar from "@/components/Navbar";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "next-themes";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
@@ -20,12 +20,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="w-full">
+    <html lang="en" className="w-full" suppressHydrationWarning>
       <body
         className={cn(
           GeistMono.variable,
           GeistSans.variable,
-          "h-full bg-background font-sans text-foreground"
+          "h-full bg-background font-sans text-foreground",
         )}
       >
         <ThemeProvider
