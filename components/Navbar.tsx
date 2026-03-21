@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MetadataLinkButton } from "./MetadataLinkButton";
+import { AboutLinkButton } from "./AboutLinkButton";
 import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
@@ -11,7 +11,7 @@ const Navbar = () => {
         </h1>
       </Link>
       <div className="flex flex-row items-center gap-2">
-        <MetadataLinkButton />
+        <AboutLinkButton />
         <ThemeToggle />
       </div>
     </div>
