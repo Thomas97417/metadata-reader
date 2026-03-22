@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FileCode, Image, Sparkles } from "lucide-react";
+import { CodeBracketSquareIcon, PhotoIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import TryLinkButton from "./TryLinkButton";
 
 const Hero = () => {
@@ -21,7 +21,7 @@ const Hero = () => {
             className="flex justify-center mb-4"
           >
             <div className="p-3 bg-primary/10 rounded-2xl">
-              <Sparkles className="w-10 h-10 text-primary" />
+              <SparklesIcon className="w-10 h-10 text-primary" />
             </div>
           </motion.div>
 
@@ -46,11 +46,11 @@ const Hero = () => {
             </p>
             <div className="flex justify-center gap-8 text-muted-foreground/80">
               <div className="flex items-center gap-2">
-                <Image className="w-5 h-5" />
+                <PhotoIcon className="w-5 h-5" />
                 <span>AI Image Analysis</span>
               </div>
               <div className="flex items-center gap-2">
-                <FileCode className="w-5 h-5" />
+                <CodeBracketSquareIcon className="w-5 h-5" />
                 <span>Prompt Extraction</span>
               </div>
             </div>

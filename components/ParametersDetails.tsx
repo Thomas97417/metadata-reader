@@ -1,6 +1,6 @@
 "use client";
 import { AnimatePresence, motion } from "framer-motion";
-import { MessageSquare, Settings2, Sparkles, XCircle } from "lucide-react";
+import { ChatBubbleLeftIcon, Cog6ToothIcon, SparklesIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import CopyToClipboard from "./CopyToClipboard";
 import MetadataDisplay from "./MetadataDisplay";
@@ -71,7 +71,7 @@ export default function ParametersDetails({
   const sections = [
     {
       title: "Positive Prompt",
-      icon: Sparkles,
+      icon: SparklesIcon,
       content: part1,
       copied: copiedPositive,
       setCopied: setCopiedPositive,
@@ -79,7 +79,7 @@ export default function ParametersDetails({
     },
     {
       title: "Negative Prompt",
-      icon: XCircle,
+      icon: XCircleIcon,
       content: part2,
       copied: copiedNegative,
       setCopied: setCopiedNegative,
@@ -87,7 +87,7 @@ export default function ParametersDetails({
     },
     {
       title: "Generation Settings",
-      icon: Settings2,
+      icon: Cog6ToothIcon,
       content: part3,
       copied: copiedDetails,
       setCopied: setCopiedDetails,
@@ -111,7 +111,7 @@ export default function ParametersDetails({
             {!embedded && (
               <div className="flex justify-between items-center pb-2 border-b">
                 <div className="flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5 text-primary" />
+                  <ChatBubbleLeftIcon className="w-5 h-5 text-primary" />
                   <h2 className="font-semibold text-lg">Generation Parameters</h2>
                 </div>
                 <CopyToClipboard

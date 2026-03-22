@@ -2,7 +2,7 @@
 import { useFileUpload } from "@/hooks/use-file-upload";
 import * as exifr from "exifr";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertCircleIcon, ImageUpIcon, XIcon } from "lucide-react";
+import { ArrowUpTrayIcon, ExclamationCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useEffect } from "react";
 import { useImageContext } from "./ImageContext";
 import { Button } from "./ui/button";
@@ -104,7 +104,7 @@ export default function ImageUploader({ variant = "default" }: ImageUploaderProp
                     whileHover={{ scale: 1.1, rotate: 15 }}
                     className="bg-white/10 p-3 rounded-full border border-white/20 backdrop-blur-sm"
                   >
-                    <ImageUpIcon className="size-5 text-white" />
+                    <ArrowUpTrayIcon className="size-5 text-white" />
                   </motion.div>
                   <p className="text-white/90 text-sm font-medium tracking-wide">
                     Change image
@@ -131,7 +131,7 @@ export default function ImageUploader({ variant = "default" }: ImageUploaderProp
                     isHero ? "size-24" : "size-20"
                   }`}
                 >
-                  <ImageUpIcon className={isHero ? "size-12 text-muted-foreground/60" : "size-8 text-muted-foreground/60"} />
+                  <ArrowUpTrayIcon className={isHero ? "size-12 text-muted-foreground/60" : "size-8 text-muted-foreground/60"} />
                 </motion.div>
                 <h3 className={`mb-2 font-semibold ${isHero ? "text-2xl" : "text-lg"}`}>
                   Drop your image here
@@ -166,7 +166,7 @@ export default function ImageUploader({ variant = "default" }: ImageUploaderProp
                 onClick={() => removeFile(files[0]?.id)}
                 aria-label="Remove image"
               >
-                <XIcon className="size-4" aria-hidden="true" />
+                <XMarkIcon className="size-4" aria-hidden="true" />
               </motion.button>
             </motion.div>
           )}
@@ -182,7 +182,7 @@ export default function ImageUploader({ variant = "default" }: ImageUploaderProp
             className="text-destructive flex items-center gap-1.5 text-sm bg-destructive/10 p-3 rounded-lg border border-destructive/20"
             role="alert"
           >
-            <AlertCircleIcon className="size-4 shrink-0" />
+            <ExclamationCircleIcon className="size-4 shrink-0" />
             <span>{errors[0]}</span>
           </motion.div>
         )}

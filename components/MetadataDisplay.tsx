@@ -3,7 +3,7 @@
 import { MAX_CHARACTERS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { ChevronDown, Database } from "lucide-react";
+import { ChevronDownIcon, CircleStackIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import CopyToClipboard from "./CopyToClipboard";
 
@@ -39,7 +39,7 @@ export default function MetadataDisplay({ metadata, embedded = false }: Metadata
       {!embedded && (
         <div className="flex items-center justify-between pb-3 border-b">
           <div className="flex items-center gap-2">
-            <Database className="w-5 h-5 text-primary" />
+            <CircleStackIcon className="w-5 h-5 text-primary" />
             <h2 className="font-semibold text-lg">Raw Metadata</h2>
           </div>
           {hasMetadata && (
@@ -91,7 +91,7 @@ export default function MetadataDisplay({ metadata, embedded = false }: Metadata
                 animate={{ rotate: isExpanded ? 180 : 0 }}
                 transition={{ duration: 0.2, ease: "easeInOut" }}
               >
-                <ChevronDown className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity group-hover:text-primary" />
+                <ChevronDownIcon className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity group-hover:text-primary" />
               </motion.span>
               {isExpanded ? "Show less" : "Show more"}
             </button>

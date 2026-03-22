@@ -1,26 +1,26 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { BrainCircuit, Rocket, ShieldCheck } from "lucide-react";
+import { CpuChipIcon, RocketLaunchIcon, ShieldCheckIcon } from "@heroicons/react/24/outline";
 import { InfoCard } from "./InfoCard";
 
 const features = [
   {
-    icon: BrainCircuit,
+    icon: CpuChipIcon,
     title: "Smart AI Detection",
     description: "Built for AI art enthusiasts",
     content:
       "Automatically detects and extracts prompts from popular AI art tools like Stable Diffusion, ComfyUI, Midjourney, and DALL-E. Works with or without the web UI running.",
   },
   {
-    icon: Rocket,
+    icon: RocketLaunchIcon,
     title: "Lightning Fast",
     description: "Results in milliseconds",
     content:
       "Get instant access to your image metadata with our optimized extraction engine. No waiting, no uploads needed - everything happens right on your device.",
   },
   {
-    icon: ShieldCheck,
+    icon: ShieldCheckIcon,
     title: "100% Private",
     description: "Your data stays local",
     content:

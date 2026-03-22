@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { FileTerminal } from "lucide-react";
+import { CommandLineIcon } from "@heroicons/react/24/outline";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 
@@ -27,7 +27,7 @@ export function MetadataLinkButton() {
         >
           <span className="relative z-10 flex items-center gap-2">
             Extract
-            <FileTerminal className="w-5 h-5 transition-transform group-hover:rotate-12" />
+            <CommandLineIcon className="w-5 h-5 transition-transform group-hover:rotate-12" />
           </span>
           <div className="absolute inset-0 bg-gradient-to-r from-primary-foreground/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </Link>
