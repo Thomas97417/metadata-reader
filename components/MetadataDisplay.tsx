@@ -53,17 +53,6 @@ export default function MetadataDisplay({ metadata, embedded = false }: Metadata
         </div>
       )}
 
-      {embedded && (
-        <div className="flex justify-end mb-2">
-          <CopyToClipboard
-            parametersSections={metadataString}
-            copied={isCopied}
-            setCopied={setIsCopied}
-            text="Copy All"
-          />
-        </div>
-      )}
-
       <div className={embedded ? "" : "mt-2"}>
         <motion.div
           initial={false}

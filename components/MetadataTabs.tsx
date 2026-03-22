@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { Code, Database, MessageSquare } from "lucide-react";
 import { useEffect, useState } from "react";
+import CopyToClipboard from "./CopyToClipboard";
 import MetadataDisplay from "./MetadataDisplay";
 import ParametersDetails from "./ParametersDetails";
 
@@ -29,10 +30,19 @@ export default function MetadataTabs({
   const [activeTab, setActiveTab] = useState<Tab>(
     hasPrompts ? "prompts" : "raw"
   );
+  const [copiedAll, setCopiedAll] = useState(false);
+
+  const metadataString =
+    metadata !== null && metadata !== undefined
+      ? JSON.stringify(metadata, null, 2).replace(/[\uFFFD]/g, " ")
+      : "";
+
+  const copyContent = activeTab === "prompts" ? parametersSections : metadataString;
 
   // Reset tab when image changes
   useEffect(() => {
     setActiveTab(hasPrompts ? "prompts" : "raw");
+    setCopiedAll(false);
   }, [hasPrompts, metadata]);
 
   const tabs = [
@@ -70,8 +80,8 @@ export default function MetadataTabs({
   return (
     <div className="space-y-4">
       {/* Tab bar */}
-      {tabs.length > 1 && (
-        <div className="flex gap-1 border-b">
+      <div className="flex items-center border-b">
+        <div className="flex gap-1">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -96,7 +106,15 @@ export default function MetadataTabs({
             </button>
           ))}
         </div>
-      )}
+        <div className="ml-auto">
+          <CopyToClipboard
+            parametersSections={copyContent}
+            copied={copiedAll}
+            setCopied={setCopiedAll}
+            text="Copy All"
+          />
+        </div>
+      </div>
 
       {/* Tab panels */}
       <AnimatePresence mode="wait">
