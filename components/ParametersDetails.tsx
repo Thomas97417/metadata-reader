@@ -123,17 +123,6 @@ export default function ParametersDetails({
               </div>
             )}
 
-            {embedded && (
-              <div className="flex justify-end">
-                <CopyToClipboard
-                  parametersSections={parametersSections}
-                  copied={copiedAll}
-                  setCopied={setCopiedAll}
-                  text="Copy All"
-                />
-              </div>
-            )}
-
             <motion.div
               variants={containerVariants}
               initial="hidden"
