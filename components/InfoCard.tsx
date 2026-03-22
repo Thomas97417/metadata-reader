@@ -8,10 +8,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import { LucideIcon } from "lucide-react";
-
 interface InfoCardProps {
-  icon: LucideIcon;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   title: string;
   description: string;
   content: string;
@@ -34,7 +32,7 @@ export function InfoCard({
 
         <CardHeader className="relative space-y-4 pb-4">
           <div className="inline-flex p-3 rounded-xl bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors duration-300">
-            <Icon className="w-6 h-6" strokeWidth={1.5} />
+            <Icon className="w-6 h-6" />
           </div>
           <div className="space-y-2.5">
             <CardTitle className="text-xl font-semibold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary group-hover:from-primary group-hover:to-secondary transition-colors duration-300">

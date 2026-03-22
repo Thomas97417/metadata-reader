@@ -1,7 +1,7 @@
 "use client";
 import { MAX_FILENAME_LENGTH } from "@/lib/constants";
 import { AnimatePresence, motion } from "framer-motion";
-import { FileText } from "lucide-react";
+import { DocumentTextIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { useImageContext } from "./ImageContext";
 import ImageUploader from "./ImageUploader";
@@ -116,7 +116,7 @@ export default function ImageDetails() {
                 transition={{ duration: 0.3 }}
                 className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg p-3"
               >
-                <FileText className="size-4 text-primary shrink-0" />
+                <DocumentTextIcon className="size-4 text-primary shrink-0" />
                 <span className="font-medium text-primary">File:</span>
                 <span className="truncate">
                   {shortFileName || "No file selected"}

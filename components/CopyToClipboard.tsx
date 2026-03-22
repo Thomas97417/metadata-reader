@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { CheckIcon, CopyIcon } from "lucide-react";
+import { CheckIcon, ClipboardDocumentIcon } from "@heroicons/react/24/outline";
 import { Button } from "./ui/button";
 import {
   Tooltip,
@@ -73,7 +73,7 @@ const CopyToClipboard = ({
                   exit="exit"
                   transition={{ duration: 0.2 }}
                 >
-                  <CopyIcon className="w-4 h-4" />
+                  <ClipboardDocumentIcon className="w-4 h-4" />
                 </motion.span>
               )}
             </AnimatePresence>

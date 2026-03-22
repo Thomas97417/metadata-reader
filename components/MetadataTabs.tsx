@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { Code, Database, MessageSquare } from "lucide-react";
+import { ChatBubbleLeftIcon, CircleStackIcon, CodeBracketIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import CopyToClipboard from "./CopyToClipboard";
 import MetadataDisplay from "./MetadataDisplay";
@@ -47,10 +47,10 @@ export default function MetadataTabs({
 
   const tabs = [
     ...(hasPrompts
-      ? [{ id: "prompts" as Tab, label: "Prompts", icon: MessageSquare }]
+      ? [{ id: "prompts" as Tab, label: "Prompts", icon: ChatBubbleLeftIcon }]
       : []),
     ...(hasMetadata
-      ? [{ id: "raw" as Tab, label: "Raw Data", icon: Code }]
+      ? [{ id: "raw" as Tab, label: "Raw Data", icon: CodeBracketIcon }]
       : []),
   ];
 
@@ -64,7 +64,7 @@ export default function MetadataTabs({
         className="flex flex-col items-center justify-center gap-3 h-full p-8 bg-muted/30 rounded-lg border border-dashed"
       >
         <div className="bg-background/80 rounded-full p-3">
-          <Database className="w-6 h-6 text-muted-foreground/70" />
+          <CircleStackIcon className="w-6 h-6 text-muted-foreground/70" />
         </div>
         <p className="text-muted-foreground text-center font-medium">
           No Metadata Found

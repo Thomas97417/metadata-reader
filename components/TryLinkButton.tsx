@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Button } from "./ui/button";
 
@@ -20,7 +20,7 @@ const TryLinkButton = () => {
         <Link href="/">
           <span className="relative z-10 flex items-center gap-2">
             Try Now
-            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            <ArrowRightIcon className="w-5 h-5 transition-transform group-hover:translate-x-1" />
           </span>
           <div className="absolute inset-0 bg-gradient-to-r from-primary-foreground/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </Link>
