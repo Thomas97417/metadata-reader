@@ -5,8 +5,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircleIcon, ImageUpIcon, XIcon } from "lucide-react";
 import { useEffect } from "react";
 import { useImageContext } from "./ImageContext";
+import { Button } from "./ui/button";
 
-export default function ImageUploader() {
+type ImageUploaderProps = {
+  variant?: "default" | "hero";
+};
+
+export default function ImageUploader({ variant = "default" }: ImageUploaderProps) {
   const { setImageUrl, setMetadata, setFileName } = useImageContext();
 
   const [
@@ -25,6 +30,7 @@ export default function ImageUploader() {
   });
 
   const previewUrl = files[0]?.preview || null;
+  const isHero = variant === "hero";
 
   useEffect(() => {
     const processMetadata = async () => {
@@ -50,12 +56,7 @@ export default function ImageUploader() {
   }, [files, setFileName, setImageUrl, setMetadata]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="flex flex-col gap-2"
-    >
+    <div className="flex flex-col gap-2">
       <div className="relative">
         <motion.div
           role="button"
@@ -72,7 +73,9 @@ export default function ImageUploader() {
             backgroundColor: isDragging ? "hsl(var(--accent))" : "transparent",
           }}
           transition={{ duration: 0.2 }}
-          className="relative flex min-h-[300px] flex-col items-center justify-center overflow-hidden rounded-xl transition-all hover:cursor-pointer hover:bg-accent/20 hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+          className={`relative flex flex-col items-center justify-center overflow-hidden rounded-xl border-2 border-dashed transition-all hover:cursor-pointer hover:bg-accent/20 hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
+            isHero ? "min-h-[400px]" : "min-h-[300px]"
+          }`}
         >
           <input
             {...getInputProps()}
@@ -124,16 +127,23 @@ export default function ImageUploader() {
                   whileHover={{ scale: 1.1, rotate: 15 }}
                   whileTap={{ scale: 0.9 }}
                   transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  className="bg-background/80 mb-2 flex size-20 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-muted-foreground/20 shadow-md hover:border-primary/30 transition-colors"
+                  className={`bg-background/80 mb-3 flex shrink-0 items-center justify-center rounded-full border-2 border-dashed border-muted-foreground/20 shadow-md hover:border-primary/30 transition-colors ${
+                    isHero ? "size-24" : "size-20"
+                  }`}
                 >
-                  <ImageUpIcon className="size-8 text-muted-foreground/60" />
+                  <ImageUpIcon className={isHero ? "size-12 text-muted-foreground/60" : "size-8 text-muted-foreground/60"} />
                 </motion.div>
-                <h3 className="mb-2 text-lg font-semibold">
+                <h3 className={`mb-2 font-semibold ${isHero ? "text-2xl" : "text-lg"}`}>
                   Drop your image here
                 </h3>
-                <p className="mb-2 text-sm text-muted-foreground">
+                <p className={`text-muted-foreground ${isHero ? "text-base mb-4" : "text-sm mb-2"}`}>
                   or click to browse
                 </p>
+                {isHero && (
+                  <Button variant="default" size="lg" type="button">
+                    Browse Files
+                  </Button>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
@@ -177,6 +187,6 @@ export default function ImageUploader() {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }

@@ -9,9 +9,10 @@ import CopyToClipboard from "./CopyToClipboard";
 
 type MetadataDisplayProps = {
   metadata: any;
+  embedded?: boolean;
 };
 
-export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
+export default function MetadataDisplay({ metadata, embedded = false }: MetadataDisplayProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [shouldShowButton, setShouldShowButton] = useState(false);
@@ -33,29 +34,37 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
 
   if (!hasMetadata) return null;
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="rounded-lg border bg-card p-4 shadow-sm hover:shadow-md transition-shadow"
-    >
-      <div className="flex items-center justify-between pb-3 border-b">
-        <div className="flex items-center gap-2">
-          <Database className="w-5 h-5 text-primary" />
-          <h2 className="font-semibold text-lg">Raw Metadata</h2>
+  const inner = (
+    <>
+      {!embedded && (
+        <div className="flex items-center justify-between pb-3 border-b">
+          <div className="flex items-center gap-2">
+            <Database className="w-5 h-5 text-primary" />
+            <h2 className="font-semibold text-lg">Raw Metadata</h2>
+          </div>
+          {hasMetadata && (
+            <CopyToClipboard
+              parametersSections={metadataString}
+              copied={isCopied}
+              setCopied={setIsCopied}
+              text="Copy All"
+            />
+          )}
         </div>
-        {hasMetadata && (
+      )}
+
+      {embedded && (
+        <div className="flex justify-end mb-2">
           <CopyToClipboard
             parametersSections={metadataString}
             copied={isCopied}
             setCopied={setIsCopied}
             text="Copy All"
           />
-        )}
-      </div>
+        </div>
+      )}
 
-      <div className="mt-2">
+      <div className={embedded ? "" : "mt-2"}>
         <motion.div
           initial={false}
           animate={{
@@ -100,6 +109,21 @@ export default function MetadataDisplay({ metadata }: MetadataDisplayProps) {
           </div>
         )}
       </div>
+    </>
+  );
+
+  if (embedded) {
+    return inner;
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="rounded-lg border bg-card p-4 shadow-sm hover:shadow-md transition-shadow"
+    >
+      {inner}
     </motion.div>
   );
 }
