@@ -14,7 +14,32 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <Button
+        variant="ghost"
+        size="icon"
+        className="text-muted-foreground"
+        disabled
+      >
+        <span className="h-[1.2rem] w-[1.2rem]" />
+      </Button>
+    );
+  }
+
+  const Icon =
+    theme === "system"
+      ? Cog6ToothIcon
+      : resolvedTheme === "dark"
+        ? MoonIcon
+        : SunIcon;
 
   return (
     <DropdownMenu>
@@ -22,9 +47,9 @@ export default function ThemeToggle() {
         <Button
           variant="ghost"
           size="icon"
-          className="hover:cursor-pointer text-muted-foreground hover:text-foreground hover:bg-primary/15"
+          className="hover:cursor-pointer text-muted-foreground hover:text-foreground hover:bg-primary/15 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
         >
-          <SunIcon className="h-[1.2rem] w-[1.2rem]" />
+          <Icon className="h-[1.2rem] w-[1.2rem]" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
