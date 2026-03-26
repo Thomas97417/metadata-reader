@@ -34,6 +34,8 @@ export default function MetadataDisplay({ metadata, embedded = false }: Metadata
 
   if (!hasMetadata) return null;
 
+  const formattedCount = characterCount.toLocaleString();
+
   const inner = (
     <>
       {!embedded && (
@@ -54,48 +56,40 @@ export default function MetadataDisplay({ metadata, embedded = false }: Metadata
       )}
 
       <div className={embedded ? "" : "mt-2"}>
-        <motion.div
-          initial={false}
-          animate={{
-            height: isExpanded ? "auto" : "15em",
-          }}
-          transition={{ duration: 0.3 }}
-          className={cn("relative", !isExpanded && "overflow-hidden")}
-        >
+        <div className="relative">
           <pre
             className={cn(
-              "text-sm font-mono bg-muted/50 rounded-lg p-3 whitespace-pre-wrap break-all hover:bg-muted/70 transition-colors",
-              isExpanded ? "h-auto" : "max-h-[15em] overflow-y-auto",
-              !isExpanded && shouldShowButton && "mask-bottom"
+              "text-[13px] leading-relaxed font-mono bg-muted/50 rounded-lg p-4 whitespace-pre-wrap break-all hover:bg-muted/70 transition-colors",
+              !isExpanded && shouldShowButton && "max-h-[20em] overflow-hidden mask-bottom",
+              isExpanded && "max-h-none"
             )}
           >
             {metadataString}
           </pre>
-        </motion.div>
+        </div>
 
         {shouldShowButton && (
-          <div className="flex justify-center -mt-1">
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className={cn(
-                "group flex items-center gap-1.5 px-3 py-1.5",
-                "text-xs font-medium text-muted-foreground/80",
-                "hover:text-muted-foreground transition-colors hover:cursor-pointer",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 rounded-md"
-              )}
-              aria-expanded={isExpanded}
-              aria-controls="metadata-content"
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className={cn(
+              "group flex items-center justify-center gap-2 w-full py-2.5 mt-1",
+              "text-xs font-medium text-muted-foreground/80",
+              "hover:text-foreground hover:bg-muted/50 transition-colors hover:cursor-pointer",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 rounded-md"
+            )}
+            aria-expanded={isExpanded}
+            aria-controls="metadata-content"
+          >
+            <motion.span
+              initial={false}
+              animate={{ rotate: isExpanded ? 180 : 0 }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className="flex items-center"
             >
-              <motion.span
-                initial={false}
-                animate={{ rotate: isExpanded ? 180 : 0 }}
-                transition={{ duration: 0.2, ease: "easeInOut" }}
-              >
-                <ChevronDownIcon className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity group-hover:text-primary" />
-              </motion.span>
-              {isExpanded ? "Show less" : "Show more"}
-            </button>
-          </div>
+              <ChevronDownIcon className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity group-hover:text-primary" />
+            </motion.span>
+            {isExpanded ? "Show less" : `Show more (${formattedCount} characters)`}
+          </button>
         )}
       </div>
     </>
