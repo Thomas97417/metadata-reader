@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowUpTrayIcon,
@@ -12,14 +13,22 @@ import {
   ShieldCheckIcon,
   RocketLaunchIcon,
   BoltIcon,
+  GlobeAltIcon,
+  SignalSlashIcon,
+  EyeSlashIcon,
 } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 import TryLinkButton from "@/components/TryLinkButton";
 
 /* ── Illustrations ─────────────────────────────────────────────── */
 
 function StepDropIllustration() {
+  const router = useRouter();
   return (
-    <div className="w-full aspect-[4/3] rounded-2xl border-2 border-dashed border-border bg-card/50 flex flex-col items-center justify-center gap-3 p-8">
+    <div
+      onClick={() => router.push("/extract")}
+      className="w-full aspect-[4/3] rounded-2xl border-2 border-dashed border-border bg-card/50 flex flex-col items-center justify-center gap-3 p-8 cursor-pointer hover:border-primary/50 transition-colors"
+    >
       <motion.div
         animate={{ y: [0, -6, 0] }}
         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
@@ -78,34 +87,194 @@ function StepParsingIllustration() {
 }
 
 function StepResultsIllustration() {
+  const [activeTab, setActiveTab] = useState<"parameters" | "raw">(
+    "parameters",
+  );
   const rows = [
-    { key: "Prompt", value: "a beautiful landscape, oil painting..." },
+    {
+      key: "Prompt",
+      value: "a beautiful landscape, oil painting, vibrant colors",
+    },
+    { key: "Negative", value: "blurry, low quality, watermark, text" },
     { key: "Model", value: "SDXL 1.0" },
     { key: "Seed", value: "4281937" },
     { key: "Steps", value: "30" },
+    { key: "CFG", value: "7.5" },
+  ];
+  const rawData = {
+    prompt: "a beautiful landscape, oil painting, vibrant colors",
+    negative_prompt: "blurry, low quality, watermark, text",
+    model: "SDXL 1.0",
+    seed: 4281937,
+    steps: 30,
+    cfg_scale: 7.5,
+    sampler: "DPM++ 2M Karras",
+    size: "1024x1024",
+  };
+  const tabs = [
+    { id: "parameters" as const, label: "Parameters" },
+    { id: "raw" as const, label: "Raw Data" },
   ];
   return (
     <div className="w-full aspect-[4/3] rounded-2xl border border-border bg-card/50 overflow-hidden flex flex-col">
       {/* Tab bar */}
       <div className="flex items-center gap-1 px-4 pt-3 pb-2 border-b border-border">
-        <span className="text-xs font-medium px-3 py-1 rounded-md bg-primary/10 text-primary">
-          Parameters
-        </span>
-        <span className="text-xs font-medium px-3 py-1 rounded-md text-muted-foreground">
-          Raw Data
-        </span>
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`text-xs font-medium px-3 py-1 rounded-md transition-colors ${
+              activeTab === tab.id
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
-      {/* Rows */}
-      <div className="flex-1 px-4 py-3 space-y-2.5 overflow-hidden">
-        {rows.map((row) => (
-          <div key={row.key} className="flex items-baseline gap-3">
-            <span className="text-[11px] font-medium text-muted-foreground shrink-0 w-12">
-              {row.key}
-            </span>
-            <span className="text-[11px] font-mono text-foreground/80 truncate">
-              {row.value}
+      {/* Content */}
+      {activeTab === "parameters" ? (
+        <div className="flex-1 px-4 py-3 space-y-2.5 overflow-hidden">
+          {rows.map((row) => (
+            <div key={row.key} className="flex items-baseline gap-3">
+              <span className="text-[11px] font-medium text-muted-foreground shrink-0 w-14">
+                {row.key}
+              </span>
+              <span className="text-[11px] font-mono text-foreground/80 truncate">
+                {row.value}
+              </span>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="flex-1 px-4 py-3 overflow-auto">
+          <pre className="text-[10px] font-mono text-foreground/80 leading-relaxed whitespace-pre">
+            {JSON.stringify(rawData, null, 2)}
+          </pre>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── Benefit Illustrations ────────────────────────────────────── */
+
+function BenefitPrivacyIllustration() {
+  return (
+    <div className="w-full aspect-[4/3] rounded-2xl border border-border bg-card/50 flex flex-col items-center justify-center gap-4 p-8">
+      {/* Browser frame */}
+      <div className="w-full max-w-[220px] rounded-xl border border-border bg-background overflow-hidden">
+        <div className="flex items-center gap-1.5 px-3 py-2 border-b border-border bg-muted/30">
+          <div className="w-2 h-2 rounded-full bg-red-400/60" />
+          <div className="w-2 h-2 rounded-full bg-yellow-400/60" />
+          <div className="w-2 h-2 rounded-full bg-green-400/60" />
+          <div className="flex-1 mx-2 h-4 rounded bg-muted/50 flex items-center justify-center">
+            <span className="text-[8px] text-muted-foreground">localhost</span>
+          </div>
+        </div>
+        <div className="p-4 flex flex-col items-center gap-3">
+          <motion.div
+            animate={{ scale: [1, 1.08, 1] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            className="p-3 rounded-full bg-green-500/10 border border-green-500/20"
+          >
+            <ShieldCheckIcon className="w-7 h-7 text-green-500/70" />
+          </motion.div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
+            <span className="text-[10px] font-medium text-green-600/80">
+              All data stays local
             </span>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BenefitSpeedIllustration() {
+  const bars = [
+    { label: "EXIF", delay: 0, width: "85%" },
+    { label: "PNG tEXt", delay: 0.15, width: "70%" },
+    { label: "XMP", delay: 0.3, width: "55%" },
+  ];
+  return (
+    <div className="w-full aspect-[4/3] rounded-2xl border border-border bg-card/50 flex flex-col items-center justify-center gap-4 p-6 sm:p-8">
+      <div className="flex items-center gap-2 mb-1">
+        <RocketLaunchIcon className="w-5 h-5 text-primary/60" />
+        <span className="text-xs font-medium text-muted-foreground">
+          Parsing speed
+        </span>
+      </div>
+      <div className="w-full max-w-[220px] space-y-3">
+        {bars.map((bar) => (
+          <div key={bar.label} className="space-y-1">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-medium text-muted-foreground">
+                {bar.label}
+              </span>
+              <span className="text-[10px] font-mono text-primary/70">
+                &lt;1ms
+              </span>
+            </div>
+            <div className="h-2 rounded-full bg-muted/50 overflow-hidden">
+              <motion.div
+                className="h-full rounded-full bg-gradient-to-r from-primary/60 to-primary/30"
+                initial={{ width: 0 }}
+                animate={{ width: bar.width }}
+                transition={{
+                  duration: 0.8,
+                  delay: bar.delay,
+                  repeat: Infinity,
+                  repeatDelay: 2.5,
+                  ease: "easeOut",
+                }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="flex items-center gap-1.5 mt-1">
+        <BoltIcon className="w-3.5 h-3.5 text-yellow-500/70" />
+        <span className="text-[10px] text-muted-foreground">
+          Instant results
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function BenefitNoTrackingIllustration() {
+  const items = [
+    { label: "Cookies", blocked: true },
+    { label: "Analytics", blocked: true },
+    { label: "Accounts", blocked: true },
+  ];
+  return (
+    <div className="w-full aspect-[4/3] rounded-2xl border border-border bg-card/50 flex flex-col items-center justify-center gap-4 p-6 sm:p-8">
+      <EyeSlashIcon className="w-7 h-7 text-primary/50" />
+      <div className="w-full max-w-[200px] space-y-2">
+        {items.map((item, i) => (
+          <motion.div
+            key={item.label}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{
+              duration: 0.4,
+              delay: i * 0.3,
+              repeat: Infinity,
+              repeatDelay: 3,
+            }}
+            className="flex items-center justify-between px-3 py-2 rounded-lg bg-muted/30 border border-border/50"
+          >
+            <span className="text-[11px] font-medium text-muted-foreground">
+              {item.label}
+            </span>
+            <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-red-500/10 text-red-500/70">
+              None
+            </span>
+          </motion.div>
         ))}
       </div>
     </div>
@@ -146,10 +315,24 @@ const supportedTools = [
 ];
 
 const benefits = [
-  { icon: ShieldCheckIcon, text: "100% private — processed in your browser" },
-  { icon: RocketLaunchIcon, text: "Lightning fast — results in milliseconds" },
-  { icon: BoltIcon, text: "Works fully offline once loaded" },
-  { icon: CheckCircleIcon, text: "No accounts, no cookies, no tracking" },
+  {
+    title: "100% Private",
+    description:
+      "Your images never leave your device. All processing happens locally in your browser — no uploads, no servers.",
+    Illustration: BenefitPrivacyIllustration,
+  },
+  {
+    title: "Lightning Fast",
+    description:
+      "Results in milliseconds. Our parser extracts EXIF, PNG tEXt, and XMP data instantly with zero latency.",
+    Illustration: BenefitSpeedIllustration,
+  },
+  {
+    title: "Zero Tracking",
+    description:
+      "No accounts, no cookies, no analytics. We don't track you or collect any data whatsoever.",
+    Illustration: BenefitNoTrackingIllustration,
+  },
 ];
 
 /* ── Page ───────────────────────────────────────────────────────── */
@@ -237,9 +420,7 @@ export default function Page() {
                     }`}
                   >
                     {/* Illustration */}
-                    <div
-                      className={isReversed ? "md:order-2" : "md:order-1"}
-                    >
+                    <div className={isReversed ? "md:order-2" : "md:order-1"}>
                       <step.Illustration />
                     </div>
 
@@ -330,33 +511,42 @@ export default function Page() {
             </motion.div>
 
             {/* Benefits */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.15 }}
-              className="rounded-2xl border border-border/50 bg-card/50 p-6 sm:p-8"
-            >
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {benefits.map((item, index) => (
+            <div className="space-y-12 lg:space-y-20">
+              {benefits.map((benefit, index) => {
+                const isReversed = index % 2 === 1;
+                return (
                   <motion.div
-                    key={item.text}
-                    initial={{ opacity: 0, y: 10 }}
+                    key={benefit.title}
+                    initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: index * 0.08 }}
-                    className="flex items-center gap-3 p-2"
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.6, delay: 0.1 }}
+                    className={`grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center ${
+                      isReversed ? "md:direction-rtl" : ""
+                    }`}
                   >
-                    <div className="p-1.5 rounded-lg bg-primary/10 shrink-0">
-                      <item.icon className="w-4 h-4 text-primary" />
+                    {/* Illustration */}
+                    <div className={isReversed ? "md:order-2" : "md:order-1"}>
+                      <benefit.Illustration />
                     </div>
-                    <span className="text-sm text-foreground/90">
-                      {item.text}
-                    </span>
+
+                    {/* Text */}
+                    <div
+                      className={`space-y-4 ${
+                        isReversed ? "md:order-1" : "md:order-2"
+                      }`}
+                    >
+                      <h3 className="text-2xl font-semibold tracking-tight text-foreground">
+                        {benefit.title}
+                      </h3>
+                      <p className="text-muted-foreground leading-relaxed">
+                        {benefit.description}
+                      </p>
+                    </div>
                   </motion.div>
-                ))}
-              </div>
-            </motion.div>
+                );
+              })}
+            </div>
           </div>
         </section>
 
