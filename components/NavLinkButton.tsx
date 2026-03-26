@@ -1,10 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  InformationCircleIcon,
-  CommandLineIcon,
-} from "@heroicons/react/24/outline";
+import { RectangleGroupIcon, PhotoIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -21,9 +18,9 @@ export function NavLinkButton() {
     >
       <Link href={isHome ? "/extract" : "/"}>
         {isHome ? (
-          <CommandLineIcon className="h-[1.2rem] w-[1.2rem]" />
+          <PhotoIcon className="h-[1.2rem] w-[1.2rem]" />
         ) : (
-          <InformationCircleIcon className="h-[1.2rem] w-[1.2rem]" />
+          <RectangleGroupIcon className="h-[1.2rem] w-[1.2rem]" />
         )}
         <span className="sr-only">{isHome ? "Extract" : "About"}</span>
       </Link>

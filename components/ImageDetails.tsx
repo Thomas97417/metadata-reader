@@ -85,7 +85,7 @@ export default function ImageDetails() {
             : "w-full max-w-2xl"
         }
       >
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 lg:sticky lg:top-4 lg:self-start">
           <motion.div
             layout
             className={
