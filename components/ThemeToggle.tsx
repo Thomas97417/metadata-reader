@@ -14,15 +14,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function ThemeToggle() {
-  const { setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon"
-          className="relative overflow-hidden hover:cursor-pointer text-primary hover:text-primary/80 dark:hover:text-primary/80 hover:bg-primary/10 dark:hover:bg-primary/10 border-primary hover:border-primary/80 dark:hover:border-primary/80 border-2"
+          className="hover:cursor-pointer text-muted-foreground hover:text-foreground hover:bg-primary/15"
         >
           <SunIcon className="h-[1.2rem] w-[1.2rem]" />
           <span className="sr-only">Toggle theme</span>
@@ -42,7 +42,9 @@ export default function ThemeToggle() {
             <span>
               {themeOption === "light" && <SunIcon className="h-4 w-4" />}
               {themeOption === "dark" && <MoonIcon className="h-4 w-4" />}
-              {themeOption === "system" && <Cog6ToothIcon className="h-4 w-4" />}
+              {themeOption === "system" && (
+                <Cog6ToothIcon className="h-4 w-4" />
+              )}
             </span>
             {themeOption}
           </DropdownMenuItem>

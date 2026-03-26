@@ -2,16 +2,21 @@
 import { useFileUpload } from "@/hooks/use-file-upload";
 import * as exifr from "exifr";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpTrayIcon, ExclamationCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowUpTrayIcon,
+  ExclamationCircleIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { useEffect } from "react";
 import { useImageContext } from "./ImageContext";
-import { Button } from "./ui/button";
 
 type ImageUploaderProps = {
   variant?: "default" | "hero";
 };
 
-export default function ImageUploader({ variant = "default" }: ImageUploaderProps) {
+export default function ImageUploader({
+  variant = "default",
+}: ImageUploaderProps) {
   const { setImageUrl, setMetadata, setFileName } = useImageContext();
 
   const [
@@ -67,13 +72,11 @@ export default function ImageUploader({ variant = "default" }: ImageUploaderProp
           onDrop={handleDrop}
           animate={{
             scale: isDragging ? 1.02 : 1,
-            borderColor: isDragging
-              ? "hsl(var(--primary))"
-              : "hsl(var(--border))",
-            backgroundColor: isDragging ? "hsl(var(--accent))" : "transparent",
           }}
           transition={{ duration: 0.2 }}
-          className={`relative flex flex-col items-center justify-center overflow-hidden rounded-xl border-2 border-dashed transition-all hover:cursor-pointer hover:bg-accent/20 hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
+          className={`relative flex flex-col items-center justify-center overflow-hidden rounded-xl transition-all hover:cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
+            previewUrl ? "" : "bg-card shadow-sm hover:shadow-md"
+          } ${isDragging ? "bg-accent" : ""} ${
             isHero ? "min-h-[400px]" : "min-h-[300px]"
           }`}
         >
@@ -124,26 +127,31 @@ export default function ImageUploader({ variant = "default" }: ImageUploaderProp
                 className="flex flex-col items-center justify-center px-4 py-6 text-center"
               >
                 <motion.div
-                  whileHover={{ scale: 1.1, rotate: 15 }}
+                  whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  className={`bg-background/80 mb-3 flex shrink-0 items-center justify-center rounded-full border-2 border-dashed border-muted-foreground/20 shadow-md hover:border-primary/30 transition-colors ${
+                  className={`bg-background/80 mb-3 flex shrink-0 items-center justify-center rounded-full border-2 border-muted-foreground/20 shadow-md hover:border-primary/30 transition-colors ${
                     isHero ? "size-24" : "size-20"
                   }`}
                 >
-                  <ArrowUpTrayIcon className={isHero ? "size-12 text-muted-foreground/60" : "size-8 text-muted-foreground/60"} />
+                  <ArrowUpTrayIcon
+                    className={
+                      isHero
+                        ? "size-12 text-muted-foreground/60"
+                        : "size-8 text-muted-foreground/60"
+                    }
+                  />
                 </motion.div>
-                <h3 className={`mb-2 font-semibold ${isHero ? "text-2xl" : "text-lg"}`}>
+                <h3
+                  className={`mb-2 font-semibold ${isHero ? "text-2xl" : "text-lg"}`}
+                >
                   Drop your image here
                 </h3>
-                <p className={`text-muted-foreground ${isHero ? "text-base mb-4" : "text-sm mb-2"}`}>
+                <p
+                  className={`text-muted-foreground ${isHero ? "text-base mb-4" : "text-sm mb-2"}`}
+                >
                   or click to browse
                 </p>
-                {isHero && (
-                  <Button variant="default" size="lg" type="button">
-                    Browse Files
-                  </Button>
-                )}
               </motion.div>
             )}
           </AnimatePresence>

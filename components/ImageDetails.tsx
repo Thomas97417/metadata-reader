@@ -7,12 +7,7 @@ import { useImageContext } from "./ImageContext";
 import ImageUploader from "./ImageUploader";
 import MetadataTabs from "./MetadataTabs";
 
-const supportedFormats = [
-  "Stable Diffusion",
-  "ComfyUI",
-  "Midjourney",
-  "DALL-E",
-];
+const supportedFormats = ["Stable Diffusion", "ComfyUI"];
 
 export default function ImageDetails() {
   const [shortFileName, setShortFileName] = useState<string | null>(null);
@@ -74,10 +69,7 @@ export default function ImageDetails() {
             transition={{ duration: 0.3 }}
             className="text-center space-y-3"
           >
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
-              Reveal your image&apos;s secrets
-            </h1>
-            <p className="text-muted-foreground text-lg max-w-md mx-auto">
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
               Drop an AI-generated image to extract its metadata and generation
               parameters
             </p>
