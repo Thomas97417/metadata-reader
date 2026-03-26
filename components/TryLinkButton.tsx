@@ -17,7 +17,7 @@ const TryLinkButton = () => {
         className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-8 py-6 text-lg relative overflow-hidden group hover:cursor-pointer"
         asChild
       >
-        <Link href="/">
+        <Link href="/extract">
           <span className="relative z-10 flex items-center gap-2">
             Try Now
             <ArrowRightIcon className="w-5 h-5 transition-transform group-hover:translate-x-1" />

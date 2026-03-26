@@ -22,7 +22,7 @@ export function MetadataLinkButton() {
         asChild
       >
         <Link
-          href="/metadata"
+          href="/extract"
           className="w-full h-full flex items-center justify-center"
         >
           <span className="relative z-10 flex items-center gap-2">
