@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export default function MetadataPage() {
   return (
-    <div className="bg-background relative pt-16">
+    <div className="bg-background relative">
       <div className="relative z-10 container mx-auto max-w-7xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
