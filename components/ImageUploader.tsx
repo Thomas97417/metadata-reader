@@ -2,12 +2,24 @@
 import { useFileUpload } from "@/hooks/use-file-upload";
 import * as exifr from "exifr";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertCircleIcon, ImageUpIcon, XIcon } from "lucide-react";
-import { useEffect } from "react";
+import {
+  ArrowUpTrayIcon,
+  ExclamationCircleIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { useEffect, useRef } from "react";
 import { useImageContext } from "./ImageContext";
 
-export default function ImageUploader() {
-  const { setImageUrl, setMetadata, setFileName } = useImageContext();
+type ImageUploaderProps = {
+  variant?: "default" | "hero";
+};
+
+export default function ImageUploader({
+  variant = "default",
+}: ImageUploaderProps) {
+  const { imageUrl, setImageUrl, setMetadata, setFileName } =
+    useImageContext();
+  const hasInteracted = useRef(false);
 
   const [
     { files, isDragging, errors },
@@ -15,16 +27,48 @@ export default function ImageUploader() {
       handleDragEnter,
       handleDragLeave,
       handleDragOver,
-      handleDrop,
-      openFileDialog,
-      removeFile,
-      getInputProps,
+      handleDrop: originalHandleDrop,
+      openFileDialog: originalOpenFileDialog,
+      removeFile: originalRemoveFile,
+      getInputProps: originalGetInputProps,
     },
   ] = useFileUpload({
     accept: "image/*",
   });
 
-  const previewUrl = files[0]?.preview || null;
+  const markInteracted = () => {
+    hasInteracted.current = true;
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    markInteracted();
+    originalHandleDrop(e);
+  };
+
+  const openFileDialog = () => {
+    markInteracted();
+    originalOpenFileDialog();
+  };
+
+  const removeFile = (id: string) => {
+    markInteracted();
+    originalRemoveFile(id);
+  };
+
+  const getInputProps = () => {
+    const props = originalGetInputProps();
+    const originalOnChange = props.onChange;
+    return {
+      ...props,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+        markInteracted();
+        originalOnChange(e);
+      },
+    };
+  };
+
+  const previewUrl = files[0]?.preview || imageUrl || null;
+  const isHero = variant === "hero";
 
   useEffect(() => {
     const processMetadata = async () => {
@@ -39,7 +83,7 @@ export default function ImageUploader() {
           console.error("Error reading EXIF data:", error);
           setMetadata(null);
         }
-      } else {
+      } else if (hasInteracted.current) {
         setFileName(null);
         setImageUrl(null);
         setMetadata(null);
@@ -50,12 +94,7 @@ export default function ImageUploader() {
   }, [files, setFileName, setImageUrl, setMetadata]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="flex flex-col gap-2"
-    >
+    <div className="flex flex-col gap-2">
       <div className="relative">
         <motion.div
           role="button"
@@ -66,13 +105,13 @@ export default function ImageUploader() {
           onDrop={handleDrop}
           animate={{
             scale: isDragging ? 1.02 : 1,
-            borderColor: isDragging
-              ? "hsl(var(--primary))"
-              : "hsl(var(--border))",
-            backgroundColor: isDragging ? "hsl(var(--accent))" : "transparent",
           }}
           transition={{ duration: 0.2 }}
-          className="relative flex min-h-[300px] flex-col items-center justify-center overflow-hidden rounded-xl transition-all hover:cursor-pointer hover:bg-accent/20 hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+          className={`relative flex flex-col items-center justify-center overflow-hidden rounded-xl transition-all hover:cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
+            previewUrl ? "" : "bg-card shadow-sm hover:shadow-md"
+          } ${isDragging ? "bg-accent" : ""} ${
+            isHero ? "min-h-[400px]" : "min-h-[300px]"
+          }`}
         >
           <input
             {...getInputProps()}
@@ -101,7 +140,7 @@ export default function ImageUploader() {
                     whileHover={{ scale: 1.1, rotate: 15 }}
                     className="bg-white/10 p-3 rounded-full border border-white/20 backdrop-blur-sm"
                   >
-                    <ImageUpIcon className="size-5 text-white" />
+                    <ArrowUpTrayIcon className="size-5 text-white" />
                   </motion.div>
                   <p className="text-white/90 text-sm font-medium tracking-wide">
                     Change image
@@ -121,17 +160,29 @@ export default function ImageUploader() {
                 className="flex flex-col items-center justify-center px-4 py-6 text-center"
               >
                 <motion.div
-                  whileHover={{ scale: 1.1, rotate: 15 }}
+                  whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  className="bg-background/80 mb-2 flex size-20 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-muted-foreground/20 shadow-md hover:border-primary/30 transition-colors"
+                  className={`bg-background/80 mb-3 flex shrink-0 items-center justify-center rounded-full border-2 border-muted-foreground/20 shadow-md hover:border-primary/30 transition-colors ${
+                    isHero ? "size-24" : "size-20"
+                  }`}
                 >
-                  <ImageUpIcon className="size-8 text-muted-foreground/60" />
+                  <ArrowUpTrayIcon
+                    className={
+                      isHero
+                        ? "size-12 text-muted-foreground/60"
+                        : "size-8 text-muted-foreground/60"
+                    }
+                  />
                 </motion.div>
-                <h3 className="mb-2 text-lg font-semibold">
+                <h3
+                  className={`mb-2 font-semibold ${isHero ? "text-2xl" : "text-lg"}`}
+                >
                   Drop your image here
                 </h3>
-                <p className="mb-2 text-sm text-muted-foreground">
+                <p
+                  className={`text-muted-foreground ${isHero ? "text-base mb-4" : "text-sm mb-2"}`}
+                >
                   or click to browse
                 </p>
               </motion.div>
@@ -156,7 +207,7 @@ export default function ImageUploader() {
                 onClick={() => removeFile(files[0]?.id)}
                 aria-label="Remove image"
               >
-                <XIcon className="size-4" aria-hidden="true" />
+                <XMarkIcon className="size-4" aria-hidden="true" />
               </motion.button>
             </motion.div>
           )}
@@ -172,11 +223,11 @@ export default function ImageUploader() {
             className="text-destructive flex items-center gap-1.5 text-sm bg-destructive/10 p-3 rounded-lg border border-destructive/20"
             role="alert"
           >
-            <AlertCircleIcon className="size-4 shrink-0" />
+            <ExclamationCircleIcon className="size-4 shrink-0" />
             <span>{errors[0]}</span>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }

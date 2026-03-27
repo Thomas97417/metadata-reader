@@ -1,17 +1,17 @@
 import Link from "next/link";
-import { MetadataLinkButton } from "./MetadataLinkButton";
+import { NavLinkButton } from "./NavLinkButton";
 import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
   return (
     <div className="m-4 flex justify-between">
       <Link href="/" className="flex items-center">
-        <h1 className="font-bold text-3xl xs:text-5xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/30">
+        <h1 className="font-bold text-3xl text-primary to-primary/10 tracking-tighter">
           Metadata Reader
         </h1>
       </Link>
       <div className="flex flex-row items-center gap-2">
-        <MetadataLinkButton />
+        <NavLinkButton />
         <ThemeToggle />
       </div>
     </div>

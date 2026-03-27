@@ -1,12 +1,13 @@
 "use client";
 import { MAX_FILENAME_LENGTH } from "@/lib/constants";
 import { AnimatePresence, motion } from "framer-motion";
-import { Database, FileText, Settings2 } from "lucide-react";
+import { DocumentTextIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { useImageContext } from "./ImageContext";
 import ImageUploader from "./ImageUploader";
-import MetadataDisplay from "./MetadataDisplay";
-import ParametersDetails from "./ParametersDetails";
+import MetadataTabs from "./MetadataTabs";
+
+const supportedFormats = ["Stable Diffusion", "ComfyUI"];
 
 export default function ImageDetails() {
   const [shortFileName, setShortFileName] = useState<string | null>(null);
@@ -47,116 +48,119 @@ export default function ImageDetails() {
     }
   }, [metadata]);
 
-  return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.5 }}
-        className="flex flex-col w-full gap-8 bg-card rounded-xl p-6 border shadow-sm hover:shadow-md transition-shadow"
-      >
-        <div
-          className={`grid grid-cols-1 xlg:grid-cols-2 gap-8 ${
-            metadata !== null ? "w-full" : "w-full"
-          }`}
-        >
-          <div className="flex flex-col gap-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="relative rounded-xl overflow-hidden border bg-background/50"
-            >
-              <ImageUploader />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg p-3 hover:bg-muted/70 transition-colors"
-            >
-              <FileText className="size-4 text-primary" />
-              <span className="font-medium text-primary">File:</span>
-              <span className="truncate">
-                {shortFileName || "No file selected"}
-              </span>
-            </motion.div>
-          </div>
+  const hasImage = !!imageUrl;
 
-          {metadata &&
-          typeof metadata === "object" &&
-          Object.keys(metadata).length > 0 ? (
-            <MetadataDisplay metadata={metadata} />
-          ) : imageUrl !== null ? (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="flex flex-col items-center justify-center gap-3 h-full p-8 bg-muted/30 rounded-lg border border-dashed hover:bg-muted/40 transition-colors"
-            >
-              <div className="bg-background/80 rounded-full p-3">
-                <Database className="w-6 h-6 text-muted-foreground/70" />
-              </div>
-              <p className="text-muted-foreground text-center font-medium">
-                No Metadata Found
-              </p>
-              <p className="text-sm text-muted-foreground/70 text-center max-w-md">
-                This image doesn&apos;t contain any embedded metadata. Try
-                uploading an image created with Stable Diffusion or ComfyUI.
-              </p>
-            </motion.div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="flex flex-col items-center justify-center gap-3 h-full p-8 transition-colors"
-            >
-              <p className="text-muted-foreground text-center font-medium">
-                No Image Selected
-              </p>
-              <p className="text-sm text-muted-foreground/70 text-center max-w-md">
-                Upload an image to view its metadata and generation parameters
-              </p>
-            </motion.div>
-          )}
+  return (
+    <div
+      className={
+        hasImage
+          ? ""
+          : "flex flex-col items-center justify-center min-h-[calc(100vh-12rem)] gap-8"
+      }
+    >
+      {/* Hero header — only when no image */}
+      <AnimatePresence>
+        {!hasImage && (
+          <motion.div
+            key="hero-header"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className="text-center space-y-3"
+          >
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+              Drop an AI-generated image to extract its metadata and generation
+              parameters
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Main content — ImageUploader is always mounted (same instance) */}
+      <div
+        className={
+          hasImage
+            ? "grid grid-cols-1 md:grid-cols-[minmax(280px,1fr)_2fr] gap-6"
+            : "w-full max-w-2xl"
+        }
+      >
+        <div className="flex flex-col gap-3 md:sticky md:top-4 md:self-start">
+          <motion.div
+            layout
+            className={
+              hasImage
+                ? "rounded-xl overflow-hidden border bg-background/50"
+                : ""
+            }
+          >
+            <ImageUploader variant={hasImage ? "default" : "hero"} />
+          </motion.div>
+
+          {/* Filename bar — only when image uploaded */}
+          <AnimatePresence>
+            {hasImage && (
+              <motion.div
+                key="filename"
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 5 }}
+                transition={{ duration: 0.3 }}
+                className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg p-3"
+              >
+                <DocumentTextIcon className="size-4 text-primary shrink-0" />
+                <span className="font-medium text-primary">File:</span>
+                <span className="truncate">
+                  {shortFileName || "No file selected"}
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="w-full"
-        >
-          {imageUrl === null ? null : metadata !== null &&
-            (kindOfPrompt === "parameters" || kindOfPrompt === "prompt") ? (
-            <ParametersDetails
-              metadata={metadata}
-              parametersSections={parametersSections}
-              kindOfPrompt={kindOfPrompt}
-            />
-          ) : (
+        {/* Metadata tabs — only when image uploaded */}
+        <AnimatePresence>
+          {hasImage && (
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="flex flex-col items-center justify-center gap-3 h-full p-8 bg-muted/30 rounded-lg border border-dashed hover:bg-muted/40 transition-colors"
+              key="metadata"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.4 }}
+              className="bg-card rounded-xl border shadow-sm p-5 min-h-[300px]"
             >
-              <div className="bg-background/80 rounded-full p-3">
-                <Settings2 className="w-6 h-6 text-muted-foreground/70" />
-              </div>
-              <p className="text-muted-foreground text-center font-medium">
-                No Generation Parameters Found
-              </p>
-              <p className="text-sm text-muted-foreground/70 text-center max-w-md">
-                This image doesn&apos;t contain any AI generation parameters.
-                Try uploading an image created with Stable Diffusion or ComfyUI.
-              </p>
+              <MetadataTabs
+                metadata={metadata}
+                parametersSections={parametersSections}
+                kindOfPrompt={kindOfPrompt}
+              />
             </motion.div>
           )}
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
+        </AnimatePresence>
+      </div>
+
+      {/* Format badges — only when no image */}
+      <AnimatePresence>
+        {!hasImage && (
+          <motion.div
+            key="badges"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="flex flex-wrap items-center justify-center gap-2"
+          >
+            {supportedFormats.map((format) => (
+              <span
+                key={format}
+                className="bg-muted text-muted-foreground text-xs px-3 py-1.5 rounded-full font-medium"
+              >
+                {format}
+              </span>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }

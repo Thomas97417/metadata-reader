@@ -1,28 +1,28 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Button } from "./ui/button";
 
 const TryLinkButton = () => {
   return (
     <motion.div
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.97 }}
       transition={{ type: "spring", stiffness: 400, damping: 17 }}
     >
       <Button
         size="lg"
-        className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-8 py-6 text-lg relative overflow-hidden group hover:cursor-pointer"
+        className="bg-gradient-to-r from-primary to-primary/70 text-primary-foreground font-semibold px-8 py-6 text-lg rounded-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 relative overflow-hidden group hover:cursor-pointer tracking-tight transition-shadow duration-300"
         asChild
       >
-        <Link href="/metadata">
+        <Link href="/extract">
           <span className="relative z-10 flex items-center gap-2">
             Try Now
-            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            <ArrowRightIcon className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
           </span>
-          <div className="absolute inset-0 bg-gradient-to-r from-primary-foreground/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary-foreground/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </Link>
       </Button>
     </motion.div>
