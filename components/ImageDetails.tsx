@@ -81,11 +81,11 @@ export default function ImageDetails() {
       <div
         className={
           hasImage
-            ? "grid grid-cols-1 lg:grid-cols-[minmax(280px,1fr)_2fr] gap-6"
+            ? "grid grid-cols-1 md:grid-cols-[minmax(280px,1fr)_2fr] gap-6"
             : "w-full max-w-2xl"
         }
       >
-        <div className="flex flex-col gap-3 lg:sticky lg:top-4 lg:self-start">
+        <div className="flex flex-col gap-3 md:sticky md:top-4 md:self-start">
           <motion.div
             layout
             className={
