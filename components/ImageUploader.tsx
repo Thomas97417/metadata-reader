@@ -7,7 +7,7 @@ import {
   ExclamationCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useImageContext } from "./ImageContext";
 
 type ImageUploaderProps = {
@@ -17,7 +17,9 @@ type ImageUploaderProps = {
 export default function ImageUploader({
   variant = "default",
 }: ImageUploaderProps) {
-  const { setImageUrl, setMetadata, setFileName } = useImageContext();
+  const { imageUrl, setImageUrl, setMetadata, setFileName } =
+    useImageContext();
+  const hasInteracted = useRef(false);
 
   const [
     { files, isDragging, errors },
@@ -25,16 +27,47 @@ export default function ImageUploader({
       handleDragEnter,
       handleDragLeave,
       handleDragOver,
-      handleDrop,
-      openFileDialog,
-      removeFile,
-      getInputProps,
+      handleDrop: originalHandleDrop,
+      openFileDialog: originalOpenFileDialog,
+      removeFile: originalRemoveFile,
+      getInputProps: originalGetInputProps,
     },
   ] = useFileUpload({
     accept: "image/*",
   });
 
-  const previewUrl = files[0]?.preview || null;
+  const markInteracted = () => {
+    hasInteracted.current = true;
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    markInteracted();
+    originalHandleDrop(e);
+  };
+
+  const openFileDialog = () => {
+    markInteracted();
+    originalOpenFileDialog();
+  };
+
+  const removeFile = (id: string) => {
+    markInteracted();
+    originalRemoveFile(id);
+  };
+
+  const getInputProps = () => {
+    const props = originalGetInputProps();
+    const originalOnChange = props.onChange;
+    return {
+      ...props,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+        markInteracted();
+        originalOnChange(e);
+      },
+    };
+  };
+
+  const previewUrl = files[0]?.preview || imageUrl || null;
   const isHero = variant === "hero";
 
   useEffect(() => {
@@ -50,7 +83,7 @@ export default function ImageUploader({
           console.error("Error reading EXIF data:", error);
           setMetadata(null);
         }
-      } else {
+      } else if (hasInteracted.current) {
         setFileName(null);
         setImageUrl(null);
         setMetadata(null);
