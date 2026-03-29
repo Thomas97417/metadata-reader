@@ -1,6 +1,7 @@
 "use client";
 import { useFileUpload } from "@/hooks/use-file-upload";
 import * as exifr from "exifr";
+import { isWebpFile, parseWebpMetadata } from "@/lib/webp-parser";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowUpTrayIcon,
@@ -17,8 +18,7 @@ type ImageUploaderProps = {
 export default function ImageUploader({
   variant = "default",
 }: ImageUploaderProps) {
-  const { imageUrl, setImageUrl, setMetadata, setFileName } =
-    useImageContext();
+  const { imageUrl, setImageUrl, setMetadata, setFileName } = useImageContext();
   const hasInteracted = useRef(false);
 
   const [
@@ -77,10 +77,17 @@ export default function ImageUploader({
         setImageUrl(files[0].preview);
 
         try {
-          const metadata = await exifr.parse(files[0].file);
+          let metadata;
+          if (isWebpFile(files[0].file)) {
+            console.log("Parsing WebP metadata");
+            metadata = await parseWebpMetadata(files[0].file);
+          } else {
+            console.log("Parsing EXIF metadata");
+            metadata = await exifr.parse(files[0].file);
+          }
           setMetadata(metadata);
         } catch (error) {
-          console.error("Error reading EXIF data:", error);
+          console.error("Error reading metadata:", error);
           setMetadata(null);
         }
       } else if (hasInteracted.current) {
