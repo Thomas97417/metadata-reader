@@ -8,6 +8,7 @@ import {
   ExclamationCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { Button } from "@/components/ui/button";
 import { useEffect, useRef } from "react";
 import { useImageContext } from "./ImageContext";
 
@@ -115,8 +116,12 @@ export default function ImageUploader({
           }}
           transition={{ duration: 0.2 }}
           className={`relative flex flex-col items-center justify-center overflow-hidden rounded-xl transition-all hover:cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
-            previewUrl ? "" : "bg-card shadow-sm hover:shadow-md"
-          } ${isDragging ? "bg-accent" : ""} ${
+            previewUrl
+              ? ""
+              : isHero
+                ? "border-2 border-dashed border-primary/30 bg-primary/5 hover:border-primary/50 hover:bg-primary/8"
+                : "bg-card shadow-sm hover:shadow-md"
+          } ${isDragging ? "bg-primary/10 border-primary/60" : ""} ${
             isHero ? "min-h-[400px]" : "min-h-[300px]"
           }`}
         >
@@ -145,14 +150,14 @@ export default function ImageUploader({
                     initial={{ scale: 0.8 }}
                     animate={{ scale: 1 }}
                     whileHover={{ scale: 1.1, rotate: 15 }}
-                    className="bg-white/10 p-3 rounded-full border border-white/20 backdrop-blur-sm"
+                    className="bg-primary-foreground/10 p-3 rounded-full border border-primary-foreground/20 backdrop-blur-sm"
                   >
-                    <ArrowUpTrayIcon className="size-5 text-white" />
+                    <ArrowUpTrayIcon className="size-5 text-primary-foreground" />
                   </motion.div>
-                  <p className="text-white/90 text-sm font-medium tracking-wide">
+                  <p className="text-primary-foreground/90 text-sm font-medium tracking-wide">
                     Change image
                   </p>
-                  <p className="text-white/60 text-xs">
+                  <p className="text-primary-foreground/60 text-xs">
                     Drop a new file or click to browse
                   </p>
                 </div>
@@ -167,17 +172,35 @@ export default function ImageUploader({
                 className="flex flex-col items-center justify-center px-4 py-6 text-center"
               >
                 <motion.div
+                  animate={isHero ? { y: [0, -6, 0] } : {}}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  className={`bg-background/80 mb-3 flex shrink-0 items-center justify-center rounded-full border-2 border-muted-foreground/20 shadow-md hover:border-primary/30 transition-colors ${
-                    isHero ? "size-24" : "size-20"
+                  transition={
+                    isHero
+                      ? {
+                          y: {
+                            duration: 2.5,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                          },
+                          scale: {
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 17,
+                          },
+                        }
+                      : { type: "spring", stiffness: 400, damping: 17 }
+                  }
+                  className={`mb-3 flex shrink-0 items-center justify-center rounded-full shadow-md transition-colors ${
+                    isHero
+                      ? "size-24 bg-primary/10 border-2 border-primary/30 hover:border-primary/50"
+                      : "size-20 bg-background/80 border-2 border-muted-foreground/20 hover:border-primary/30"
                   }`}
                 >
                   <ArrowUpTrayIcon
                     className={
                       isHero
-                        ? "size-12 text-muted-foreground/60"
+                        ? "size-12 text-primary/70"
                         : "size-8 text-muted-foreground/60"
                     }
                   />
@@ -188,10 +211,29 @@ export default function ImageUploader({
                   Drop your image here
                 </h3>
                 <p
-                  className={`text-muted-foreground ${isHero ? "text-base mb-4" : "text-sm mb-2"}`}
+                  className={`text-muted-foreground ${isHero ? "text-base mb-2" : "text-sm mb-2"}`}
                 >
-                  or click to browse
+                  {isHero ? "or" : "or click to browse"}
                 </p>
+                {isHero && (
+                  <>
+                    <Button
+                      type="button"
+                      variant="default"
+                      size="lg"
+                      className="mt-1 rounded-full px-8 shadow-md"
+                      onClick={(e: React.MouseEvent) => {
+                        e.stopPropagation();
+                        openFileDialog();
+                      }}
+                    >
+                      Browse files
+                    </Button>
+                    <p className="text-muted-foreground/60 text-xs mt-3">
+                      Supports PNG, JPG, WebP
+                    </p>
+                  </>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
@@ -210,7 +252,7 @@ export default function ImageUploader({
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 type="button"
-                className="focus-visible:border-ring focus-visible:ring-ring/50 z-50 flex size-8 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white transition-colors outline-none hover:bg-black/80 focus-visible:ring-[3px]"
+                className="focus-visible:border-ring focus-visible:ring-ring/50 z-50 flex size-8 cursor-pointer items-center justify-center rounded-full bg-primary/80 text-primary-foreground transition-colors outline-none hover:bg-primary focus-visible:ring-[3px]"
                 onClick={() => removeFile(files[0]?.id)}
                 aria-label="Remove image"
               >

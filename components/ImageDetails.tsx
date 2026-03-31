@@ -55,7 +55,7 @@ export default function ImageDetails() {
       className={
         hasImage
           ? ""
-          : "flex flex-col items-center justify-center min-h-[calc(100vh-12rem)] gap-8"
+          : "flex flex-col items-center justify-center min-h-[calc(100vh-12rem)] gap-6"
       }
     >
       {/* Hero header — only when no image */}
@@ -82,7 +82,7 @@ export default function ImageDetails() {
         className={
           hasImage
             ? "grid grid-cols-1 md:grid-cols-[minmax(280px,1fr)_2fr] gap-6"
-            : "w-full max-w-2xl"
+            : "w-full max-w-3xl"
         }
       >
         <div className="flex flex-col gap-3 md:sticky md:top-4 md:self-start">
@@ -96,6 +96,23 @@ export default function ImageDetails() {
           >
             <ImageUploader variant={hasImage ? "default" : "hero"} />
           </motion.div>
+
+          {/* Format badges — only when no image, grouped with uploader */}
+          {!hasImage && (
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
+              <span className="text-muted-foreground/50 text-xs">
+                Supported:
+              </span>
+              {supportedFormats.map((format) => (
+                <span
+                  key={format}
+                  className="bg-muted text-muted-foreground text-xs px-3 py-1.5 rounded-full font-medium"
+                >
+                  {format}
+                </span>
+              ))}
+            </div>
+          )}
 
           {/* Filename bar — only when image uploaded */}
           <AnimatePresence>
@@ -139,28 +156,6 @@ export default function ImageDetails() {
         </AnimatePresence>
       </div>
 
-      {/* Format badges — only when no image */}
-      <AnimatePresence>
-        {!hasImage && (
-          <motion.div
-            key="badges"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="flex flex-wrap items-center justify-center gap-2"
-          >
-            {supportedFormats.map((format) => (
-              <span
-                key={format}
-                className="bg-muted text-muted-foreground text-xs px-3 py-1.5 rounded-full font-medium"
-              >
-                {format}
-              </span>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
