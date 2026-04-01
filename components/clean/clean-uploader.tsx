@@ -10,8 +10,9 @@ import {
   CheckCircleIcon,
   ExclamationCircleIcon,
   XMarkIcon,
-  SparklesIcon,
+  ArchiveBoxXMarkIcon,
   ClockIcon,
+  ShieldCheckIcon,
 } from "@heroicons/react/24/outline";
 import { Button } from "@/components/ui/buttons/button";
 import { Input } from "@/components/ui/input";
@@ -149,19 +150,22 @@ export default function CleanUploader() {
     processingRef.current = false;
   }, [cleanFiles]);
 
-  const downloadFile = useCallback((file: CleanableFile) => {
-    if (!file.cleanedBlob) return;
-    const url = URL.createObjectURL(file.cleanedBlob);
-    const a = document.createElement("a");
-    a.href = url;
-    const ext = file.file.name.split(".").pop() || "jpg";
-    const baseName = file.file.name.replace(/\.[^.]+$/, "");
-    a.download = `${baseName}${suffix}.${ext}`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }, [suffix]);
+  const downloadFile = useCallback(
+    (file: CleanableFile) => {
+      if (!file.cleanedBlob) return;
+      const url = URL.createObjectURL(file.cleanedBlob);
+      const a = document.createElement("a");
+      a.href = url;
+      const ext = file.file.name.split(".").pop() || "jpg";
+      const baseName = file.file.name.replace(/\.[^.]+$/, "");
+      a.download = `${baseName}${suffix}.${ext}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    },
+    [suffix],
+  );
 
   const downloadAll = useCallback(async () => {
     const doneFiles = cleanFiles.filter((f) => f.status === "done");
@@ -200,17 +204,27 @@ export default function CleanUploader() {
     name.length > max ? name.slice(0, max - 3) + "..." : name;
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Header */}
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/50">
-          Clean Metadata
-        </h1>
-        <p className="text-muted-foreground text-sm sm:text-base max-w-md mx-auto">
-          Strip all metadata from your images. Upload, clean, and download —
-          everything stays in your browser.
-        </p>
-      </div>
+    <div
+      className={`flex flex-col gap-6 ${!hasFiles ? "items-center justify-center min-h-[calc(100vh-12rem)]" : ""}`}
+    >
+      {/* Info section */}
+      {!hasFiles && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="text-center space-y-2 max-w-lg mx-auto"
+        >
+          <h2 className="text-lg font-semibold tracking-tight">
+            Why remove metadata?
+          </h2>
+          <p className="text-muted-foreground text-sm leading-relaxed">
+            Your images contain hidden data — location, device info, software
+            settings, and AI generation parameters. Cleaning metadata protects
+            your privacy before sharing online.
+          </p>
+        </motion.div>
+      )}
 
       {/* Upload Zone */}
       <motion.div
@@ -222,56 +236,107 @@ export default function CleanUploader() {
         onDrop={handleDrop}
         animate={{ scale: isDragging ? 1.02 : 1 }}
         transition={{ duration: 0.2 }}
-        className={`relative flex flex-col items-center justify-center overflow-hidden rounded-xl transition-all hover:cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 border-2 border-dashed ${
+        className={`relative flex flex-col items-center justify-center overflow-hidden transition-all hover:cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
           isDragging
-            ? "border-primary/60 bg-primary/10"
-            : "border-primary/30 bg-primary/5 hover:border-primary/50 hover:bg-primary/8"
-        } ${hasFiles ? "min-h-[140px]" : "min-h-[240px]"}`}
+            ? "ring-2 ring-primary/50 bg-primary/5 shadow-lg"
+            : "bg-card ring-1 ring-primary/15 shadow-sm hover:ring-primary/30 hover:shadow-md"
+        } ${hasFiles ? "rounded-2xl min-h-[140px]" : "rounded-2xl min-h-[320px] py-8 w-full max-w-3xl"}`}
       >
         <input
           {...getInputProps()}
           className="sr-only"
           aria-label="Upload files"
         />
-        <motion.div
-          animate={!hasFiles ? { y: [0, -6, 0] } : {}}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          transition={{
-            y: { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
-            scale: { type: "spring", stiffness: 400, damping: 17 },
-          }}
-          className={`mb-2 flex shrink-0 items-center justify-center rounded-full shadow-md transition-colors ${
-            hasFiles
-              ? "size-14 bg-primary/10 border border-primary/30"
-              : "size-20 bg-primary/10 border-2 border-primary/30 hover:border-primary/50"
-          }`}
-        >
-          <ArrowUpTrayIcon
-            className={
-              hasFiles ? "size-6 text-primary/70" : "size-10 text-primary/70"
-            }
-          />
-        </motion.div>
-        <h3
-          className={`font-semibold ${hasFiles ? "text-base" : "text-xl mb-1"}`}
-        >
-          {hasFiles ? "Add more images" : "Drop your images here"}
-        </h3>
-        {!hasFiles && (
+
+        {hasFiles ? (
           <>
-            <p className="text-muted-foreground text-sm mb-3">
-              or click to browse
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              className="mb-2 flex shrink-0 items-center justify-center rounded-full size-14 bg-primary/10 border border-primary/30"
+            >
+              <ArrowUpTrayIcon className="size-6 text-primary/70" />
+            </motion.div>
+            <h3 className="font-semibold text-base">Add more images</h3>
+          </>
+        ) : (
+          <>
+            {/* Hero icon */}
+            <motion.div
+              animate={{ scale: [1, 1.06, 1] }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="mb-4 flex shrink-0 items-center justify-center rounded-full size-20 bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/20"
+            >
+              <ArchiveBoxXMarkIcon className="size-10 text-primary/70" />
+            </motion.div>
+
+            {/* Title */}
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/50">
+              Clean Metadata
+            </h1>
+            <p className="text-muted-foreground text-sm max-w-sm mx-auto mt-1 mb-5">
+              Strip metadata from multiple images at once
             </p>
-            <div className="flex gap-2">
-              {["PNG", "JPEG", "WebP"].map((fmt) => (
-                <span
-                  key={fmt}
-                  className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium"
-                >
-                  {fmt}
+
+            {/* 3-step process */}
+            <div className="flex items-center gap-0 mb-5">
+              <div className="flex flex-col items-center gap-1.5">
+                <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <ArrowUpTrayIcon className="size-5 text-primary/60" />
+                </div>
+                <span className="text-[11px] text-muted-foreground font-medium">
+                  Upload
                 </span>
-              ))}
+              </div>
+              <div className="w-10 sm:w-14 h-px border-t border-dashed border-primary/25 -mt-4" />
+              <div className="flex flex-col items-center gap-1.5">
+                <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <ArchiveBoxXMarkIcon className="size-5 text-primary/60" />
+                </div>
+                <span className="text-[11px] text-muted-foreground font-medium">
+                  Clean
+                </span>
+              </div>
+              <div className="w-10 sm:w-14 h-px border-t border-dashed border-primary/25 -mt-4" />
+              <div className="flex flex-col items-center gap-1.5">
+                <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <ArrowDownTrayIcon className="size-5 text-primary/60" />
+                </div>
+                <span className="text-[11px] text-muted-foreground font-medium">
+                  Download
+                </span>
+              </div>
+            </div>
+
+            {/* CTA */}
+            <Button
+              type="button"
+              variant="default"
+              size="default"
+              className="rounded-full px-6 shadow-sm gap-2"
+              onClick={(e: React.MouseEvent) => {
+                e.stopPropagation();
+                openFileDialog();
+              }}
+            >
+              <ArrowUpTrayIcon className="size-4" />
+              Browse files
+            </Button>
+            <p className="text-muted-foreground/50 text-xs mt-3">
+              or drop images anywhere on this card
+            </p>
+
+            {/* Privacy footer */}
+            <div className="flex items-center gap-1.5 mt-4 text-muted-foreground/40">
+              <ShieldCheckIcon className="size-3.5" />
+              <span className="text-[11px]">
+                Everything stays in your browser
+              </span>
             </div>
           </>
         )}
@@ -423,14 +488,16 @@ export default function CleanUploader() {
                     {/* Remove button */}
                     {!isProcessing && (
                       <motion.button
-                        initial={{ opacity: 0 }}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         onClick={(e) => {
                           e.stopPropagation();
                           removeFile(file.id);
                         }}
-                        className="absolute top-2 right-2 size-7 rounded-full bg-background/80 border border-border/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive/10 hover:border-destructive/30"
+                        className="absolute top-2 right-2 z-10 flex size-7 cursor-pointer items-center justify-center rounded-full bg-primary/80 text-primary-foreground transition-colors hover:bg-primary"
                         aria-label="Remove image"
                       >
                         <XMarkIcon className="size-3.5" />
@@ -485,7 +552,10 @@ export default function CleanUploader() {
 
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1.5">
-                  <label htmlFor="suffix-input" className="text-xs text-muted-foreground whitespace-nowrap">
+                  <label
+                    htmlFor="suffix-input"
+                    className="text-xs text-muted-foreground whitespace-nowrap"
+                  >
                     Suffix
                   </label>
                   <Input
@@ -548,7 +618,7 @@ export default function CleanUploader() {
                       </>
                     ) : (
                       <>
-                        <SparklesIcon className="size-4" />
+                        <ArchiveBoxXMarkIcon className="size-4" />
                         Clean all
                       </>
                     )}
