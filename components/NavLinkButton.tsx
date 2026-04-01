@@ -4,10 +4,9 @@ import { Button } from "@/components/ui/button";
 import {
   RectangleGroupIcon,
   PhotoIcon,
-  SparklesIcon,
+  ArchiveBoxXMarkIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import {
   Tooltip,
   TooltipContent,
@@ -24,18 +23,14 @@ interface NavLink {
 const allLinks: NavLink[] = [
   { href: "/", icon: RectangleGroupIcon, label: "Home" },
   { href: "/extract", icon: PhotoIcon, label: "Extract" },
-  { href: "/clean", icon: SparklesIcon, label: "Clean" },
+  { href: "/clean", icon: ArchiveBoxXMarkIcon, label: "Clean" },
 ];
 
 export function NavLinkButton() {
-  const pathname = usePathname();
-
-  const links = allLinks.filter((link) => link.href !== pathname);
-
   return (
     <TooltipProvider delayDuration={300}>
       <div className="flex items-center gap-1">
-        {links.map((link) => (
+        {allLinks.map((link) => (
           <Tooltip key={link.href}>
             <TooltipTrigger asChild>
               <Button

@@ -15,6 +15,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { Button } from "@/components/ui/button";
 import { useCallback, useRef, useState } from "react";
+import JSZip from "jszip";
 
 type FileStatus = "queued" | "processing" | "done" | "error";
 
@@ -154,15 +155,35 @@ export default function CleanUploader() {
     const ext = file.file.name.split(".").pop() || "jpg";
     const baseName = file.file.name.replace(/\.[^.]+$/, "");
     a.download = `${baseName}_clean.${ext}`;
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   }, []);
 
-  const downloadAll = useCallback(() => {
+  const downloadAll = useCallback(async () => {
     const doneFiles = cleanFiles.filter((f) => f.status === "done");
-    doneFiles.forEach((file, i) => {
-      setTimeout(() => downloadFile(file), i * 200);
+    if (doneFiles.length === 0) return;
+    if (doneFiles.length === 1) {
+      downloadFile(doneFiles[0]);
+      return;
+    }
+    const zip = new JSZip();
+    doneFiles.forEach((file) => {
+      if (!file.cleanedBlob) return;
+      const ext = file.file.name.split(".").pop() || "jpg";
+      const baseName = file.file.name.replace(/\.[^.]+$/, "");
+      zip.file(`${baseName}_clean.${ext}`, file.cleanedBlob);
     });
+    const blob = await zip.generateAsync({ type: "blob" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "cleaned_images.zip";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   }, [cleanFiles, downloadFile]);
 
   const completedCount = cleanFiles.filter((f) => f.status === "done").length;

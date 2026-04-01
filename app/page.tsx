@@ -15,10 +15,20 @@ import {
   BoltIcon,
   GlobeAltIcon,
   SignalSlashIcon,
+  MagnifyingGlassIcon,
   EyeSlashIcon,
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import TryLinkButton from "@/components/TryLinkButton";
+import CleanLinkButton from "@/components/CleanLinkButton";
+import {
+  ArrowDownTrayIcon,
+  XMarkIcon,
+  MapPinIcon,
+  CameraIcon,
+  CalendarIcon,
+  WrenchScrewdriverIcon,
+} from "@heroicons/react/24/outline";
 
 /* ── Illustrations ─────────────────────────────────────────────── */
 
@@ -247,9 +257,9 @@ function BenefitSpeedIllustration() {
 
 function BenefitNoTrackingIllustration() {
   const items = [
-    { label: "Cookies", blocked: true },
-    { label: "Analytics", blocked: true },
-    { label: "Accounts", blocked: true },
+    { label: "Cookies" },
+    { label: "Data Collection" },
+    { label: "Accounts" },
   ];
   return (
     <div className="w-full aspect-[4/3] rounded-2xl border border-border bg-card/50 flex flex-col items-center justify-center gap-4 p-6 sm:p-8">
@@ -281,6 +291,173 @@ function BenefitNoTrackingIllustration() {
   );
 }
 
+/* ── Clean Illustrations ──────────────────────────────────────── */
+
+function CleanDropIllustration() {
+  const router = useRouter();
+  const thumbnails = [
+    { rotate: -6, x: -30, delay: 0 },
+    { rotate: 3, x: 0, delay: 0.15 },
+    { rotate: 8, x: 30, delay: 0.3 },
+  ];
+  return (
+    <div
+      onClick={() => router.push("/clean")}
+      className="w-full aspect-[4/3] rounded-2xl border-2 border-dashed border-border bg-card/50 flex flex-col items-center justify-center gap-4 p-8 cursor-pointer hover:border-green-500/50 transition-colors"
+    >
+      <div className="relative flex items-end justify-center h-20 w-40">
+        {thumbnails.map((t, i) => (
+          <motion.div
+            key={i}
+            animate={{ y: [0, -8, 0] }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              delay: t.delay,
+              ease: "easeInOut",
+            }}
+            style={{ rotate: t.rotate, x: t.x }}
+            className="absolute w-14 h-14 rounded-lg bg-gradient-to-br from-green-500/20 to-green-500/5 border border-green-500/20 flex items-center justify-center"
+          >
+            <div className="w-7 h-7 rounded bg-gradient-to-br from-green-500/30 to-green-500/10" />
+          </motion.div>
+        ))}
+      </div>
+      <p className="text-sm font-medium text-foreground">
+        Drop your images here
+      </p>
+      <p className="text-xs text-muted-foreground">or click to browse</p>
+      <div className="flex gap-2 mt-1">
+        {["PNG", "JPEG", "WebP"].map((fmt) => (
+          <span
+            key={fmt}
+            className="text-[10px] px-2 py-0.5 rounded-full bg-green-500/10 text-green-600 font-medium"
+          >
+            {fmt}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CleanProcessIllustration() {
+  const metadataTags = [
+    { label: "GPS", icon: MapPinIcon, x: -70, y: -40, delay: 0 },
+    { label: "Camera", icon: CameraIcon, x: 70, y: -35, delay: 0.8 },
+    { label: "Date", icon: CalendarIcon, x: -65, y: 35, delay: 1.6 },
+    {
+      label: "Software",
+      icon: WrenchScrewdriverIcon,
+      x: 75,
+      y: 40,
+      delay: 2.4,
+    },
+  ];
+  return (
+    <div className="w-full aspect-[4/3] rounded-2xl border border-border bg-card/50 flex items-center justify-center p-6 sm:p-8">
+      <div className="relative flex items-center justify-center">
+        {/* Image thumbnail */}
+        <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl bg-gradient-to-br from-green-500/20 to-green-500/5 border border-border flex items-center justify-center z-10">
+          <motion.div
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            className="p-3 rounded-full bg-green-500/10"
+          >
+            <SparklesIcon className="w-8 h-8 text-green-500/60" />
+          </motion.div>
+        </div>
+
+        {/* Metadata tags that fade out with strikethrough */}
+        {metadataTags.map((tag) => (
+          <motion.div
+            key={tag.label}
+            style={{ x: tag.x, y: tag.y }}
+            className="absolute flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-red-500/8 border border-red-500/20"
+            animate={{
+              opacity: [0.9, 0.9, 0.2, 0],
+              scale: [1, 1, 0.95, 0.9],
+            }}
+            transition={{
+              duration: 3.2,
+              delay: tag.delay,
+              repeat: Infinity,
+              repeatDelay: 0,
+              times: [0, 0.4, 0.7, 1],
+            }}
+          >
+            <tag.icon className="w-3 h-3 text-red-500/70" />
+            <span className="text-[10px] font-medium text-red-500/70">
+              {tag.label}
+            </span>
+            <motion.div
+              className="absolute inset-y-0 left-0 right-0 flex items-center px-1"
+              animate={{ opacity: [0, 0, 1, 1] }}
+              transition={{
+                duration: 3.2,
+                delay: tag.delay,
+                repeat: Infinity,
+                repeatDelay: 0,
+                times: [0, 0.4, 0.5, 1],
+              }}
+            >
+              <div className="w-full h-[1px] bg-red-500/60" />
+            </motion.div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CleanResultIllustration() {
+  const files = [
+    { name: "photo_clean.jpg", delay: 0 },
+    { name: "portrait_clean.png", delay: 0.2 },
+    { name: "landscape_clean.webp", delay: 0.4 },
+  ];
+  return (
+    <div className="w-full aspect-[4/3] rounded-2xl border border-border bg-card/50 flex flex-col items-center justify-center gap-4 p-6 sm:p-8">
+      {/* File list */}
+      <div className="w-full max-w-[220px] space-y-2">
+        {files.map((file, i) => (
+          <motion.div
+            key={file.name}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{
+              duration: 0.4,
+              delay: file.delay,
+              repeat: Infinity,
+              repeatDelay: 4,
+            }}
+            className="flex items-center justify-between px-3 py-2 rounded-lg bg-green-500/5 border border-green-500/20"
+          >
+            <div className="flex items-center gap-2">
+              <CheckCircleIcon className="w-3.5 h-3.5 text-green-500" />
+              <span className="text-[10px] font-mono text-foreground/80">
+                {file.name}
+              </span>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* ZIP download button visual */}
+      <motion.div
+        animate={{ scale: [1, 1.05, 1] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-600/15 border border-green-500/30"
+      >
+        <ArrowDownTrayIcon className="w-4 h-4 text-green-600" />
+        <span className="text-xs font-medium text-green-600">
+          cleaned_images.zip
+        </span>
+      </motion.div>
+    </div>
+  );
+}
+
 /* ── Data ───────────────────────────────────────────────────────── */
 
 const steps = [
@@ -308,10 +485,34 @@ const steps = [
 ];
 
 const supportedTools = [
-  { icon: CommandLineIcon, name: "Stable Diffusion", comingSoon: false },
-  { icon: CpuChipIcon, name: "ComfyUI", comingSoon: false },
-  { icon: SparklesIcon, name: "Midjourney", comingSoon: true },
-  { icon: LightBulbIcon, name: "DALL-E", comingSoon: true },
+  {
+    icon: CommandLineIcon,
+    name: "Automatic1111",
+    description:
+      "The most popular Stable Diffusion web UI. Stores full generation parameters — prompt, seed, sampler, model — directly inside PNG chunks.",
+    comingSoon: false,
+  },
+  {
+    icon: CpuChipIcon,
+    name: "ComfyUI",
+    description:
+      "A node-based interface for Stable Diffusion that saves the entire workflow graph as metadata, letting you rebuild any image from scratch.",
+    comingSoon: false,
+  },
+  {
+    icon: SparklesIcon,
+    name: "Midjourney",
+    description:
+      "A cloud-based AI image generator known for its artistic style. Metadata support coming soon.",
+    comingSoon: true,
+  },
+  {
+    icon: LightBulbIcon,
+    name: "Nano Banana",
+    description:
+      "Google's lightweight image generation model. Metadata support coming soon.",
+    comingSoon: true,
+  },
 ];
 
 const benefits = [
@@ -330,8 +531,32 @@ const benefits = [
   {
     title: "Zero Tracking",
     description:
-      "No accounts, no cookies, no analytics. We don't track you or collect any data whatsoever.",
+      "No accounts, no cookies, no data collection. We don't store or share any of your information whatsoever.",
     Illustration: BenefitNoTrackingIllustration,
+  },
+];
+
+const cleanSteps = [
+  {
+    number: "01",
+    title: "Upload your images",
+    description:
+      "Drag and drop or select multiple images at once. We support PNG, JPEG, and WebP formats — all processed locally.",
+    Illustration: CleanDropIllustration,
+  },
+  {
+    number: "02",
+    title: "We strip the metadata",
+    description:
+      "EXIF data, GPS coordinates, camera info, timestamps, software tags — everything gets removed while preserving image quality.",
+    Illustration: CleanProcessIllustration,
+  },
+  {
+    number: "03",
+    title: "Download clean files",
+    description:
+      "Get your cleaned images individually or as a single ZIP archive. Share them safely without exposing any private information.",
+    Illustration: CleanResultIllustration,
   },
 ];
 
@@ -460,9 +685,12 @@ export default function Page() {
               <h2 className="font-bold tracking-tighter text-3xl sm:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/30">
                 Built for AI Artists
               </h2>
-              <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-                Works with the tools you already use, with the privacy you
-                deserve.
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                AI image generators embed hidden metadata inside every image —
+                prompts, models, seeds, and full generation settings. Extracting
+                this data lets you reproduce results, learn from other artists,
+                and understand exactly how an image was created. We support the
+                most popular tools.
               </p>
             </motion.div>
 
@@ -472,12 +700,12 @@ export default function Page() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-12"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12"
             >
               {supportedTools.map((tool) => (
                 <div
                   key={tool.name}
-                  className={`relative flex flex-col items-center gap-3 p-5 sm:p-6 rounded-2xl border bg-card transition-colors ${
+                  className={`relative flex gap-4 p-5 sm:p-6 rounded-2xl border bg-card transition-colors ${
                     tool.comingSoon
                       ? "border-border/30 opacity-60"
                       : "border-border/50 hover:border-primary/30"
@@ -489,7 +717,7 @@ export default function Page() {
                     </span>
                   )}
                   <div
-                    className={`p-2.5 rounded-xl ${
+                    className={`p-2.5 rounded-xl h-fit shrink-0 ${
                       tool.comingSoon
                         ? "bg-muted text-muted-foreground"
                         : "bg-primary/10 text-primary"
@@ -497,15 +725,20 @@ export default function Page() {
                   >
                     <tool.icon className="w-5 h-5" />
                   </div>
-                  <span
-                    className={`text-sm font-medium ${
-                      tool.comingSoon
-                        ? "text-muted-foreground"
-                        : "text-foreground"
-                    }`}
-                  >
-                    {tool.name}
-                  </span>
+                  <div className="space-y-1.5">
+                    <span
+                      className={`text-sm font-medium block ${
+                        tool.comingSoon
+                          ? "text-muted-foreground"
+                          : "text-foreground"
+                      }`}
+                    >
+                      {tool.name}
+                    </span>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {tool.description}
+                    </p>
+                  </div>
                 </div>
               ))}
             </motion.div>
@@ -550,24 +783,126 @@ export default function Page() {
           </div>
         </section>
 
+        {/* ── Protect Your Privacy ────────────────────────────── */}
+        <section className="w-full py-16 lg:py-20">
+          <div className="container px-4 md:px-6 mx-auto max-w-5xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="text-center space-y-4 mb-16"
+            >
+              <h2 className="font-bold tracking-tighter text-3xl sm:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-400">
+                Protect Your Privacy
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-xl mx-auto">
+                Strip all metadata from your images before sharing them online.
+              </p>
+            </motion.div>
+
+            <div className="space-y-12 lg:space-y-20">
+              {cleanSteps.map((step, index) => {
+                const isReversed = index % 2 === 1;
+                return (
+                  <motion.div
+                    key={step.number}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.6, delay: 0.1 }}
+                    className={`grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center ${
+                      isReversed ? "md:direction-rtl" : ""
+                    }`}
+                  >
+                    <div className={isReversed ? "md:order-2" : "md:order-1"}>
+                      <step.Illustration />
+                    </div>
+                    <div
+                      className={`space-y-4 ${
+                        isReversed ? "md:order-1" : "md:order-2"
+                      }`}
+                    >
+                      <span className="text-5xl font-bold text-green-500/25 leading-none">
+                        {step.number}
+                      </span>
+                      <h3 className="text-2xl font-semibold tracking-tight text-foreground">
+                        {step.title}
+                      </h3>
+                      <p className="text-muted-foreground leading-relaxed">
+                        {step.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         {/* ── CTA ──────────────────────────────────────────────── */}
-        <section className="py-16 flex justify-center items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center space-y-6"
-          >
-            <h2 className="text-2xl font-bold tracking-tight text-foreground">
-              Ready to try it?
-            </h2>
-            <p className="text-muted-foreground max-w-md mx-auto px-4">
-              It takes just a few seconds. Drop an image and see what&apos;s
-              hidden inside.
-            </p>
-            <TryLinkButton />
-          </motion.div>
+        <section className="py-16 lg:py-20">
+          <div className="container px-4 md:px-6 mx-auto max-w-4xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="text-center space-y-4 mb-12"
+            >
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+                Ready to try it?
+              </h2>
+              <p className="text-muted-foreground max-w-lg mx-auto">
+                Choose the tool you need — extract hidden metadata or strip it
+                all away. Both run entirely in your browser.
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {/* Extract card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0 }}
+                className="group relative flex flex-col items-center gap-4 p-8 rounded-2xl border border-border/50 bg-card hover:border-primary/30 transition-colors"
+              >
+                <div className="p-3 rounded-xl bg-primary/10 text-primary">
+                  <MagnifyingGlassIcon className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground">
+                  Extract Metadata
+                </h3>
+                <p className="text-sm text-muted-foreground text-center leading-relaxed">
+                  Drop an image and instantly see prompts, models, seeds, and
+                  every generation parameter hidden inside.
+                </p>
+                <TryLinkButton />
+              </motion.div>
+
+              {/* Clean card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="group relative flex flex-col items-center gap-4 p-8 rounded-2xl border border-border/50 bg-card hover:border-green-500/30 transition-colors"
+              >
+                <div className="p-3 rounded-xl bg-green-500/10 text-green-600">
+                  <SparklesIcon className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground">
+                  Clean Metadata
+                </h3>
+                <p className="text-sm text-muted-foreground text-center leading-relaxed">
+                  Strip all EXIF, GPS, and generation data from your images
+                  before sharing.
+                </p>
+                <CleanLinkButton />
+              </motion.div>
+            </div>
+          </div>
         </section>
       </div>
     </main>
