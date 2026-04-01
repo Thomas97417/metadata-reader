@@ -1,6 +1,6 @@
 "use client";
 
-import ImageDetails from "@/components/ImageDetails";
+import ImageDetails from "@/components/extract/image-details";
 import { motion } from "framer-motion";
 
 export default function ExtractPage() {

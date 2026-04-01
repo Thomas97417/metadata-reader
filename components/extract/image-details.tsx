@@ -3,9 +3,9 @@ import { MAX_FILENAME_LENGTH } from "@/lib/constants";
 import { AnimatePresence, motion } from "framer-motion";
 import { DocumentTextIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
-import { useImageContext } from "./ImageContext";
-import ImageUploader from "./ImageUploader";
-import MetadataTabs from "./MetadataTabs";
+import { useImageContext } from "../../context/image-context";
+import ImageUploader from "./image-uploader";
+import MetadataTabs from "./metadata-tabs";
 
 const supportedFormats = ["Stable Diffusion", "ComfyUI"];
 
@@ -155,7 +155,6 @@ export default function ImageDetails() {
           )}
         </AnimatePresence>
       </div>
-
     </div>
   );
 }

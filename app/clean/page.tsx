@@ -1,6 +1,6 @@
 "use client";
 
-import CleanUploader from "@/components/CleanUploader";
+import CleanUploader from "@/components/clean/clean-uploader";
 import { motion } from "framer-motion";
 
 export default function CleanPage() {

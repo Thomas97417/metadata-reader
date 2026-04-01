@@ -13,7 +13,7 @@ import {
   SparklesIcon,
   ClockIcon,
 } from "@heroicons/react/24/outline";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/buttons/button";
 import { useCallback, useRef, useState } from "react";
 import JSZip from "jszip";
 
@@ -189,8 +189,7 @@ export default function CleanUploader() {
   const completedCount = cleanFiles.filter((f) => f.status === "done").length;
   const totalCount = cleanFiles.length;
   const hasFiles = totalCount > 0;
-  const allDone =
-    hasFiles && cleanFiles.every((f) => f.status === "done");
+  const allDone = hasFiles && cleanFiles.every((f) => f.status === "done");
   const hasQueued = cleanFiles.some(
     (f) => f.status === "queued" || f.status === "error",
   );
@@ -247,7 +246,9 @@ export default function CleanUploader() {
           }`}
         >
           <ArrowUpTrayIcon
-            className={hasFiles ? "size-6 text-primary/70" : "size-10 text-primary/70"}
+            className={
+              hasFiles ? "size-6 text-primary/70" : "size-10 text-primary/70"
+            }
           />
         </motion.div>
         <h3

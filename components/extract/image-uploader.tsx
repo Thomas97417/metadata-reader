@@ -8,9 +8,9 @@ import {
   ExclamationCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/buttons/button";
 import { useEffect, useRef } from "react";
-import { useImageContext } from "./ImageContext";
+import { useImageContext } from "../../context/image-context";
 
 type ImageUploaderProps = {
   variant?: "default" | "hero";
