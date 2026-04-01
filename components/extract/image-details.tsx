@@ -58,24 +58,24 @@ export default function ImageDetails() {
           : "flex flex-col items-center justify-center min-h-[calc(100vh-12rem)] gap-6"
       }
     >
-      {/* Hero header — only when no image */}
-      <AnimatePresence>
-        {!hasImage && (
-          <motion.div
-            key="hero-header"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
-            className="text-center space-y-3"
-          >
-            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-              Drop an AI-generated image to extract its metadata and generation
-              parameters
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Info section */}
+      {!hasImage && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="text-center space-y-2 max-w-lg mx-auto"
+        >
+          <h2 className="text-lg font-semibold tracking-tight">
+            What can you find?
+          </h2>
+          <p className="text-muted-foreground text-sm leading-relaxed">
+            AI-generated images embed prompts, models, seeds, and sampler
+            settings in their metadata. Extract them instantly to understand
+            how any image was created.
+          </p>
+        </motion.div>
+      )}
 
       {/* Main content — ImageUploader is always mounted (same instance) */}
       <div
@@ -97,7 +97,7 @@ export default function ImageDetails() {
             <ImageUploader variant={hasImage ? "default" : "hero"} />
           </motion.div>
 
-          {/* Format badges — only when no image, grouped with uploader */}
+          {/* Format badges — only when no image */}
           {!hasImage && (
             <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
               <span className="text-muted-foreground/50 text-xs">
