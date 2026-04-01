@@ -14,6 +14,7 @@ import {
   ClockIcon,
 } from "@heroicons/react/24/outline";
 import { Button } from "@/components/ui/buttons/button";
+import { Input } from "@/components/ui/input";
 import { useCallback, useRef, useState } from "react";
 import JSZip from "jszip";
 
@@ -31,6 +32,7 @@ interface CleanableFile {
 export default function CleanUploader() {
   const [cleanFiles, setCleanFiles] = useState<CleanableFile[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [suffix, setSuffix] = useState("_clean");
   const processingRef = useRef(false);
 
   const [
@@ -154,12 +156,12 @@ export default function CleanUploader() {
     a.href = url;
     const ext = file.file.name.split(".").pop() || "jpg";
     const baseName = file.file.name.replace(/\.[^.]+$/, "");
-    a.download = `${baseName}_clean.${ext}`;
+    a.download = `${baseName}${suffix}.${ext}`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }, []);
+  }, [suffix]);
 
   const downloadAll = useCallback(async () => {
     const doneFiles = cleanFiles.filter((f) => f.status === "done");
@@ -173,7 +175,7 @@ export default function CleanUploader() {
       if (!file.cleanedBlob) return;
       const ext = file.file.name.split(".").pop() || "jpg";
       const baseName = file.file.name.replace(/\.[^.]+$/, "");
-      zip.file(`${baseName}_clean.${ext}`, file.cleanedBlob);
+      zip.file(`${baseName}${suffix}.${ext}`, file.cleanedBlob);
     });
     const blob = await zip.generateAsync({ type: "blob" });
     const url = URL.createObjectURL(blob);
@@ -184,7 +186,7 @@ export default function CleanUploader() {
     a.click();
     document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }, [cleanFiles, downloadFile]);
+  }, [cleanFiles, downloadFile, suffix]);
 
   const completedCount = cleanFiles.filter((f) => f.status === "done").length;
   const totalCount = cleanFiles.length;
@@ -482,6 +484,18 @@ export default function CleanUploader() {
               </div>
 
               <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5">
+                  <label htmlFor="suffix-input" className="text-xs text-muted-foreground whitespace-nowrap">
+                    Suffix
+                  </label>
+                  <Input
+                    id="suffix-input"
+                    value={suffix}
+                    onChange={(e) => setSuffix(e.target.value)}
+                    placeholder="_clean"
+                    className="h-8 w-28 text-xs"
+                  />
+                </div>
                 <Button
                   variant="outline"
                   size="sm"

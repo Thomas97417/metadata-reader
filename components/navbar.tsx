@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { NavLinkButton } from "./ui/navbar-links";
-import ThemeButton from "./theme-button";
+import ThemeButton from "./ui/buttons/theme-button";
 
 const Navbar = () => {
   return (

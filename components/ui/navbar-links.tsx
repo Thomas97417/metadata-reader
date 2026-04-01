@@ -7,6 +7,7 @@ import {
   ArchiveBoxXMarkIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Tooltip,
   TooltipContent,
@@ -27,16 +28,22 @@ const allLinks: NavLink[] = [
 ];
 
 export function NavLinkButton() {
+  const pathname = usePathname();
+
   return (
     <TooltipProvider delayDuration={300}>
       <div className="flex items-center gap-1">
-        {allLinks.map((link) => (
+        {allLinks.map((link) => {
+          const isActive = pathname === link.href;
+          return (
           <Tooltip key={link.href}>
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
-                className="hover:cursor-pointer text-muted-foreground hover:text-foreground hover:bg-primary/15"
+                className={`hover:cursor-pointer hover:text-foreground hover:bg-primary/15 ${
+                  isActive ? "text-primary" : "text-muted-foreground"
+                }`}
                 asChild
               >
                 <Link href={link.href}>
@@ -49,7 +56,8 @@ export function NavLinkButton() {
               <p>{link.label}</p>
             </TooltipContent>
           </Tooltip>
-        ))}
+          );
+        })}
       </div>
     </TooltipProvider>
   );
