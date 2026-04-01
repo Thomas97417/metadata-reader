@@ -2,8 +2,8 @@ import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 
-import { ImageContextProvider } from "@/components/ImageContext";
-import Navbar from "@/components/Navbar";
+import { ImageContextProvider } from "@/context/image-context";
+import Navbar from "@/components/navbar";
 import { ThemeProvider } from "next-themes";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";

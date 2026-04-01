@@ -1,9 +1,14 @@
 "use client";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChatBubbleLeftIcon, Cog6ToothIcon, SparklesIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import {
+  ChatBubbleLeftIcon,
+  Cog6ToothIcon,
+  SparklesIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/outline";
 import { useState } from "react";
-import CopyToClipboard from "./CopyToClipboard";
-import MetadataDisplay from "./MetadataDisplay";
+import CopyToClipboard from "../ui/copy-to-clipboard";
+import MetadataDisplay from "./metadata-display";
 
 type ParametersDetailsProps = {
   metadata: any;
@@ -106,13 +111,19 @@ export default function ParametersDetails({
         {parametersSections !== "" && (
           <motion.div
             {...fadeInUp}
-            className={embedded ? "space-y-4" : "rounded-lg border bg-card p-4 shadow-sm hover:shadow-md transition-shadow space-y-4"}
+            className={
+              embedded
+                ? "space-y-4"
+                : "rounded-lg border bg-card p-4 shadow-sm hover:shadow-md transition-shadow space-y-4"
+            }
           >
             {!embedded && (
               <div className="flex justify-between items-center pb-2 border-b">
                 <div className="flex items-center gap-2">
                   <ChatBubbleLeftIcon className="w-5 h-5 text-primary" />
-                  <h2 className="font-semibold text-lg">Generation Parameters</h2>
+                  <h2 className="font-semibold text-lg">
+                    Generation Parameters
+                  </h2>
                 </div>
                 <CopyToClipboard
                   parametersSections={parametersSections}

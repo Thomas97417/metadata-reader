@@ -2,11 +2,15 @@
 
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChatBubbleLeftIcon, CircleStackIcon, CodeBracketIcon } from "@heroicons/react/24/outline";
+import {
+  ChatBubbleLeftIcon,
+  CircleStackIcon,
+  CodeBracketIcon,
+} from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
-import CopyToClipboard from "./CopyToClipboard";
-import MetadataDisplay from "./MetadataDisplay";
-import ParametersDetails from "./ParametersDetails";
+import CopyToClipboard from "../ui/copy-to-clipboard";
+import MetadataDisplay from "./metadata-display";
+import ParametersDetails from "./parameters-details";
 
 type Tab = "prompts" | "raw";
 
@@ -28,7 +32,7 @@ export default function MetadataTabs({
     Object.keys(metadata).length > 0;
 
   const [activeTab, setActiveTab] = useState<Tab>(
-    hasPrompts ? "prompts" : "raw"
+    hasPrompts ? "prompts" : "raw",
   );
   const [copiedAll, setCopiedAll] = useState(false);
 
@@ -37,7 +41,8 @@ export default function MetadataTabs({
       ? JSON.stringify(metadata, null, 2).replace(/[\uFFFD]/g, " ")
       : "";
 
-  const copyContent = activeTab === "prompts" ? parametersSections : metadataString;
+  const copyContent =
+    activeTab === "prompts" ? parametersSections : metadataString;
 
   // Reset tab when image changes
   useEffect(() => {
@@ -70,8 +75,8 @@ export default function MetadataTabs({
           No Metadata Found
         </p>
         <p className="text-sm text-muted-foreground/70 text-center max-w-md">
-          This image doesn&apos;t contain any embedded metadata. Try uploading an
-          image created with Stable Diffusion or ComfyUI.
+          This image doesn&apos;t contain any embedded metadata. Try uploading
+          an image created with Stable Diffusion or ComfyUI.
         </p>
       </motion.div>
     );
@@ -89,9 +94,7 @@ export default function MetadataTabs({
               className={cn(
                 "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors relative",
                 "hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 rounded-t-md",
-                activeTab === tab.id
-                  ? "text-primary"
-                  : "text-muted-foreground"
+                activeTab === tab.id ? "text-primary" : "text-muted-foreground",
               )}
             >
               <tab.icon className="w-4 h-4" />
