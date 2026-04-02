@@ -83,11 +83,10 @@ export default function ImageUploader({
         try {
           let metadata;
           if (isWebpFile(files[0].file)) {
-            console.log("Parsing WebP metadata");
             metadata = await parseWebpMetadata(files[0].file);
           } else {
-            console.log("Parsing EXIF metadata");
             metadata = await exifr.parse(files[0].file);
+            console.log("Parsing EXIF metadata", metadata);
           }
           setMetadata(metadata);
         } catch (error) {
