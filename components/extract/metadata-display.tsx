@@ -5,14 +5,17 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { ChevronDownIcon, CircleStackIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
-import CopyToClipboard from "./CopyToClipboard";
+import CopyToClipboard from "../ui/copy-to-clipboard";
 
 type MetadataDisplayProps = {
   metadata: any;
   embedded?: boolean;
 };
 
-export default function MetadataDisplay({ metadata, embedded = false }: MetadataDisplayProps) {
+export default function MetadataDisplay({
+  metadata,
+  embedded = false,
+}: MetadataDisplayProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [shouldShowButton, setShouldShowButton] = useState(false);
@@ -60,8 +63,10 @@ export default function MetadataDisplay({ metadata, embedded = false }: Metadata
           <pre
             className={cn(
               "text-[13px] leading-relaxed font-mono bg-muted/50 rounded-lg p-4 whitespace-pre-wrap break-all hover:bg-muted/70 transition-colors",
-              !isExpanded && shouldShowButton && "max-h-[20em] overflow-hidden mask-bottom",
-              isExpanded && "max-h-none"
+              !isExpanded &&
+                shouldShowButton &&
+                "max-h-[20em] overflow-hidden mask-bottom",
+              isExpanded && "max-h-none",
             )}
           >
             {metadataString}
@@ -75,7 +80,7 @@ export default function MetadataDisplay({ metadata, embedded = false }: Metadata
               "group flex items-center justify-center gap-2 w-full py-2.5 mt-1",
               "text-xs font-medium text-muted-foreground/80",
               "hover:text-foreground hover:bg-muted/50 transition-colors hover:cursor-pointer",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 rounded-md"
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 rounded-md",
             )}
             aria-expanded={isExpanded}
             aria-controls="metadata-content"
@@ -88,7 +93,9 @@ export default function MetadataDisplay({ metadata, embedded = false }: Metadata
             >
               <ChevronDownIcon className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity group-hover:text-primary" />
             </motion.span>
-            {isExpanded ? "Show less" : `Show more (${formattedCount} characters)`}
+            {isExpanded
+              ? "Show less"
+              : `Show more (${formattedCount} characters)`}
           </button>
         )}
       </div>

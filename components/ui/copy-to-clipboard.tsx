@@ -2,13 +2,13 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckIcon, ClipboardDocumentIcon } from "@heroicons/react/24/outline";
-import { Button } from "./ui/button";
+import { Button } from "./buttons/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./ui/tooltip";
+} from "./tooltip";
 
 type CopyToClipboardProps = {
   parametersSections: string;

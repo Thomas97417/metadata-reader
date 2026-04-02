@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { Button } from "./ui/button";
+import { Button } from "./button";
 
 const TryLinkButton = () => {
   return (

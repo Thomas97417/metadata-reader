@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { NavLinkButton } from "./NavLinkButton";
-import ThemeToggle from "./ThemeToggle";
+import { NavLinkButton } from "./ui/navbar-links";
+import ThemeButton from "./ui/buttons/theme-button";
 
 const Navbar = () => {
   return (
@@ -12,7 +12,7 @@ const Navbar = () => {
       </Link>
       <div className="flex flex-row items-center gap-2">
         <NavLinkButton />
-        <ThemeToggle />
+        <ThemeButton />
       </div>
     </div>
   );
