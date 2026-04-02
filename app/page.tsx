@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import {
   ShieldCheckIcon,
   MagnifyingGlassIcon,
-  SparklesIcon,
+  ArchiveBoxXMarkIcon,
 } from "@heroicons/react/24/outline";
 import TryLinkButton from "@/components/ui/buttons/try-link-button";
 import CleanLinkButton from "@/components/ui/buttons/clean-link-button";
@@ -340,7 +340,7 @@ export default function Page() {
                 className="group relative flex flex-col items-center gap-4 p-8 rounded-2xl border border-border/50 bg-card hover:border-green-500/30 transition-colors"
               >
                 <div className="p-3 rounded-xl bg-green-500/10 text-green-600">
-                  <SparklesIcon className="w-6 h-6" />
+                  <ArchiveBoxXMarkIcon className="w-6 h-6" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground">
                   Clean Metadata
