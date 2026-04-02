@@ -59,7 +59,8 @@ export default function ParametersDetails({
   let part3 = "";
 
   if (kindOfPrompt === "prompt" && metadata?.prompt) {
-    const promptData = JSON.parse(metadata.prompt);
+    const sanitized = metadata.prompt.replace(/\bNaN\b/g, "null");
+    const promptData = JSON.parse(sanitized);
     part1 = promptData["6"]?.inputs?.text || "";
     part2 = promptData["7"]?.inputs?.text || "";
     part3 = Object.entries(promptData["3"]?.inputs || {})
