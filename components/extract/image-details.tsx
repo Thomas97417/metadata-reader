@@ -71,8 +71,8 @@ export default function ImageDetails() {
           </h2>
           <p className="text-muted-foreground text-sm leading-relaxed">
             AI-generated images embed prompts, models, seeds, and sampler
-            settings in their metadata. Extract them instantly to understand
-            how any image was created.
+            settings in their metadata. Extract them instantly to understand how
+            any image was created.
           </p>
         </motion.div>
       )}
@@ -123,13 +123,31 @@ export default function ImageDetails() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 5 }}
                 transition={{ duration: 0.3 }}
-                className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg p-3"
+                className="flex flex-col gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg p-3"
               >
-                <DocumentTextIcon className="size-4 text-primary shrink-0" />
-                <span className="font-medium text-primary">File:</span>
-                <span className="truncate">
-                  {shortFileName || "No file selected"}
-                </span>
+                <div className="flex items-center gap-2">
+                  <DocumentTextIcon className="size-4 text-primary shrink-0" />
+                  <span className="font-medium text-primary">File:</span>
+                  <span className="truncate">
+                    {shortFileName || "No file selected"}
+                  </span>
+                </div>
+                {kindOfPrompt && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground/70">
+                      Generated with
+                    </span>
+                    <span
+                      className="text-xs font-semibold px-2 py-0.5 rounded-full
+                      bg-primary/15 text-primary
+                      "
+                    >
+                      {kindOfPrompt === "parameters"
+                        ? "Automatic1111"
+                        : "ComfyUI"}
+                    </span>
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
