@@ -1,32 +1,28 @@
 "use client";
 
 import { useFileUpload } from "@/hooks/use-file-upload";
-import { cleanImage } from "@/lib/clean-image";
+import { useCleanContext } from "@/context/clean-context";
 import { AnimatePresence, motion } from "framer-motion";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
-import { useCallback, useRef, useState } from "react";
-import JSZip from "jszip";
+import { useCallback, useRef } from "react";
 import CleanDropzone from "./clean-dropzone";
 import CleanImageCard from "./clean-image-card";
 import CleanAddCard from "./clean-add-card";
 import CleanActionBar from "./clean-action-bar";
 
-export type FileStatus = "queued" | "processing" | "done" | "error";
-
-export interface CleanableFile {
-  id: string;
-  file: File;
-  preview: string;
-  status: FileStatus;
-  cleanedBlob: Blob | null;
-  error: string | null;
-}
-
 export default function CleanUploader() {
-  const [cleanFiles, setCleanFiles] = useState<CleanableFile[]>([]);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [suffix, setSuffix] = useState("_clean");
-  const processingRef = useRef(false);
+  const {
+    cleanFiles,
+    isProcessing,
+    suffix,
+    setSuffix,
+    addFiles,
+    removeFile,
+    clearAll,
+    processAll,
+    downloadFile,
+    downloadAll,
+  } = useCleanContext();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -59,22 +55,8 @@ export default function CleanUploader() {
       // Still call original to clear dragging state
       originalHandleDrop(e);
     },
-    [originalHandleDrop],
+    [originalHandleDrop, addFiles],
   );
-
-  const addFiles = useCallback((fileList: FileList) => {
-    const newFiles: CleanableFile[] = Array.from(fileList)
-      .filter((f) => f.type.startsWith("image/"))
-      .map((file) => ({
-        id: Math.random().toString(36).slice(2),
-        file,
-        preview: URL.createObjectURL(file),
-        status: "queued" as const,
-        cleanedBlob: null,
-        error: null,
-      }));
-    setCleanFiles((prev) => [...prev, ...newFiles]);
-  }, []);
 
   const getInputProps = useCallback(() => {
     const { ref, ...props } = originalGetInputProps() as ReturnType<typeof originalGetInputProps> & { ref?: unknown };
@@ -90,105 +72,6 @@ export default function CleanUploader() {
       },
     };
   }, [originalGetInputProps, addFiles]);
-
-  const removeFile = useCallback((id: string) => {
-    setCleanFiles((prev) => {
-      const file = prev.find((f) => f.id === id);
-      if (file) URL.revokeObjectURL(file.preview);
-      return prev.filter((f) => f.id !== id);
-    });
-  }, []);
-
-  const clearAll = useCallback(() => {
-    cleanFiles.forEach((f) => URL.revokeObjectURL(f.preview));
-    setCleanFiles([]);
-  }, [cleanFiles]);
-
-  const processAll = useCallback(async () => {
-    if (processingRef.current) return;
-    processingRef.current = true;
-    setIsProcessing(true);
-
-    const filesToProcess = cleanFiles.filter(
-      (f) => f.status === "queued" || f.status === "error",
-    );
-
-    for (const file of filesToProcess) {
-      setCleanFiles((prev) =>
-        prev.map((f) =>
-          f.id === file.id ? { ...f, status: "processing" as const } : f,
-        ),
-      );
-
-      try {
-        const blob = await cleanImage(file.file);
-        setCleanFiles((prev) =>
-          prev.map((f) =>
-            f.id === file.id
-              ? { ...f, status: "done" as const, cleanedBlob: blob }
-              : f,
-          ),
-        );
-      } catch {
-        setCleanFiles((prev) =>
-          prev.map((f) =>
-            f.id === file.id
-              ? {
-                  ...f,
-                  status: "error" as const,
-                  error: "Failed to process",
-                }
-              : f,
-          ),
-        );
-      }
-    }
-
-    setIsProcessing(false);
-    processingRef.current = false;
-  }, [cleanFiles]);
-
-  const downloadFile = useCallback(
-    (file: CleanableFile) => {
-      if (!file.cleanedBlob) return;
-      const url = URL.createObjectURL(file.cleanedBlob);
-      const a = document.createElement("a");
-      a.href = url;
-      const ext = file.file.name.split(".").pop() || "jpg";
-      const baseName = file.file.name.replace(/\.[^.]+$/, "");
-      a.download = `${baseName}${suffix}.${ext}`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-    },
-    [suffix],
-  );
-
-  const downloadAll = useCallback(async () => {
-    const doneFiles = cleanFiles.filter((f) => f.status === "done");
-    if (doneFiles.length === 0) return;
-    if (doneFiles.length === 1) {
-      downloadFile(doneFiles[0]);
-      return;
-    }
-    const zip = new JSZip();
-    doneFiles.forEach((file) => {
-      if (!file.cleanedBlob) return;
-      const ext = file.file.name.split(".").pop() || "jpg";
-      const baseName = file.file.name.replace(/\.[^.]+$/, "");
-      zip.file(`${baseName}${suffix}.${ext}`, file.cleanedBlob);
-    });
-    const blob = await zip.generateAsync({ type: "blob" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "cleaned_images.zip";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }, [cleanFiles, downloadFile, suffix]);
 
   const completedCount = cleanFiles.filter((f) => f.status === "done").length;
   const totalCount = cleanFiles.length;
@@ -282,18 +165,20 @@ export default function CleanUploader() {
               />
             </div>
 
-            <CleanActionBar
-              totalCount={totalCount}
-              completedCount={completedCount}
-              allDone={allDone}
-              hasQueued={hasQueued}
-              isProcessing={isProcessing}
-              suffix={suffix}
-              onSuffixChange={setSuffix}
-              onClearAll={clearAll}
-              onProcessAll={processAll}
-              onDownloadAll={downloadAll}
-            />
+            <div className="sticky bottom-4 z-50">
+              <CleanActionBar
+                totalCount={totalCount}
+                completedCount={completedCount}
+                allDone={allDone}
+                hasQueued={hasQueued}
+                isProcessing={isProcessing}
+                suffix={suffix}
+                onSuffixChange={setSuffix}
+                onClearAll={clearAll}
+                onProcessAll={processAll}
+                onDownloadAll={downloadAll}
+              />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

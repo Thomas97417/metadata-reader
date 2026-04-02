@@ -9,7 +9,7 @@ import {
   ExclamationCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import type { CleanableFile } from "./clean-uploader";
+import type { CleanableFile } from "@/context/clean-context";
 
 interface CleanImageCardProps {
   file: CleanableFile;

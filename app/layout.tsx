@@ -2,6 +2,7 @@ import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 
+import { CleanContextProvider } from "@/context/clean-context";
 import { ImageContextProvider } from "@/context/image-context";
 import Navbar from "@/components/navbar";
 import { ThemeProvider } from "next-themes";
@@ -35,10 +36,12 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ImageContextProvider>
-            <div className="max-w-7xl mx-auto min-h-screen flex flex-col">
-              <Navbar />
-              {children}
-            </div>
+            <CleanContextProvider>
+              <div className="max-w-7xl mx-auto min-h-screen flex flex-col">
+                <Navbar />
+                {children}
+              </div>
+            </CleanContextProvider>
           </ImageContextProvider>
         </ThemeProvider>
         <Analytics />
