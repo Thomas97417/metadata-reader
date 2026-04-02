@@ -2,10 +2,8 @@ import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 
-import { CleanContextProvider } from "@/context/clean-context";
-import { ImageContextProvider } from "@/context/image-context";
+import { AppProviders } from "@/context/app-providers";
 import Navbar from "@/components/navbar";
-import { ThemeProvider } from "next-themes";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
@@ -29,21 +27,12 @@ export default function RootLayout({
           "h-full bg-background font-sans text-foreground",
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <ImageContextProvider>
-            <CleanContextProvider>
-              <div className="max-w-7xl mx-auto min-h-screen flex flex-col">
-                <Navbar />
-                {children}
-              </div>
-            </CleanContextProvider>
-          </ImageContextProvider>
-        </ThemeProvider>
+        <AppProviders>
+          <div className="max-w-7xl mx-auto min-h-screen flex flex-col">
+            <Navbar />
+            {children}
+          </div>
+        </AppProviders>
         <Analytics />
       </body>
     </html>
