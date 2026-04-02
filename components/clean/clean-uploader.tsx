@@ -3,25 +3,17 @@
 import { useFileUpload } from "@/hooks/use-file-upload";
 import { cleanImage } from "@/lib/clean-image";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  ArrowUpTrayIcon,
-  ArrowDownTrayIcon,
-  ArrowPathIcon,
-  CheckCircleIcon,
-  ExclamationCircleIcon,
-  XMarkIcon,
-  ArchiveBoxXMarkIcon,
-  ClockIcon,
-  ShieldCheckIcon,
-  TrashIcon,
-} from "@heroicons/react/24/outline";
-import { Button } from "@/components/ui/buttons/button";
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { useCallback, useRef, useState } from "react";
 import JSZip from "jszip";
+import CleanDropzone from "./clean-dropzone";
+import CleanImageCard from "./clean-image-card";
+import CleanAddCard from "./clean-add-card";
+import CleanActionBar from "./clean-action-bar";
 
-type FileStatus = "queued" | "processing" | "done" | "error";
+export type FileStatus = "queued" | "processing" | "done" | "error";
 
-interface CleanableFile {
+export interface CleanableFile {
   id: string;
   file: File;
   preview: string;
@@ -36,6 +28,8 @@ export default function CleanUploader() {
   const [suffix, setSuffix] = useState("_clean");
   const processingRef = useRef(false);
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [
     { isDragging, errors },
     {
@@ -43,13 +37,16 @@ export default function CleanUploader() {
       handleDragLeave,
       handleDragOver,
       handleDrop: originalHandleDrop,
-      openFileDialog,
       getInputProps: originalGetInputProps,
     },
   ] = useFileUpload({
     accept: "image/*",
     multiple: true,
   });
+
+  const openFileDialog = useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
 
   // Intercept file upload to add to our own state
   const handleDrop = useCallback(
@@ -80,9 +77,10 @@ export default function CleanUploader() {
   }, []);
 
   const getInputProps = useCallback(() => {
-    const props = originalGetInputProps();
+    const { ref, ...props } = originalGetInputProps() as ReturnType<typeof originalGetInputProps> & { ref?: unknown };
     return {
       ...props,
+      ref: fileInputRef,
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         if (files?.length) {
@@ -200,132 +198,38 @@ export default function CleanUploader() {
     (f) => f.status === "queued" || f.status === "error",
   );
 
-  const truncateName = (name: string, max: number = 20) =>
-    name.length > max ? name.slice(0, max - 3) + "..." : name;
+  const truncateName = (name: string, max: number = 20) => {
+    if (name.length <= max) return name;
+    const dotIndex = name.lastIndexOf(".");
+    if (dotIndex === -1) return name.slice(0, max - 3) + "...";
+    const ext = name.slice(dotIndex);
+    const baseName = name.slice(0, dotIndex);
+    const tailLen = 3;
+    const availStart = max - ext.length - tailLen - 3; // 3 for "..."
+    if (availStart <= 0) return "..." + baseName.slice(-tailLen) + ext;
+    return baseName.slice(0, availStart) + "..." + baseName.slice(-tailLen) + ext;
+  };
 
   return (
     <div
       className={`flex flex-col gap-6 ${!hasFiles ? "items-center justify-center min-h-[calc(100vh-12rem)]" : ""}`}
     >
-      {/* Info section */}
-      {!hasFiles && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="text-center space-y-2 max-w-lg mx-auto"
-        >
-          <h2 className="text-lg font-semibold tracking-tight">
-            Why remove metadata?
-          </h2>
-          <p className="text-muted-foreground text-sm leading-relaxed">
-            Your images contain hidden data — location, device info, software
-            settings, and AI generation parameters. Cleaning metadata protects
-            your privacy before sharing online.
-          </p>
-        </motion.div>
-      )}
+      {/* Single hidden file input — kept outside conditional blocks to avoid ref loss */}
+      <input
+        {...getInputProps()}
+        className="sr-only"
+        aria-label="Upload files"
+      />
 
-      {/* Upload Zone (empty state only) */}
       {!hasFiles && (
-        <motion.div
-          role="button"
-          onClick={openFileDialog}
+        <CleanDropzone
+          isDragging={isDragging}
           onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}
           onDragOver={handleDragOver}
           onDrop={handleDrop}
-          animate={{ scale: isDragging ? 1.02 : 1 }}
-          transition={{ duration: 0.2 }}
-          className={`relative flex flex-col items-center justify-center overflow-hidden transition-all hover:cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-2xl min-h-[320px] py-8 w-full max-w-3xl ${
-            isDragging
-              ? "ring-2 ring-primary/50 bg-primary/5 shadow-lg"
-              : "bg-card ring-1 ring-primary/15 shadow-sm hover:ring-primary/30 hover:shadow-md"
-          }`}
-        >
-          <input
-            {...getInputProps()}
-            className="sr-only"
-            aria-label="Upload files"
-          />
-
-          {/* Hero icon */}
-          <motion.div
-            animate={{ scale: [1, 1.06, 1] }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="mb-4 flex shrink-0 items-center justify-center rounded-full size-20 bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/20"
-          >
-            <ArchiveBoxXMarkIcon className="size-10 text-primary/70" />
-          </motion.div>
-
-          {/* Title */}
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/50">
-            Clean Metadata
-          </h1>
-          <p className="text-muted-foreground text-sm max-w-sm mx-auto mt-1 mb-5">
-            Strip metadata from multiple images at once
-          </p>
-
-          {/* 3-step process */}
-          <div className="flex items-center gap-0 mb-5">
-            <div className="flex flex-col items-center gap-1.5">
-              <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <ArrowUpTrayIcon className="size-5 text-primary/60" />
-              </div>
-              <span className="text-[11px] text-muted-foreground font-medium">
-                Upload
-              </span>
-            </div>
-            <div className="w-10 sm:w-14 h-px border-t border-dashed border-primary/25 -mt-4" />
-            <div className="flex flex-col items-center gap-1.5">
-              <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <ArchiveBoxXMarkIcon className="size-5 text-primary/60" />
-              </div>
-              <span className="text-[11px] text-muted-foreground font-medium">
-                Clean
-              </span>
-            </div>
-            <div className="w-10 sm:w-14 h-px border-t border-dashed border-primary/25 -mt-4" />
-            <div className="flex flex-col items-center gap-1.5">
-              <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <ArrowDownTrayIcon className="size-5 text-primary/60" />
-              </div>
-              <span className="text-[11px] text-muted-foreground font-medium">
-                Download
-              </span>
-            </div>
-          </div>
-
-          {/* CTA */}
-          <Button
-            type="button"
-            variant="default"
-            size="default"
-            className="rounded-full px-6 shadow-sm gap-2"
-            onClick={(e: React.MouseEvent) => {
-              e.stopPropagation();
-              openFileDialog();
-            }}
-          >
-            <ArrowUpTrayIcon className="size-4" />
-            Browse files
-          </Button>
-          <p className="text-muted-foreground/50 text-xs mt-3">
-            or drop images anywhere on this card
-          </p>
-
-          {/* Privacy footer */}
-          <div className="flex items-center gap-1.5 mt-4 text-muted-foreground/40">
-            <ShieldCheckIcon className="size-3.5" />
-            <span className="text-[11px]">
-              Everything stays in your browser
-            </span>
-          </div>
-        </motion.div>
+          onBrowse={openFileDialog}
+        />
       )}
 
       {/* Error display */}
@@ -353,7 +257,6 @@ export default function CleanUploader() {
             exit={{ opacity: 0 }}
             className="space-y-4"
           >
-            {/* Grid */}
             <div
               className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3"
               onDragEnter={handleDragEnter}
@@ -361,295 +264,36 @@ export default function CleanUploader() {
               onDragOver={handleDragOver}
               onDrop={handleDrop}
             >
-              <input
-                {...getInputProps()}
-                className="sr-only"
-                aria-label="Upload files"
-              />
               {cleanFiles.map((file, index) => (
-                <motion.div
+                <CleanImageCard
                   key={file.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className={`group relative rounded-xl border overflow-hidden bg-card transition-colors ${
-                    file.status === "done"
-                      ? "border-green-500/30"
-                      : file.status === "error"
-                        ? "border-destructive/30"
-                        : file.status === "processing"
-                          ? "border-primary/40"
-                          : "border-border"
-                  }`}
-                >
-                  {/* Thumbnail */}
-                  <div className="aspect-square relative overflow-hidden">
-                    <img
-                      src={file.preview}
-                      alt={file.file.name}
-                      className="h-full w-full object-cover"
-                    />
-
-                    {/* Status overlay */}
-                    <AnimatePresence mode="wait">
-                      {file.status === "processing" && (
-                        <motion.div
-                          key="processing"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="absolute inset-0 bg-background/60 backdrop-blur-[2px] flex items-center justify-center"
-                        >
-                          <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{
-                              duration: 1,
-                              repeat: Infinity,
-                              ease: "linear",
-                            }}
-                          >
-                            <ArrowPathIcon className="size-8 text-primary" />
-                          </motion.div>
-                        </motion.div>
-                      )}
-                      {file.status === "done" && (
-                        <motion.div
-                          key="done"
-                          initial={{ opacity: 0, scale: 0.5 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          className="absolute inset-0 bg-green-500/10 flex items-center justify-center"
-                        >
-                          <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{
-                              type: "spring",
-                              stiffness: 400,
-                              damping: 15,
-                            }}
-                          >
-                            <CheckCircleIcon className="size-10 text-green-500" />
-                          </motion.div>
-                        </motion.div>
-                      )}
-                      {file.status === "error" && (
-                        <motion.div
-                          key="error"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          className="absolute inset-0 bg-destructive/10 flex items-center justify-center"
-                        >
-                          <ExclamationCircleIcon className="size-10 text-destructive" />
-                        </motion.div>
-                      )}
-                      {file.status === "queued" && (
-                        <motion.div
-                          key="queued"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="absolute inset-0 bg-background/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                          <ClockIcon className="size-6 text-muted-foreground" />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
-                    {/* Remove button */}
-                    {!isProcessing && (
-                      <motion.button
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.8 }}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          removeFile(file.id);
-                        }}
-                        className="absolute top-2 right-2 z-10 flex size-7 cursor-pointer items-center justify-center rounded-full bg-primary/80 text-primary-foreground transition-colors hover:bg-primary"
-                        aria-label="Remove image"
-                      >
-                        <XMarkIcon className="size-3.5" />
-                      </motion.button>
-                    )}
-
-                    {/* Individual download button */}
-                    {file.status === "done" && (
-                      <motion.button
-                        initial={{ opacity: 0, y: 5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          downloadFile(file);
-                        }}
-                        className="absolute bottom-2 right-2 size-7 rounded-full bg-green-500/90 flex items-center justify-center hover:bg-green-500 transition-colors"
-                        aria-label="Download cleaned image"
-                      >
-                        <ArrowDownTrayIcon className="size-3.5 text-white" />
-                      </motion.button>
-                    )}
-                  </div>
-
-                  {/* Filename */}
-                  <div className="px-2.5 py-2 flex items-center gap-1.5">
-                    <span className="text-xs text-muted-foreground truncate">
-                      {truncateName(file.file.name)}
-                    </span>
-                  </div>
-                </motion.div>
+                  file={file}
+                  index={index}
+                  isProcessing={isProcessing}
+                  onRemove={removeFile}
+                  onDownload={downloadFile}
+                  truncateName={truncateName}
+                />
               ))}
-
-              {/* Add more card */}
-              <motion.div
-                role="button"
-                onClick={openFileDialog}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ duration: 0.3, delay: cleanFiles.length * 0.05 }}
-                className={`relative rounded-xl border-2 border-dashed overflow-hidden flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors ${
-                  isDragging
-                    ? "border-primary/50 bg-primary/5"
-                    : "border-border hover:border-primary/40 hover:bg-primary/5"
-                }`}
-              >
-                <div className="aspect-square flex flex-col items-center justify-center gap-2 p-4">
-                  <motion.div
-                    whileHover={{ scale: 1.1, rotate: 10 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                    className="flex items-center justify-center rounded-full size-12 bg-primary/10 border border-primary/20"
-                  >
-                    <ArrowUpTrayIcon className="size-5 text-primary/60" />
-                  </motion.div>
-                  <span className="text-sm font-medium text-muted-foreground">
-                    Add more
-                  </span>
-                  <span className="text-[11px] text-muted-foreground/50">
-                    Drop or click
-                  </span>
-                </div>
-              </motion.div>
+              <CleanAddCard
+                isDragging={isDragging}
+                animationDelay={cleanFiles.length * 0.05}
+                onBrowse={openFileDialog}
+              />
             </div>
 
-            {/* Action bar */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="rounded-xl bg-card border border-border overflow-hidden"
-            >
-              {/* Progress bar — thin stripe at top of card */}
-              <div className="h-1 w-full bg-muted/30">
-                <motion.div
-                  className={`h-full ${allDone ? "bg-green-500" : "bg-gradient-to-r from-primary to-primary/60"}`}
-                  initial={{ width: 0 }}
-                  animate={{
-                    width: `${totalCount > 0 ? (completedCount / totalCount) * 100 : 0}%`,
-                  }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                />
-              </div>
-
-              <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
-                {/* Left: status */}
-                <div className="flex items-center gap-3">
-                  {/* Count badge */}
-                  <div className="flex items-center gap-1.5 text-sm">
-                    <span className="font-medium">
-                      {totalCount} image{totalCount !== 1 ? "s" : ""}
-                    </span>
-                    {completedCount > 0 && (
-                      <span
-                        className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${allDone ? "bg-green-500/15 text-green-500" : "bg-primary/10 text-primary"}`}
-                      >
-                        {allDone
-                          ? "All cleaned"
-                          : `${completedCount}/${totalCount}`}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Right: controls */}
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center h-8 rounded-lg bg-muted/50 overflow-hidden">
-                    <span className="text-xs text-muted-foreground px-2.5 whitespace-nowrap select-none">
-                      Suffix
-                    </span>
-                    <input
-                      id="suffix-input"
-                      value={suffix}
-                      onChange={(e) => setSuffix(e.target.value)}
-                      placeholder="_clean"
-                      className="h-full w-24 text-xs bg-background/80 px-2 border-l border-border outline-none"
-                    />
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearAll}
-                    disabled={isProcessing}
-                    className="gap-1.5 hover:cursor-pointer text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                  >
-                    <TrashIcon className="size-3.5" />
-                    Clear all
-                  </Button>
-
-                  {allDone ? (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 20,
-                      }}
-                    >
-                      <Button
-                        size="sm"
-                        onClick={downloadAll}
-                        className="gap-1.5 hover:cursor-pointer bg-green-600 hover:bg-green-700 text-white"
-                      >
-                        <ArrowDownTrayIcon className="size-4" />
-                        Download all
-                      </Button>
-                    </motion.div>
-                  ) : (
-                    <Button
-                      size="sm"
-                      onClick={processAll}
-                      disabled={isProcessing || !hasQueued}
-                      className="gap-1.5 hover:cursor-pointer"
-                    >
-                      {isProcessing ? (
-                        <>
-                          <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{
-                              duration: 1,
-                              repeat: Infinity,
-                              ease: "linear",
-                            }}
-                          >
-                            <ArrowPathIcon className="size-4" />
-                          </motion.div>
-                          Cleaning...
-                        </>
-                      ) : (
-                        <>
-                          <ArchiveBoxXMarkIcon className="size-4" />
-                          Clean all
-                        </>
-                      )}
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </motion.div>
+            <CleanActionBar
+              totalCount={totalCount}
+              completedCount={completedCount}
+              allDone={allDone}
+              hasQueued={hasQueued}
+              isProcessing={isProcessing}
+              suffix={suffix}
+              onSuffixChange={setSuffix}
+              onClearAll={clearAll}
+              onProcessAll={processAll}
+              onDownloadAll={downloadAll}
+            />
           </motion.div>
         )}
       </AnimatePresence>
