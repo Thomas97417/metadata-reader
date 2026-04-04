@@ -243,7 +243,7 @@ export default function Page() {
               transition={{ duration: 0.8 }}
               className="text-center space-y-4 mb-16"
             >
-              <h2 className="font-bold tracking-tighter text-3xl sm:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-400">
+              <h2 className="font-bold tracking-tighter text-3xl sm:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-red-300">
                 Protect Your Privacy
               </h2>
               <p className="text-lg text-muted-foreground max-w-xl mx-auto">
@@ -273,7 +273,7 @@ export default function Page() {
                         isReversed ? "md:order-1" : "md:order-2"
                       }`}
                     >
-                      <span className="text-5xl font-bold text-green-500/25 leading-none">
+                      <span className="text-5xl font-bold text-red-400/25 leading-none">
                         {step.number}
                       </span>
                       <h3 className="text-2xl font-semibold tracking-tight text-foreground">
@@ -337,9 +337,9 @@ export default function Page() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="group relative flex flex-col items-center gap-4 p-8 rounded-2xl border border-border/50 bg-card hover:border-green-500/30 transition-colors"
+                className="group relative flex flex-col items-center gap-4 p-8 rounded-2xl border border-border/50 bg-card hover:border-red-400/30 transition-colors"
               >
-                <div className="p-3 rounded-xl bg-green-500/10 text-green-600">
+                <div className="p-3 rounded-xl bg-red-400/10 text-red-500">
                   <ArchiveBoxXMarkIcon className="w-6 h-6" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground">
