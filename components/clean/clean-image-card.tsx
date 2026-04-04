@@ -36,7 +36,7 @@ export default function CleanImageCard({
       transition={{ duration: 0.3, delay: index * 0.05 }}
       className={`group relative rounded-xl border overflow-hidden bg-card transition-colors ${
         file.status === "done"
-          ? "border-green-500/30"
+          ? "border-border"
           : file.status === "error"
             ? "border-destructive/30"
             : file.status === "processing"
@@ -79,7 +79,7 @@ export default function CleanImageCard({
               key="done"
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="absolute inset-0 bg-green-500/10 flex items-center justify-center"
+              className="absolute inset-0 flex items-center justify-center"
             >
               <motion.div
                 initial={{ scale: 0 }}
