@@ -43,7 +43,7 @@ export default function CleanActionBar({
       {/* Progress bar — thin stripe at top of card */}
       <div className="h-1 w-full bg-muted/30">
         <motion.div
-          className={`h-full ${allDone ? "bg-green-500" : "bg-gradient-to-r from-primary to-primary/60"}`}
+          className={`h-full ${allDone ? "bg-green-500" : "bg-gradient-to-r from-green-500 to-green-500/60"}`}
           initial={{ width: 0 }}
           animate={{
             width: `${totalCount > 0 ? (completedCount / totalCount) * 100 : 0}%`,
@@ -61,7 +61,7 @@ export default function CleanActionBar({
             </span>
             {completedCount > 0 && (
               <span
-                className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${allDone ? "bg-green-500/15 text-green-500" : "bg-primary/10 text-primary"}`}
+                className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${allDone ? "bg-red-400/15 text-red-400" : "bg-red-400/10 text-red-400"}`}
               >
                 {allDone
                   ? "All cleaned"

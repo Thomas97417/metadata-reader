@@ -149,7 +149,7 @@ export default function ImageUploader({
                   <motion.div
                     initial={{ scale: 0.8 }}
                     animate={{ scale: 1 }}
-                    whileHover={{ scale: 1.1, rotate: 15 }}
+                    whileHover={{ scale: 1.15 }}
                     className="bg-primary-foreground/10 p-3 rounded-full border border-primary-foreground/20 backdrop-blur-sm"
                   >
                     <ArrowUpTrayIcon className="size-5 text-primary-foreground" />

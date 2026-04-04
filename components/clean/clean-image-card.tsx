@@ -40,7 +40,7 @@ export default function CleanImageCard({
           : file.status === "error"
             ? "border-destructive/30"
             : file.status === "processing"
-              ? "border-primary/40"
+              ? "border-red-400/40"
               : "border-border"
       }`}
     >
@@ -60,7 +60,7 @@ export default function CleanImageCard({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-background/60 backdrop-blur-[2px] flex items-center justify-center"
+              className="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center"
             >
               <motion.div
                 animate={{ rotate: 360 }}
@@ -69,16 +69,18 @@ export default function CleanImageCard({
                   repeat: Infinity,
                   ease: "linear",
                 }}
+                className="p-2.5 rounded-full bg-white/15 backdrop-blur-sm"
               >
-                <ArrowPathIcon className="size-8 text-primary" />
+                <ArrowPathIcon className="size-6 text-white" />
               </motion.div>
             </motion.div>
           )}
           {file.status === "done" && (
             <motion.div
               key="done"
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               className="absolute inset-0 flex items-center justify-center"
             >
               <motion.div
@@ -89,8 +91,9 @@ export default function CleanImageCard({
                   stiffness: 400,
                   damping: 15,
                 }}
+                className="p-2 rounded-full bg-green-500/20 backdrop-blur-sm"
               >
-                <CheckCircleIcon className="size-10 text-green-500" />
+                <CheckCircleIcon className="size-8 text-green-400" />
               </motion.div>
             </motion.div>
           )}
@@ -99,40 +102,41 @@ export default function CleanImageCard({
               key="error"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="absolute inset-0 bg-destructive/10 flex items-center justify-center"
+              className="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center"
             >
-              <ExclamationCircleIcon className="size-10 text-destructive" />
+              <div className="p-2 rounded-full bg-red-500/20 backdrop-blur-sm">
+                <ExclamationCircleIcon className="size-8 text-red-400" />
+              </div>
             </motion.div>
           )}
           {file.status === "queued" && (
             <motion.div
               key="queued"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              animate={{ opacity: 0.8 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-background/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
             >
-              <ClockIcon className="size-6 text-muted-foreground" />
+              <div className="p-2 rounded-full bg-white/10 backdrop-blur-sm">
+                <ClockIcon className="size-5 text-white/70" />
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Remove button */}
+        {/* Remove button — hidden by default, revealed on hover */}
         {!isProcessing && (
           <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={(e) => {
               e.stopPropagation();
               onRemove(file.id);
             }}
-            className="absolute top-2 right-2 z-10 flex size-7 cursor-pointer items-center justify-center rounded-full bg-primary/80 text-primary-foreground transition-colors hover:bg-primary"
+            className="absolute top-1.5 right-1.5 z-10 flex size-6 cursor-pointer items-center justify-center rounded-full bg-black/50 text-white/80 opacity-0 group-hover:opacity-100 transition-all backdrop-blur-sm hover:bg-black/70 hover:text-white"
             aria-label="Remove image"
           >
-            <XMarkIcon className="size-3.5" />
+            <XMarkIcon className="size-3" />
           </motion.button>
         )}
 
@@ -141,16 +145,17 @@ export default function CleanImageCard({
           <motion.button
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={(e) => {
               e.stopPropagation();
               onDownload(file);
             }}
-            className="absolute bottom-2 right-2 size-7 rounded-full bg-green-500/90 flex items-center justify-center hover:bg-green-500 transition-colors"
+            className="absolute bottom-1.5 right-1.5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-500/90 backdrop-blur-sm shadow-lg shadow-black/20 hover:bg-green-500 transition-colors"
             aria-label="Download cleaned image"
           >
-            <ArrowDownTrayIcon className="size-3.5 text-white" />
+            <ArrowDownTrayIcon className="size-3 text-white" />
+            <span className="text-[10px] font-medium text-white">Save</span>
           </motion.button>
         )}
       </div>
