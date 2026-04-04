@@ -90,7 +90,7 @@ export default function ImageDetails() {
             layout
             className={
               hasImage
-                ? "rounded-xl overflow-hidden border bg-background/50"
+                ? "rounded-2xl overflow-hidden border bg-background"
                 : ""
             }
           >

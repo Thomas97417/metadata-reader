@@ -77,7 +77,7 @@ export function CleanProcessIllustration() {
     <div className="w-full aspect-[4/3] rounded-2xl border border-border bg-card/50 flex items-center justify-center p-6 sm:p-8">
       <div className="relative flex items-center justify-center">
         {/* Image thumbnail */}
-        <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl bg-gradient-to-br from-green-500/20 to-green-500/5 border border-border flex items-center justify-center z-10">
+        <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl bg-gradient-to-br from-green-500/20 to-green-500/5 border border-green-500/20 flex items-center justify-center z-10">
           <motion.div
             animate={{ scale: [1, 1.05, 1] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
