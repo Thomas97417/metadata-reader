@@ -2,7 +2,6 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckIcon, ClipboardDocumentIcon } from "@heroicons/react/24/outline";
-import { Button } from "./buttons/button";
 import {
   Tooltip,
   TooltipContent,
@@ -45,11 +44,9 @@ const CopyToClipboard = ({
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
+          <button
             onClick={copyToClipboard}
-            variant="ghost"
-            size="sm"
-            className="h-8 px-2 text-muted-foreground transition-colors hover:cursor-pointer"
+            className="p-1.5 rounded-md text-muted-foreground hover:text-foreground transition-colors hover:cursor-pointer"
             disabled={copied}
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -60,7 +57,7 @@ const CopyToClipboard = ({
                   initial="initial"
                   animate="animate"
                   exit="exit"
-                  transition={{ duration: 0.2 }}
+                  transition={{ duration: 0.15 }}
                 >
                   <CheckIcon className="w-4 h-4 text-primary" />
                 </motion.span>
@@ -71,17 +68,16 @@ const CopyToClipboard = ({
                   initial="initial"
                   animate="animate"
                   exit="exit"
-                  transition={{ duration: 0.2 }}
+                  transition={{ duration: 0.15 }}
                 >
                   <ClipboardDocumentIcon className="w-4 h-4" />
                 </motion.span>
               )}
             </AnimatePresence>
-            <span>{copied && "Copied!"}</span>
-          </Button>
+          </button>
         </TooltipTrigger>
         <TooltipContent side="bottom" className="text-xs">
-          <p>{`${text} to clipboard`}</p>
+          <p>{text}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
