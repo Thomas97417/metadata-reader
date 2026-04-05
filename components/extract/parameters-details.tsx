@@ -151,6 +151,18 @@ function parseComfyUIData(promptJson: string): ParsedComfyUI {
       const weight = node.inputs.strength_model;
       if (name) loras.push({ name, weight: weight ?? 1 });
     }
+
+    // CR LoRA Stack (numbered slots: lora_name_1, switch_1, model_weight_1, ...)
+    if (node.class_type === "CR LoRA Stack") {
+      for (let i = 1; ; i++) {
+        const name = node.inputs[`lora_name_${i}`];
+        if (name === undefined) break;
+        const switchVal = node.inputs[`switch_${i}`];
+        if (switchVal === "Off" || name === "None") continue;
+        const weight = node.inputs[`model_weight_${i}`];
+        loras.push({ name, weight: weight ?? 1 });
+      }
+    }
   }
 
   return { positive, negative, params, loras, modelParams };
