@@ -25,17 +25,17 @@ export default function CleanAddCard({
       transition={{ duration: 0.3, delay: animationDelay }}
       className={`relative rounded-xl border-2 border-dashed overflow-hidden flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors ${
         isDragging
-          ? "border-primary/50 bg-primary/5"
-          : "border-border hover:border-primary/40 hover:bg-primary/5"
+          ? "border-red-400/50 bg-red-400/5"
+          : "border-border hover:border-red-400/40 hover:bg-red-400/5"
       }`}
     >
       <div className="aspect-square flex flex-col items-center justify-center gap-2 p-4">
         <motion.div
-          whileHover={{ scale: 1.1, rotate: 10 }}
+          whileHover={{ scale: 1.15 }}
           transition={{ type: "spring", stiffness: 400, damping: 17 }}
-          className="flex items-center justify-center rounded-full size-12 bg-primary/10 border border-primary/20"
+          className="flex items-center justify-center rounded-full size-12 bg-red-400/10 border border-red-400/20"
         >
-          <ArrowUpTrayIcon className="size-5 text-primary/60" />
+          <ArrowUpTrayIcon className="size-5 text-red-400/60" />
         </motion.div>
         <span className="text-sm font-medium text-muted-foreground">
           Add more

@@ -59,7 +59,9 @@ export default function CleanUploader() {
   );
 
   const getInputProps = useCallback(() => {
-    const { ref, ...props } = originalGetInputProps() as ReturnType<typeof originalGetInputProps> & { ref?: unknown };
+    const { ref, ...props } = originalGetInputProps() as ReturnType<
+      typeof originalGetInputProps
+    > & { ref?: unknown };
     return {
       ...props,
       ref: fileInputRef,
@@ -84,13 +86,15 @@ export default function CleanUploader() {
   const truncateName = (name: string, max: number = 20) => {
     if (name.length <= max) return name;
     const dotIndex = name.lastIndexOf(".");
-    if (dotIndex === -1) return name.slice(0, max - 3) + "...";
+    if (dotIndex === -1) return name.slice(0, max - 4) + "...";
     const ext = name.slice(dotIndex);
     const baseName = name.slice(0, dotIndex);
-    const tailLen = 3;
-    const availStart = max - ext.length - tailLen - 3; // 3 for "..."
+    const tailLen = 4;
+    const availStart = max - ext.length - tailLen - 4; // 4 for "..."
     if (availStart <= 0) return "..." + baseName.slice(-tailLen) + ext;
-    return baseName.slice(0, availStart) + "..." + baseName.slice(-tailLen) + ext;
+    return (
+      baseName.slice(0, availStart) + "..." + baseName.slice(-tailLen) + ext
+    );
   };
 
   return (

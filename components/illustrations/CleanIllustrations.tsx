@@ -22,7 +22,7 @@ export function CleanDropIllustration() {
   return (
     <div
       onClick={() => router.push("/clean")}
-      className="w-full aspect-[4/3] rounded-2xl border-2 border-dashed border-border bg-card/50 flex flex-col items-center justify-center gap-4 p-8 cursor-pointer hover:border-green-500/50 transition-colors"
+      className="w-full aspect-[4/3] rounded-2xl border-2 border-dashed border-border bg-card/50 flex flex-col items-center justify-center gap-4 p-8 cursor-pointer hover:border-red-400/50 transition-colors"
     >
       <div className="relative flex items-end justify-center h-20 w-40">
         {thumbnails.map((t, i) => (
@@ -36,9 +36,9 @@ export function CleanDropIllustration() {
               ease: "easeInOut",
             }}
             style={{ rotate: t.rotate, x: t.x }}
-            className="absolute w-14 h-14 rounded-lg bg-gradient-to-br from-green-500/20 to-green-500/5 border border-green-500/20 flex items-center justify-center"
+            className="absolute w-14 h-14 rounded-lg bg-gradient-to-br from-red-400/20 to-red-400/5 border border-red-400/20 flex items-center justify-center"
           >
-            <div className="w-7 h-7 rounded bg-gradient-to-br from-green-500/30 to-green-500/10" />
+            <div className="w-7 h-7 rounded bg-gradient-to-br from-red-400/30 to-red-400/10" />
           </motion.div>
         ))}
       </div>
@@ -50,7 +50,7 @@ export function CleanDropIllustration() {
         {["PNG", "JPEG", "WebP"].map((fmt) => (
           <span
             key={fmt}
-            className="text-[10px] px-2 py-0.5 rounded-full bg-green-500/10 text-green-600 font-medium"
+            className="text-[10px] px-2 py-0.5 rounded-full bg-red-400/10 text-red-500 font-medium"
           >
             {fmt}
           </span>
@@ -77,13 +77,13 @@ export function CleanProcessIllustration() {
     <div className="w-full aspect-[4/3] rounded-2xl border border-border bg-card/50 flex items-center justify-center p-6 sm:p-8">
       <div className="relative flex items-center justify-center">
         {/* Image thumbnail */}
-        <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl bg-gradient-to-br from-green-500/20 to-green-500/5 border border-border flex items-center justify-center z-10">
+        <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl bg-gradient-to-br from-red-400/20 to-red-400/5 border border-red-400/20 flex items-center justify-center z-10">
           <motion.div
             animate={{ scale: [1, 1.05, 1] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            className="p-3 rounded-full bg-green-500/10"
+            className="p-3 rounded-full bg-red-400/10"
           >
-            <ArchiveBoxXMarkIcon className="w-8 h-8 text-green-500/60" />
+            <ArchiveBoxXMarkIcon className="w-8 h-8 text-red-400/60" />
           </motion.div>
         </div>
 
@@ -92,7 +92,7 @@ export function CleanProcessIllustration() {
           <motion.div
             key={tag.label}
             style={{ x: tag.x, y: tag.y }}
-            className="absolute flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-green-500/8 border border-green-500/20"
+            className="absolute flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-red-400/8 border border-red-400/20"
             animate={{
               opacity: [0.9, 0.9, 0.2, 0],
               scale: [1, 1, 0.95, 0.9],
@@ -105,8 +105,8 @@ export function CleanProcessIllustration() {
               times: [0, 0.4, 0.7, 1],
             }}
           >
-            <tag.icon className="w-3 h-3 text-green-500/70" />
-            <span className="text-[10px] font-medium text-green-500/70">
+            <tag.icon className="w-3 h-3 text-red-400/70" />
+            <span className="text-[10px] font-medium text-red-400/70">
               {tag.label}
             </span>
             <motion.div
@@ -120,7 +120,7 @@ export function CleanProcessIllustration() {
                 times: [0, 0.4, 0.5, 1],
               }}
             >
-              <div className="w-full h-[1px] bg-green-500/60" />
+              <div className="w-full h-[1px] bg-red-400/60" />
             </motion.div>
           </motion.div>
         ))}

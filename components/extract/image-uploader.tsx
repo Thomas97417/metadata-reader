@@ -117,12 +117,12 @@ export default function ImageUploader({
             scale: isDragging ? 1.02 : 1,
           }}
           transition={{ duration: 0.2 }}
-          className={`relative flex flex-col items-center justify-center overflow-hidden rounded-2xl transition-all hover:cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
+          className={`relative flex flex-col items-center justify-center overflow-hidden transition-all hover:cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
             previewUrl
               ? ""
               : isDragging
-                ? "ring-2 ring-primary/50 bg-primary/5 shadow-lg"
-                : "bg-card ring-1 ring-primary/15 shadow-sm hover:ring-primary/30 hover:shadow-md"
+                ? "rounded-2xl ring-2 ring-primary/50 bg-primary/5 shadow-lg"
+                : "rounded-2xl bg-card ring-1 ring-primary/15 shadow-sm hover:ring-primary/30 hover:shadow-md"
           } ${isHero ? "min-h-[400px]" : "min-h-[300px]"}`}
         >
           <input
@@ -149,7 +149,7 @@ export default function ImageUploader({
                   <motion.div
                     initial={{ scale: 0.8 }}
                     animate={{ scale: 1 }}
-                    whileHover={{ scale: 1.1, rotate: 15 }}
+                    whileHover={{ scale: 1.15 }}
                     className="bg-primary-foreground/10 p-3 rounded-full border border-primary-foreground/20 backdrop-blur-sm"
                   >
                     <ArrowUpTrayIcon className="size-5 text-primary-foreground" />

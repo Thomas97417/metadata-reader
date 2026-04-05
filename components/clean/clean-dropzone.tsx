@@ -55,10 +55,10 @@ export default function CleanDropzone({
         onDrop={onDrop}
         animate={{ scale: isDragging ? 1.02 : 1 }}
         transition={{ duration: 0.2 }}
-        className={`relative flex flex-col items-center justify-center overflow-hidden transition-all hover:cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-2xl min-h-[320px] py-8 w-full max-w-3xl ${
+        className={`relative flex flex-col items-center justify-center overflow-hidden transition-all hover:cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/50 rounded-2xl min-h-[320px] py-8 w-full max-w-3xl ${
           isDragging
-            ? "ring-2 ring-primary/50 bg-primary/5 shadow-lg"
-            : "bg-card ring-1 ring-primary/15 shadow-sm hover:ring-primary/30 hover:shadow-md"
+            ? "ring-2 ring-red-400/50 bg-red-400/5 shadow-lg"
+            : "bg-card ring-1 ring-red-400/15 shadow-sm hover:ring-red-400/30 hover:shadow-md"
         }`}
       >
         {/* Hero icon */}
@@ -69,13 +69,13 @@ export default function CleanDropzone({
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="mb-4 flex shrink-0 items-center justify-center rounded-full size-20 bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/20"
+          className="mb-4 flex shrink-0 items-center justify-center rounded-full size-20 bg-gradient-to-br from-red-400/15 to-red-400/5 border border-red-400/20"
         >
-          <ArchiveBoxXMarkIcon className="size-10 text-primary/70" />
+          <ArchiveBoxXMarkIcon className="size-10 text-red-400/70" />
         </motion.div>
 
         {/* Title */}
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/50">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-red-400 to-red-400/50">
           Clean Metadata
         </h1>
         <p className="text-muted-foreground text-sm max-w-sm mx-auto mt-1 mb-5">
@@ -85,26 +85,26 @@ export default function CleanDropzone({
         {/* 3-step process */}
         <div className="flex items-center gap-0 mb-5">
           <div className="flex flex-col items-center gap-1.5">
-            <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <ArrowUpTrayIcon className="size-5 text-primary/60" />
+            <div className="size-10 rounded-full bg-red-400/10 flex items-center justify-center">
+              <ArrowUpTrayIcon className="size-5 text-red-400/60" />
             </div>
             <span className="text-[11px] text-muted-foreground font-medium">
               Upload
             </span>
           </div>
-          <div className="w-10 sm:w-14 h-px border-t border-dashed border-primary/25 -mt-4" />
+          <div className="w-10 sm:w-14 h-px border-t border-dashed border-red-400/25 -mt-4" />
           <div className="flex flex-col items-center gap-1.5">
-            <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <ArchiveBoxXMarkIcon className="size-5 text-primary/60" />
+            <div className="size-10 rounded-full bg-red-400/10 flex items-center justify-center">
+              <ArchiveBoxXMarkIcon className="size-5 text-red-400/60" />
             </div>
             <span className="text-[11px] text-muted-foreground font-medium">
               Clean
             </span>
           </div>
-          <div className="w-10 sm:w-14 h-px border-t border-dashed border-primary/25 -mt-4" />
+          <div className="w-10 sm:w-14 h-px border-t border-dashed border-red-400/25 -mt-4" />
           <div className="flex flex-col items-center gap-1.5">
-            <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <ArrowDownTrayIcon className="size-5 text-primary/60" />
+            <div className="size-10 rounded-full bg-red-400/10 flex items-center justify-center">
+              <ArrowDownTrayIcon className="size-5 text-red-400/60" />
             </div>
             <span className="text-[11px] text-muted-foreground font-medium">
               Download

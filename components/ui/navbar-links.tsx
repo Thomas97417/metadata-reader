@@ -36,26 +36,28 @@ export function NavLinkButton() {
         {allLinks.map((link) => {
           const isActive = pathname === link.href;
           return (
-          <Tooltip key={link.href}>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className={`hover:cursor-pointer hover:text-foreground hover:bg-primary/15 ${
-                  isActive ? "text-primary" : "text-muted-foreground"
-                }`}
-                asChild
-              >
-                <Link href={link.href}>
-                  <link.icon className="h-[1.2rem] w-[1.2rem]" />
-                  <span className="sr-only">{link.label}</span>
-                </Link>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{link.label}</p>
-            </TooltipContent>
-          </Tooltip>
+            <Tooltip key={link.href}>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={`hover:cursor-pointer hover:text-foreground hover:bg-primary/15 ${
+                    isActive
+                      ? "text-primary hover:text-primary"
+                      : "text-muted-foreground"
+                  }`}
+                  asChild
+                >
+                  <Link href={link.href}>
+                    <link.icon className="h-[1.2rem] w-[1.2rem]" />
+                    <span className="sr-only">{link.label}</span>
+                  </Link>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{link.label}</p>
+              </TooltipContent>
+            </Tooltip>
           );
         })}
       </div>

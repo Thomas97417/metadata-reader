@@ -14,7 +14,7 @@ const CleanLinkButton = () => {
     >
       <Button
         size="lg"
-        className="bg-gradient-to-r from-green-600 to-green-500 text-white font-semibold px-8 py-6 text-lg rounded-xl shadow-lg shadow-green-500/20 hover:shadow-xl hover:shadow-green-500/30 relative overflow-hidden group hover:cursor-pointer tracking-tight transition-shadow duration-300"
+        className="bg-gradient-to-r from-red-500 to-red-400 text-white font-semibold px-8 py-6 text-lg rounded-xl shadow-lg shadow-red-400/20 hover:shadow-xl hover:shadow-red-400/30 relative overflow-hidden group hover:cursor-pointer tracking-tight transition-shadow duration-300"
         asChild
       >
         <Link href="/clean">
