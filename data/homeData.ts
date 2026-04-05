@@ -2,7 +2,6 @@ import {
   CommandLineIcon,
   CpuChipIcon,
   SparklesIcon,
-  LightBulbIcon,
 } from "@heroicons/react/24/outline";
 
 import {
@@ -64,16 +63,9 @@ export const supportedTools = [
   },
   {
     icon: SparklesIcon,
-    name: "Midjourney",
+    name: "More coming soon",
     description:
-      "A cloud-based AI image generator known for its artistic style. Metadata support coming soon.",
-    comingSoon: true,
-  },
-  {
-    icon: LightBulbIcon,
-    name: "Nano Banana",
-    description:
-      "Google's lightweight image generation model. Metadata support coming soon.",
+      "We're always listening — reach out at contact@metadata-reader.com to suggest a tool.",
     comingSoon: true,
   },
 ];

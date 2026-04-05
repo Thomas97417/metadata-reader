@@ -5,6 +5,7 @@ import {
   RectangleGroupIcon,
   PhotoIcon,
   ArchiveBoxXMarkIcon,
+  QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -25,6 +26,7 @@ const allLinks: NavLink[] = [
   { href: "/", icon: RectangleGroupIcon, label: "Home" },
   { href: "/extract", icon: PhotoIcon, label: "Extract" },
   { href: "/clean", icon: ArchiveBoxXMarkIcon, label: "Clean" },
+  { href: "/faq", icon: QuestionMarkCircleIcon, label: "FAQ" },
 ];
 
 export function NavLinkButton() {

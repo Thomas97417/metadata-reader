@@ -157,7 +157,7 @@ export default function Page() {
                   key={tool.name}
                   className={`relative flex gap-4 p-5 sm:p-6 rounded-2xl border bg-card transition-colors ${
                     tool.comingSoon
-                      ? "border-border/30 opacity-60"
+                      ? "border-border/30 opacity-60 sm:col-span-2"
                       : "border-border/50 hover:border-primary/30"
                   }`}
                 >
@@ -186,7 +186,15 @@ export default function Page() {
                       {tool.name}
                     </span>
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                      {tool.description}
+                      {tool.description.split(/([\w.-]+@[\w.-]+\.\w+)/).map((part, i) =>
+                        /[\w.-]+@[\w.-]+\.\w+/.test(part) ? (
+                          <a key={i} href={`mailto:${part}?subject=${encodeURIComponent("Tool support request")}`} className="text-primary hover:underline">
+                            {part}
+                          </a>
+                        ) : (
+                          part
+                        )
+                      )}
                     </p>
                   </div>
                 </div>
