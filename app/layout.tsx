@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 
 import { AppProviders } from "@/context/app-providers";
 import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
 import { JsonLd } from "./json-ld";
@@ -57,7 +58,8 @@ export default function RootLayout({
         <AppProviders>
           <div className="max-w-7xl mx-auto min-h-screen flex flex-col">
             <Navbar />
-            {children}
+            <div className="flex-1 pb-16">{children}</div>
+            <Footer />
           </div>
         </AppProviders>
         <Analytics />
