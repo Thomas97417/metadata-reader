@@ -118,7 +118,7 @@ export default function CleanImageCard({
               className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
             >
               <div className="p-2 rounded-full bg-white/10 backdrop-blur-sm">
-                <ClockIcon className="size-5 text-white/70" />
+                <ClockIcon className="size-8 text-white/70" />
               </div>
             </motion.div>
           )}
