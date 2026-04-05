@@ -59,6 +59,20 @@ const PARAM_ICON_MAP: Record<
   VAE: Square3Stack3DIcon,
 };
 
+function parseA1111Loras(prompt: string): {
+  cleaned: string;
+  loras: ParsedLora[];
+} {
+  const loras: ParsedLora[] = [];
+  const loraRegex = /<lora:([^:>]+):([\d.]+)>/g;
+  let match;
+  while ((match = loraRegex.exec(prompt)) !== null) {
+    loras.push({ name: match[1], weight: parseFloat(match[2]) });
+  }
+  const cleaned = prompt.replace(loraRegex, "").replace(/\s{2,}/g, " ").trim();
+  return { cleaned, loras };
+}
+
 function parseA1111Settings(raw: string): ParsedParam[] {
   const pairs: ParsedParam[] = [];
   const regex =
@@ -434,9 +448,13 @@ export default function ParametersDetails({
       };
     }
     if (kindOfPrompt === "parameters" && part3) {
+      const rawPositive = parametersSections
+        .substring(0, negativePromptIndex)
+        .trim();
+      const { loras: a1111Loras } = parseA1111Loras(rawPositive);
       return {
         parsedSettings: parseA1111Settings(part3),
-        loras: [] as ParsedLora[],
+        loras: a1111Loras,
         modelParams: [] as ParsedParam[],
       };
     }
@@ -445,7 +463,7 @@ export default function ParametersDetails({
       loras: [] as ParsedLora[],
       modelParams: [] as ParsedParam[],
     };
-  }, [kindOfPrompt, part3, metadata?.prompt]);
+  }, [kindOfPrompt, part3, metadata?.prompt, parametersSections, negativePromptIndex]);
 
   const sections = [
     {
