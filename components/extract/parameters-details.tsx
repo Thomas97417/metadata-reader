@@ -10,7 +10,6 @@ import {
   Cog6ToothIcon,
   CubeIcon,
   FingerPrintIcon,
-  HashtagIcon,
   PaintBrushIcon,
   PhotoIcon,
   PuzzlePieceIcon,
@@ -49,7 +48,6 @@ const PARAM_ICON_MAP: Record<
   CFG: AdjustmentsHorizontalIcon,
   Seed: FingerPrintIcon,
   Size: PhotoIcon,
-  "Model hash": HashtagIcon,
   Model: CubeIcon,
   Checkpoint: CubeIcon,
   "Clip skip": Cog6ToothIcon,
@@ -69,7 +67,10 @@ function parseA1111Loras(prompt: string): {
   while ((match = loraRegex.exec(prompt)) !== null) {
     loras.push({ name: match[1], weight: parseFloat(match[2]) });
   }
-  const cleaned = prompt.replace(loraRegex, "").replace(/\s{2,}/g, " ").trim();
+  const cleaned = prompt
+    .replace(loraRegex, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
   return { cleaned, loras };
 }
 
@@ -452,8 +453,9 @@ export default function ParametersDetails({
         .substring(0, negativePromptIndex)
         .trim();
       const { loras: a1111Loras } = parseA1111Loras(rawPositive);
+      const allSettings = parseA1111Settings(part3);
       return {
-        parsedSettings: parseA1111Settings(part3),
+        parsedSettings: allSettings.filter((p) => p.key in PARAM_ICON_MAP),
         loras: a1111Loras,
         modelParams: [] as ParsedParam[],
       };
@@ -463,7 +465,13 @@ export default function ParametersDetails({
       loras: [] as ParsedLora[],
       modelParams: [] as ParsedParam[],
     };
-  }, [kindOfPrompt, part3, metadata?.prompt, parametersSections, negativePromptIndex]);
+  }, [
+    kindOfPrompt,
+    part3,
+    metadata?.prompt,
+    parametersSections,
+    negativePromptIndex,
+  ]);
 
   const sections = [
     {

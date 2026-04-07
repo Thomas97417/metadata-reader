@@ -123,7 +123,7 @@ export default function ImageUploader({
               : isDragging
                 ? "rounded-2xl ring-2 ring-primary/50 bg-primary/5 shadow-lg"
                 : "rounded-2xl bg-card ring-1 ring-primary/15 shadow-sm hover:ring-primary/30 hover:shadow-md"
-          } ${isHero ? "min-h-[400px]" : "min-h-[300px]"}`}
+          } ${isHero ? "min-h-[400px]" : previewUrl ? "" : "min-h-[300px]"}`}
         >
           <input
             {...getInputProps()}
@@ -138,14 +138,14 @@ export default function ImageUploader({
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
-                className="absolute inset-0 group"
+                className="relative w-full group"
               >
                 <img
                   src={previewUrl}
                   alt={files[0]?.file?.name || "Uploaded image"}
-                  className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                  className="w-full max-h-[600px] object-contain transition-transform group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-200 rounded-xl flex flex-col gap-2 items-center justify-center backdrop-blur-[2px]">
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-200 flex flex-col gap-2 items-center justify-center backdrop-blur-[2px]">
                   <motion.div
                     initial={{ scale: 0.8 }}
                     animate={{ scale: 1 }}
