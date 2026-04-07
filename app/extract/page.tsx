@@ -1,5 +1,6 @@
 "use client";
 
+import ContactBubble from "@/components/extract/contact-bubble";
 import ImageDetails from "@/components/extract/image-details";
 import { motion } from "framer-motion";
 
@@ -16,6 +17,7 @@ export default function ExtractPage() {
           <ImageDetails />
         </motion.div>
       </div>
+      <ContactBubble />
     </div>
   );
 }
