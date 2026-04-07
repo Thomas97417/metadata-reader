@@ -42,6 +42,12 @@ const faqs: FaqEntry[] = [
       "The Clean feature strips all embedded metadata (EXIF, GPS, AI generation parameters, etc.) from your images. This is useful when you want to share images without revealing how they were made or any personal information.",
   },
   {
+    question: "Why aren't my LoRAs showing up?",
+    answer:
+      "LoRA detection depends on the node used in your workflow. ComfyUI has many different LoRA loader nodes, and our parser may not support all of them yet. If your LoRAs aren't detected, please contact us at contact@metadata-reader.com with your workflow — we'll add support for your LoRA node.",
+    mailtoSubject: "LoRA node support request",
+  },
+  {
     question: "Why can't I see any metadata in my image?",
     answer:
       "Some tools (like ChatGPT, Google's Nano Banana) don't embed metadata in the image file. Other platforms (like Twitter, Instagram, Discord) automatically strip metadata when you upload an image. We're working on adding support for more tools, if you want to request a new tool, please contact us at contact@metadata-reader.com",
