@@ -53,6 +53,7 @@ const PARAM_ICON_MAP: Record<
   "Clip skip": Cog6ToothIcon,
   Scheduler: ClockIcon,
   Denoise: PaintBrushIcon,
+  "Noise schedule": ClockIcon,
   LoRA: PuzzlePieceIcon,
   VAE: Square3Stack3DIcon,
 };
@@ -181,6 +182,49 @@ function parseComfyUIData(promptJson: string): ParsedComfyUI {
   }
 
   return { positive, negative, params, loras, modelParams };
+}
+
+type ParsedNovelAI = {
+  positive: string;
+  negative: string;
+  params: ParsedParam[];
+  modelParams: ParsedParam[];
+};
+
+function parseNovelAIData(
+  commentJson: string,
+  source?: string,
+): ParsedNovelAI {
+  const data = JSON.parse(commentJson);
+  const params: ParsedParam[] = [];
+  const modelParams: ParsedParam[] = [];
+
+  // Prompts — prefer v4 format, fallback to flat fields
+  const positive =
+    data.v4_prompt?.caption?.base_caption ?? data.prompt ?? "";
+  const negative =
+    data.v4_negative_prompt?.caption?.base_caption ?? data.uc ?? "";
+
+  // Model from Source field
+  if (source) {
+    modelParams.push({ key: "Model", value: source });
+  }
+
+  // Core generation params
+  if (data.steps !== undefined)
+    params.push({ key: "Steps", value: String(data.steps) });
+  if (data.sampler)
+    params.push({ key: "Sampler", value: data.sampler });
+  if (data.scale !== undefined)
+    params.push({ key: "CFG scale", value: String(data.scale) });
+  if (data.seed !== undefined)
+    params.push({ key: "Seed", value: String(data.seed) });
+  if (data.width && data.height)
+    params.push({ key: "Size", value: `${data.width}x${data.height}` });
+  if (data.noise_schedule)
+    params.push({ key: "Noise schedule", value: data.noise_schedule });
+
+  return { positive, negative, params, modelParams };
 }
 
 const fadeInUp = {
@@ -425,7 +469,12 @@ export default function ParametersDetails({
   let part2 = "";
   let part3 = "";
 
-  if (kindOfPrompt === "prompt" && metadata?.prompt) {
+  if (kindOfPrompt === "novelai" && metadata?.Comment) {
+    const novelaiData = parseNovelAIData(metadata.Comment, metadata.Source);
+    part1 = novelaiData.positive;
+    part2 = novelaiData.negative;
+    part3 = novelaiData.params.map((p) => `${p.key}: ${p.value}`).join(", ");
+  } else if (kindOfPrompt === "prompt" && metadata?.prompt) {
     const comfyData = parseComfyUIData(metadata.prompt);
     part1 = comfyData.positive;
     part2 = comfyData.negative;
@@ -440,6 +489,14 @@ export default function ParametersDetails({
   }
 
   const { parsedSettings, loras, modelParams } = useMemo(() => {
+    if (kindOfPrompt === "novelai" && metadata?.Comment) {
+      const data = parseNovelAIData(metadata.Comment, metadata.Source);
+      return {
+        parsedSettings: data.params,
+        loras: [] as ParsedLora[],
+        modelParams: data.modelParams,
+      };
+    }
     if (kindOfPrompt === "prompt" && metadata?.prompt) {
       const data = parseComfyUIData(metadata.prompt);
       return {
@@ -499,7 +556,7 @@ export default function ParametersDetails({
       copied: copiedDetails,
       setCopied: setCopiedDetails,
       copyText: "Copy Settings",
-      useGrid: kindOfPrompt === "parameters" || kindOfPrompt === "prompt",
+      useGrid: kindOfPrompt === "parameters" || kindOfPrompt === "prompt" || kindOfPrompt === "novelai",
     },
   ];
 

@@ -25,7 +25,7 @@ export default function MetadataTabs({
   parametersSections,
   kindOfPrompt,
 }: MetadataTabsProps) {
-  const hasPrompts = kindOfPrompt === "parameters" || kindOfPrompt === "prompt";
+  const hasPrompts = kindOfPrompt === "parameters" || kindOfPrompt === "prompt" || kindOfPrompt === "novelai";
   const hasMetadata =
     metadata !== null &&
     metadata !== undefined &&
@@ -76,14 +76,14 @@ export default function MetadataTabs({
         </p>
         <p className="text-sm text-muted-foreground/70 text-center max-w-md">
           This image doesn&apos;t contain any embedded metadata. Try uploading
-          an image created with Stable Diffusion or ComfyUI.
+          an image created with Stable Diffusion, ComfyUI, or NovelAI.
         </p>
       </motion.div>
     );
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full min-w-0">
       {/* Tab bar */}
       <div className="flex items-center border-b">
         <div className="flex gap-1">

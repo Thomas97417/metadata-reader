@@ -4,13 +4,33 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpTrayIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import { useImageContext } from "@/context/image-context";
 
 export function StepDropIllustration() {
   const router = useRouter();
+  const { setPendingFile } = useImageContext();
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file?.type.startsWith("image/")) {
+      setPendingFile(file);
+      router.push("/extract");
+    }
+  };
+
   return (
     <div
       onClick={() => router.push("/extract")}
-      className="w-full aspect-[4/3] rounded-2xl border-2 border-dashed border-border bg-card/50 flex flex-col items-center justify-center gap-3 p-8 cursor-pointer hover:border-primary/50 transition-colors"
+      onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+      onDragEnter={(e) => { e.preventDefault(); setIsDragging(true); }}
+      onDragLeave={() => setIsDragging(false)}
+      onDrop={handleDrop}
+      className={`w-full aspect-[4/3] rounded-2xl border-2 border-dashed bg-card/50 flex flex-col items-center justify-center gap-3 p-8 cursor-pointer transition-colors ${
+        isDragging ? "border-primary/50 bg-primary/5" : "border-border hover:border-primary/50"
+      }`}
     >
       <motion.div
         animate={{ y: [0, -6, 0] }}

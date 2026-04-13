@@ -22,7 +22,7 @@ type ImageUploaderProps = {
 export default function ImageUploader({
   variant = "default",
 }: ImageUploaderProps) {
-  const { imageUrl, setImageUrl, setMetadata, setFileName } = useImageContext();
+  const { imageUrl, setImageUrl, setMetadata, setFileName, pendingFile, setPendingFile } = useImageContext();
   const hasInteracted = useRef(false);
 
   const [
@@ -102,6 +102,32 @@ export default function ImageUploader({
 
     processMetadata();
   }, [files, setFileName, setImageUrl, setMetadata]);
+
+  useEffect(() => {
+    if (!pendingFile) return;
+    const file = pendingFile;
+    setPendingFile(null);
+
+    const processPending = async () => {
+      setFileName(file.name);
+      setImageUrl(URL.createObjectURL(file));
+
+      try {
+        let metadata;
+        if (isWebpFile(file)) {
+          metadata = await parseWebpMetadata(file);
+        } else {
+          metadata = await exifr.parse(file);
+        }
+        setMetadata(metadata);
+      } catch (error) {
+        console.error("Error reading metadata:", error);
+        setMetadata(null);
+      }
+    };
+
+    processPending();
+  }, [pendingFile, setPendingFile, setFileName, setImageUrl, setMetadata]);
 
   return (
     <div className="flex flex-col gap-2">
