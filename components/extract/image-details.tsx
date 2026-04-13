@@ -7,7 +7,7 @@ import { useImageContext } from "../../context/image-context";
 import ImageUploader from "./image-uploader";
 import MetadataTabs from "./metadata-tabs";
 
-const supportedFormats = ["Stable Diffusion", "ComfyUI"];
+const supportedFormats = ["Stable Diffusion", "ComfyUI", "NovelAI"];
 
 export default function ImageDetails() {
   const [shortFileName, setShortFileName] = useState<string | null>(null);
@@ -35,11 +35,13 @@ export default function ImageDetails() {
     }
   }, [fileName]);
 
-  let parametersSections = metadata?.parameters || metadata?.prompt || "";
+  let parametersSections = metadata?.parameters || metadata?.prompt || metadata?.Comment || "";
   parametersSections = parametersSections.replace(/[\uFFFD]/g, " ");
 
   useEffect(() => {
-    if (metadata?.parameters) {
+    if (metadata?.Software === "NovelAI" || metadata?.Source?.startsWith("NovelAI")) {
+      setKindOfPrompt("novelai");
+    } else if (metadata?.parameters) {
       setKindOfPrompt("parameters");
     } else if (metadata?.prompt) {
       setKindOfPrompt("prompt");
@@ -144,7 +146,9 @@ export default function ImageDetails() {
                     >
                       {kindOfPrompt === "parameters"
                         ? "Automatic1111"
-                        : "ComfyUI"}
+                        : kindOfPrompt === "novelai"
+                          ? "NovelAI"
+                          : "ComfyUI"}
                     </span>
                   </div>
                 )}
