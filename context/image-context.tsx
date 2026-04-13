@@ -6,9 +6,11 @@ interface ImageContextType {
   imageUrl: string | null;
   metadata: Metadata | null;
   fileName: string | null;
+  pendingFile: File | null;
   setImageUrl: (url: string | null) => void;
   setMetadata: (metadata: Metadata | null) => void;
   setFileName: (fileName: string | null) => void;
+  setPendingFile: (file: File | null) => void;
 }
 
 const ImageContext = createContext<ImageContextType | undefined>(undefined);
@@ -17,6 +19,7 @@ export const ImageContextProvider = ({ children }: { children: ReactNode }) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [metadata, setMetadata] = useState<Metadata | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
 
   return (
     <ImageContext.Provider
@@ -24,9 +27,11 @@ export const ImageContextProvider = ({ children }: { children: ReactNode }) => {
         imageUrl,
         metadata,
         fileName,
+        pendingFile,
         setImageUrl,
         setMetadata,
         setFileName,
+        setPendingFile,
       }}
     >
       {children}

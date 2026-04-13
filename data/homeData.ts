@@ -1,7 +1,9 @@
 import {
   CommandLineIcon,
   CpuChipIcon,
-  SparklesIcon,
+  EllipsisHorizontalCircleIcon,
+  PaintBrushIcon,
+  WrenchScrewdriverIcon,
 } from "@heroicons/react/24/outline";
 
 import {
@@ -62,7 +64,14 @@ export const supportedTools = [
     comingSoon: false,
   },
   {
-    icon: SparklesIcon,
+    icon: PaintBrushIcon,
+    name: "NovelAI",
+    description:
+      "A powerful AI image generator that embeds prompts, models, and generation settings directly in PNG metadata.",
+    comingSoon: false,
+  },
+  {
+    icon: WrenchScrewdriverIcon,
     name: "More coming soon",
     description:
       "We're always listening — reach out at contact@metadata-reader.com to suggest a tool.",

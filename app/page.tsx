@@ -157,7 +157,7 @@ export default function Page() {
                   key={tool.name}
                   className={`relative flex gap-4 p-5 sm:p-6 rounded-2xl border bg-card transition-colors ${
                     tool.comingSoon
-                      ? "border-border/30 opacity-60 sm:col-span-2"
+                      ? "border-border/30 opacity-60"
                       : "border-border/50 hover:border-primary/30"
                   }`}
                 >

@@ -58,14 +58,14 @@ export default function MetadataDisplay({
         </div>
       )}
 
-      <div className={embedded ? "" : "mt-2"}>
-        <div className="relative">
+      <div className={cn("w-full min-w-0", embedded ? "" : "mt-2")}>
+        <div className="relative w-full">
           <pre
             className={cn(
-              "text-[13px] leading-relaxed font-mono bg-muted/50 rounded-lg p-4 whitespace-pre-wrap break-all hover:bg-muted/70 transition-colors",
+              "text-[13px] leading-relaxed font-mono bg-muted/50 rounded-lg p-4 w-full whitespace-pre-wrap break-all hover:bg-muted/70 transition-colors",
               !isExpanded &&
                 shouldShowButton &&
-                "max-h-[20em] overflow-hidden mask-bottom",
+                "max-h-[32em] overflow-hidden mask-bottom",
               isExpanded && "max-h-none",
             )}
           >
