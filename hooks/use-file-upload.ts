@@ -40,6 +40,7 @@ export function useFileUpload(
   const [isDragging, setIsDragging] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const dragCounter = useRef(0);
 
   const validateFile = useCallback(
     (file: File) => {
@@ -111,13 +112,17 @@ export function useFileUpload(
   const handleDragEnter = useCallback((e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    dragCounter.current++;
     setIsDragging(true);
   }, []);
 
   const handleDragLeave = useCallback((e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsDragging(false);
+    dragCounter.current--;
+    if (dragCounter.current === 0) {
+      setIsDragging(false);
+    }
   }, []);
 
   const handleDragOver = useCallback((e: DragEvent) => {
@@ -130,6 +135,7 @@ export function useFileUpload(
       e.preventDefault();
       e.stopPropagation();
       setIsDragging(false);
+      dragCounter.current = 0;
 
       const droppedFiles = e.dataTransfer?.files;
       if (!droppedFiles?.length) return;
